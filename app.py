@@ -202,7 +202,7 @@ class CNPJApp:
                     GROUP BY uf 
                     ORDER BY uf
                 """)
-                ufs = [{"codigo": row[0], "nome": row[0], "total": row[1]} for row in cursor.fetchall()]
+                ufs = [{"value": row[0], "label": row[0], "count": row[1]} for row in cursor.fetchall()]
                 
                 # CNAEs disponíveis (temporariamente desabilitado - dados não disponíveis)
                 cnaes = []
