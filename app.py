@@ -194,8 +194,15 @@ class CNPJApp:
                 cursor.execute("SELECT COUNT(*) FROM estabelecimentos")
                 has_estabelecimentos = cursor.fetchone()[0] > 0
                 
-                # UFs não disponíveis - dados de estabelecimentos corrompidos
-                ufs = []
+                # UFs disponíveis na tabela estabelecimentos
+                cursor.execute("""
+                    SELECT DISTINCT uf, COUNT(*) as total 
+                    FROM estabelecimentos 
+                    WHERE uf IS NOT NULL AND uf != '' 
+                    GROUP BY uf 
+                    ORDER BY uf
+                """)
+                ufs = [{"codigo": row[0], "nome": row[0], "total": row[1]} for row in cursor.fetchall()]
                 
                 # CNAEs disponíveis (temporariamente desabilitado - dados não disponíveis)
                 cnaes = []
@@ -280,7 +287,10 @@ class CNPJApp:
                     where_clauses.append("UPPER(e.razao_social) LIKE UPPER(?)")
                     params.append(f"%{filtros['razao_social']}%")
                 
-                # UF e CNAE não disponíveis - dados estão na tabela estabelecimentos que está corrompida
+                if filtros.get('uf'):
+                    # Usar JOIN com estabelecimentos para filtrar por UF
+                    where_clauses.append("est.uf = ?")
+                    params.append(filtros['uf'])
                 
                 if filtros.get('natureza_juridica'):
                     where_clauses.append("e.natureza_juridica = ?")
@@ -296,14 +306,29 @@ class CNPJApp:
                 
                 where_sql = " AND ".join(where_clauses) if where_clauses else "1=1"
                 
-
+                # Determinar se precisa do JOIN com estabelecimentos
+                needs_estabelecimentos_join = filtros.get('uf')
+                
+                # Definir FROM clause baseado nos filtros
+                if needs_estabelecimentos_join:
+                    from_clause = """
+                        FROM empresas e
+                        LEFT JOIN naturezas n ON e.natureza_juridica = n.codigo_natureza
+                        LEFT JOIN simples s ON e.cnpj_basico = s.cnpj_basico
+                        LEFT JOIN estabelecimentos est ON e.cnpj_basico = est.cnpj_basico
+                    """
+                else:
+                    from_clause = """
+                        FROM empresas e
+                        LEFT JOIN naturezas n ON e.natureza_juridica = n.codigo_natureza
+                        LEFT JOIN simples s ON e.cnpj_basico = s.cnpj_basico
+                    """
                 
                 # Contar total
                 cursor = self.db.connection.cursor()
                 sql_count = f"""
-                    SELECT COUNT(*) 
-                    FROM empresas e
-                    LEFT JOIN simples s ON e.cnpj_basico = s.cnpj_basico
+                    SELECT COUNT(DISTINCT e.cnpj_basico) 
+                    {from_clause}
                     WHERE {where_sql}
                 """
                 
@@ -315,7 +340,7 @@ class CNPJApp:
                 offset = (page - 1) * per_page
                 
                 sql_data = f"""
-                    SELECT 
+                    SELECT DISTINCT
                         e.cnpj_basico,
                         e.razao_social,
                         n.descricao_natureza,
@@ -329,9 +354,7 @@ class CNPJApp:
                              WHEN s.opcao_simples = 'N' THEN 'Não'
                              ELSE 'N/A' END as simples_nacional,
                         s.data_opcao_simples
-                    FROM empresas e
-                    LEFT JOIN naturezas n ON e.natureza_juridica = n.codigo_natureza
-                    LEFT JOIN simples s ON e.cnpj_basico = s.cnpj_basico
+                    {from_clause}
                     WHERE {where_sql}
                     ORDER BY e.razao_social
                     LIMIT ? OFFSET ?
