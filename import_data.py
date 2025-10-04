@@ -11,7 +11,7 @@ class CNPJImporter:
     Processa arquivos grandes em chunks para otimizar memória
     """
     
-    def __init__(self, db_path="cnpj_database.db", data_dir="../PROJETO CNPJ"):
+    def __init__(self, db_path="cnpj_database.db", data_dir=r"c:\Users\Victor Vasconcelos\Documents\Projeto CNPJ"):
         self.db_path = db_path
         self.data_dir = Path(data_dir)
         self.db = CNPJDatabase(db_path)
@@ -25,15 +25,16 @@ class CNPJImporter:
         
         # Mapear pastas para tipos de dados
         mapeamento_pastas = {
-            'Empresas0': 'empresas',
-            'Estabelecimentos0': 'estabelecimentos', 
-            'Simples': 'simples',
-            'Cnaes': 'cnaes',
-            'Municipios': 'municipios',
-            'Naturezas': 'naturezas',
-            'Motivos': 'motivos',
-            'Paises': 'paises',
-            'Qualificacoes': 'qualificacoes'
+            'EMPRESAS': 'empresas',
+            'ESTABELECIMENTOS': 'estabelecimentos', 
+            'SIMPLES': 'simples',
+            'CNAES': 'cnaes',
+            'MUNICIPIOS': 'municipios',
+            'NATUREZAS': 'naturezas',
+            'MOTIVOS': 'motivos',
+            'PAISES': 'paises',
+            'QUALIFICACOES': 'qualificacoes',
+            'SOCIOS': 'socios'
         }
         
         for pasta, tabela in mapeamento_pastas.items():
@@ -134,7 +135,10 @@ class CNPJImporter:
                                    'telefone1', 'ddd2', 'telefone2', 'fax_ddd', 'fax_numero',
                                    'email', 'situacao_especial', 'data_situacao_especial'],
                 'simples': ['cnpj_basico', 'opcao_simples', 'data_opcao_simples', 'data_exclusao_simples',
-                          'opcao_mei', 'data_opcao_mei', 'data_exclusao_mei']
+                          'opcao_mei', 'data_opcao_mei', 'data_exclusao_mei'],
+                'socios': ['cnpj_basico', 'identificador_socio', 'nome_socio', 'cnpj_cpf_socio', 
+                         'qualificacao_socio', 'data_entrada_sociedade', 'pais', 'representante_legal',
+                         'nome_representante', 'qualificacao_representante', 'faixa_etaria']
             }
             
             colunas = colunas_map.get(tabela, [])
@@ -207,7 +211,7 @@ class CNPJImporter:
         
         # Separar tabelas por tamanho
         tabelas_pequenas = ['cnaes', 'municipios', 'naturezas', 'motivos', 'paises', 'qualificacoes']
-        tabelas_grandes = ['empresas', 'estabelecimentos', 'simples']
+        tabelas_grandes = ['empresas', 'estabelecimentos', 'simples', 'socios']
         
         sucesso_total = True
         

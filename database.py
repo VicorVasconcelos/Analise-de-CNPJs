@@ -167,6 +167,27 @@ class CNPJDatabase:
                 )
             """)
             
+            # 10. TABELA SÓCIOS (Grande - Relacionamentos)
+            print("📊 Criando tabela: socios")
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS socios (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    cnpj_basico TEXT NOT NULL,
+                    identificador_socio TEXT,
+                    nome_socio TEXT,
+                    cnpj_cpf_socio TEXT,
+                    qualificacao_socio TEXT,
+                    data_entrada_sociedade TEXT,
+                    pais TEXT,
+                    representante_legal TEXT,
+                    nome_representante TEXT,
+                    qualificacao_representante TEXT,
+                    faixa_etaria TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (cnpj_basico) REFERENCES empresas(cnpj_basico)
+                )
+            """)
+            
             # CRIAR ÍNDICES PARA PERFORMANCE
             print("\n🚀 Criando índices para otimização...")
             
@@ -181,7 +202,9 @@ class CNPJDatabase:
                 "CREATE INDEX IF NOT EXISTS idx_empresas_natureza ON empresas(natureza_juridica)",
                 "CREATE INDEX IF NOT EXISTS idx_empresas_porte ON empresas(porte)",
                 "CREATE INDEX IF NOT EXISTS idx_simples_opcao ON simples(opcao_simples)",
-                "CREATE INDEX IF NOT EXISTS idx_simples_mei ON simples(opcao_mei)"
+                "CREATE INDEX IF NOT EXISTS idx_simples_mei ON simples(opcao_mei)",
+                "CREATE INDEX IF NOT EXISTS idx_socios_cnpj_basico ON socios(cnpj_basico)",
+                "CREATE INDEX IF NOT EXISTS idx_socios_qualificacao ON socios(qualificacao_socio)"
             ]
             
             for i, sql in enumerate(indices, 1):
@@ -189,7 +212,7 @@ class CNPJDatabase:
                 print(f"   ✅ Índice {i}/10 criado")
             
             self.connection.commit()
-            print(f"\n✅ SUCESSO! Banco de dados criado com 9 tabelas e 10 índices")
+            print(f"\n✅ SUCESSO! Banco de dados criado com 10 tabelas e 12 índices")
             return True
             
         except Exception as e:

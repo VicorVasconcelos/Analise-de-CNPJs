@@ -415,6 +415,16 @@ body {
     color: #7f8c8d;
 }
 
+.footer p {
+    margin: 5px 0;
+}
+
+.footer p:last-child {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .header h1 {
