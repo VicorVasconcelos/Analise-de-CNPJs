@@ -12,15 +12,12 @@ class CNPJApp:
     """
     Backend Flask para o Sistema de Análise de Dados CNPJ
     Provides APIs for filtering and exporting CNPJ data
-    Sistema otimizado com cache e performance melhorada
     """
     
     def __init__(self, db_path="cnpj_database.db"):
         self.app = Flask(__name__)
         CORS(self.app)  # Permitir requisições do frontend
         self.db_path = db_path
-        self.cache = {}  # Cache simples para filtros
-        self.cache_timeout = 300  # 5 minutos
         self.db = CNPJDatabase(db_path)
         
         # Configurar rotas
@@ -139,46 +136,38 @@ class CNPJApp:
                 
                 # Estatísticas por tabela
                 stats = {}
-                tabelas = ['empresas', 'simples', 'cnaes', 'naturezas', 'qualificacoes', 'motivos', 'estabelecimentos', 'socios']
+                tabelas = ['empresas', 'simples', 'cnaes', 'naturezas', 'qualificacoes', 'motivos']
                 
                 for tabela in tabelas:
                     try:
                         cursor.execute(f"SELECT COUNT(*) FROM {tabela}")
                         count = cursor.fetchone()[0]
                         stats[tabela] = count
-                    except Exception as e:
+                    except:
                         stats[tabela] = 0
                 
-                # Top Naturezas Jurídicas (apenas se temos dados)
-                top_naturezas = []
-                try:
-                    cursor.execute("""
-                        SELECT n.descricao_natureza, COUNT(*) as total
-                        FROM empresas e
-                        LEFT JOIN naturezas n ON e.natureza_juridica = n.codigo_natureza
-                        GROUP BY e.natureza_juridica
-                        ORDER BY total DESC
-                        LIMIT 10
-                    """)
-                    top_naturezas = [{"natureza": natureza or "N/A", "total": total} for natureza, total in cursor.fetchall()]
-                except:
-                    top_naturezas = []
+                # Top Naturezas Jurídicas
+                cursor.execute("""
+                    SELECT n.descricao_natureza, COUNT(*) as total
+                    FROM empresas e
+                    LEFT JOIN naturezas n ON e.natureza_juridica = n.codigo_natureza
+                    GROUP BY e.natureza_juridica
+                    ORDER BY total DESC
+                    LIMIT 10
+                """)
+                top_naturezas = [{"natureza": natureza or "N/A", "total": total} for natureza, total in cursor.fetchall()]
                 
-                # Distribuição Simples Nacional (apenas se temos dados)
-                simples_dist = []
-                try:
-                    cursor.execute("""
-                        SELECT 
-                            CASE WHEN opcao_simples = 'S' THEN 'Simples Nacional' 
-                                 ELSE 'Não Optante' END as tipo,
-                            COUNT(*) as total
-                        FROM simples
-                        GROUP BY opcao_simples
-                        ORDER BY total DESC
-                    """)
-                    simples_dist = [{"tipo": tipo, "total": total} for tipo, total in cursor.fetchall()]
-                except:
-                    simples_dist = []
+                # Distribuição Simples Nacional
+                cursor.execute("""
+                    SELECT 
+                        CASE WHEN opcao_simples = 'S' THEN 'Simples Nacional' 
+                             ELSE 'Não Optante' END as tipo,
+                        COUNT(*) as total
+                    FROM simples
+                    GROUP BY opcao_simples
+                    ORDER BY total DESC
+                """)
+                simples_dist = [{"tipo": tipo, "total": total} for tipo, total in cursor.fetchall()]
                 
                 self.db.disconnect()
                 
@@ -190,23 +179,11 @@ class CNPJApp:
                 })
                 
             except Exception as e:
-                if self.db.connection:
-                    self.db.disconnect()
                 return jsonify({"error": str(e)}), 500
         
         @self.app.route('/filters')
         def get_filter_options():
-            """Retorna opções disponíveis para cada filtro com cache"""
-            cache_key = "filter_options"
-            current_time = time.time()
-            
-            # Verificar cache
-            if (cache_key in self.cache and 
-                current_time - self.cache[cache_key]['timestamp'] < self.cache_timeout):
-                print("🚀 Usando cache para filtros")
-                return jsonify(self.cache[cache_key]['data'])
-            
-            print("🔍 Carregando filtros do banco de dados...")
+            """Retorna opções disponíveis para cada filtro"""
             try:
                 if not self.db.connect():
                     return jsonify({"error": "Database connection failed"}), 500
@@ -214,116 +191,62 @@ class CNPJApp:
                 cursor = self.db.connection.cursor()
                 
                 # Verificar se temos dados de estabelecimentos
-                try:
-                    cursor.execute("SELECT COUNT(*) FROM estabelecimentos")
-                    has_estabelecimentos = cursor.fetchone()[0] > 0
-                except:
-                    has_estabelecimentos = False
+                cursor.execute("SELECT COUNT(*) FROM estabelecimentos")
+                has_estabelecimentos = cursor.fetchone()[0] > 0
                 
-                # UFs disponíveis na tabela estabelecimentos
+                # UFs não disponíveis - dados de estabelecimentos corrompidos
                 ufs = []
-                try:
-                    cursor.execute("""
-                        SELECT DISTINCT uf, COUNT(*) as total 
-                        FROM estabelecimentos 
-                        WHERE uf IS NOT NULL AND uf != '' 
-                        GROUP BY uf 
-                        ORDER BY uf
-                    """)
-                    ufs = [{"value": row[0], "label": row[0], "count": row[1]} for row in cursor.fetchall()]
-                except:
-                    ufs = []
                 
-                # CNAEs disponíveis
+                # CNAEs disponíveis (temporariamente desabilitado - dados não disponíveis)
                 cnaes = []
-                try:
-                    cursor.execute("""
-                        SELECT c.codigo_cnae, c.descricao_cnae, COUNT(*) as total 
-                        FROM cnaes c
-                        LEFT JOIN estabelecimentos e ON c.codigo_cnae = e.cnae_principal
-                        WHERE c.codigo_cnae IS NOT NULL AND c.codigo_cnae != ''
-                        GROUP BY c.codigo_cnae, c.descricao_cnae
-                        HAVING total > 0
-                        ORDER BY total DESC
-                        LIMIT 50
-                    """)
-                    cnaes = [{"value": codigo, "label": f"{codigo} - {descricao[:50]}...", "count": total} 
-                            for codigo, descricao, total in cursor.fetchall()]
-                except:
-                    # Se não conseguir fazer JOIN, pelo menos mostrar CNAEs cadastrados
-                    try:
-                        cursor.execute("""
-                            SELECT codigo_cnae, descricao_cnae 
-                            FROM cnaes 
-                            WHERE codigo_cnae IS NOT NULL AND codigo_cnae != ''
-                            ORDER BY codigo_cnae
-                            LIMIT 50
-                        """)
-                        cnaes = [{"value": codigo, "label": f"{codigo} - {descricao[:50]}...", "count": 0} 
-                                for codigo, descricao in cursor.fetchall()]
-                    except:
-                        cnaes = []
                 
                 # Naturezas Jurídicas disponíveis
-                naturezas = []
-                try:
-                    cursor.execute("""
-                        SELECT n.codigo_natureza, n.descricao_natureza, COUNT(*) as total 
-                        FROM empresas e
-                        INNER JOIN naturezas n ON e.natureza_juridica = n.codigo_natureza
-                        GROUP BY n.codigo_natureza, n.descricao_natureza
-                        ORDER BY total DESC
-                        LIMIT 20
-                    """)
-                    naturezas = [{"value": codigo, "label": f"{codigo} - {descricao[:60]}...", "count": total} 
-                               for codigo, descricao, total in cursor.fetchall()]
-                except:
-                    naturezas = []
+                cursor.execute("""
+                    SELECT n.codigo_natureza, n.descricao_natureza, COUNT(*) as total 
+                    FROM empresas e
+                    INNER JOIN naturezas n ON e.natureza_juridica = n.codigo_natureza
+                    GROUP BY n.codigo_natureza, n.descricao_natureza
+                    ORDER BY total DESC
+                    LIMIT 20
+                """)
+                naturezas = [{"value": codigo, "label": f"{codigo} - {descricao[:60]}...", "count": total} 
+                           for codigo, descricao, total in cursor.fetchall()]
                 
                 # Portes de Empresa disponíveis
-                portes = []
-                try:
-                    cursor.execute("""
-                        SELECT 
-                            porte,
-                            CASE WHEN porte = '01' THEN 'Micro Empresa'
-                                 WHEN porte = '03' THEN 'Empresa de Pequeno Porte'
-                                 WHEN porte = '05' THEN 'Demais'
-                                 ELSE 'Não Informado' END as descricao,
-                            COUNT(*) as total
-                        FROM empresas
-                        WHERE porte IS NOT NULL AND porte != ''
-                        GROUP BY porte
-                        ORDER BY total DESC
-                    """)
-                    portes = [{"value": porte, "label": descricao, "count": total} 
-                             for porte, descricao, total in cursor.fetchall()]
-                except:
-                    portes = []
+                cursor.execute("""
+                    SELECT 
+                        porte,
+                        CASE WHEN porte = '01' THEN 'Micro Empresa'
+                             WHEN porte = '03' THEN 'Empresa de Pequeno Porte'
+                             WHEN porte = '05' THEN 'Demais'
+                             ELSE 'Não Informado' END as descricao,
+                        COUNT(*) as total
+                    FROM empresas
+                    WHERE porte IS NOT NULL AND porte != ''
+                    GROUP BY porte
+                    ORDER BY total DESC
+                """)
+                portes = [{"value": porte, "label": descricao, "count": total} 
+                         for porte, descricao, total in cursor.fetchall()]
                 
                 # Status Simples Nacional
-                simples_opcoes = []
-                try:
-                    cursor.execute("""
-                        SELECT 
-                            opcao_simples,
-                            CASE WHEN opcao_simples = 'S' THEN 'Optante pelo Simples'
-                                 WHEN opcao_simples = 'N' THEN 'Não Optante'
-                                 ELSE 'Não Informado' END as descricao,
-                            COUNT(*) as total
-                        FROM simples
-                        GROUP BY opcao_simples
-                        ORDER BY total DESC
-                    """)
-                    simples_opcoes = [{"value": opcao, "label": descricao, "count": total} 
-                                    for opcao, descricao, total in cursor.fetchall()]
-                except:
-                    simples_opcoes = []
+                cursor.execute("""
+                    SELECT 
+                        opcao_simples,
+                        CASE WHEN opcao_simples = 'S' THEN 'Optante pelo Simples'
+                             WHEN opcao_simples = 'N' THEN 'Não Optante'
+                             ELSE 'Não Informado' END as descricao,
+                        COUNT(*) as total
+                    FROM simples
+                    GROUP BY opcao_simples
+                    ORDER BY total DESC
+                """)
+                simples_opcoes = [{"value": opcao, "label": descricao, "count": total} 
+                                for opcao, descricao, total in cursor.fetchall()]
                 
                 self.db.disconnect()
                 
-                # Preparar dados para retorno e cache
-                filter_data = {
+                return jsonify({
                     "ufs": ufs,
                     "cnaes": cnaes,
                     "naturezas": naturezas,
@@ -331,20 +254,9 @@ class CNPJApp:
                     "simples_opcoes": simples_opcoes,
                     "has_estabelecimentos": has_estabelecimentos,
                     "timestamp": datetime.now().isoformat()
-                }
-                
-                # Salvar no cache
-                self.cache[cache_key] = {
-                    'data': filter_data,
-                    'timestamp': current_time
-                }
-                print(f"✅ Filtros carregados e salvos no cache")
-                
-                return jsonify(filter_data)
+                })
                 
             except Exception as e:
-                if self.db.connection:
-                    self.db.disconnect()
                 return jsonify({"error": str(e)}), 500
         
         @self.app.route('/query', methods=['POST'])
@@ -368,14 +280,7 @@ class CNPJApp:
                     where_clauses.append("UPPER(e.razao_social) LIKE UPPER(?)")
                     params.append(f"%{filtros['razao_social']}%")
                 
-                if filtros.get('uf'):
-                    # Usar JOIN com estabelecimentos para filtrar por UF
-                    where_clauses.append("est.uf = ?")
-                    params.append(filtros['uf'])
-                
-                if filtros.get('cnae'):
-                    where_clauses.append("est.cnae_principal = ?")
-                    params.append(filtros['cnae'])
+                # UF e CNAE não disponíveis - dados estão na tabela estabelecimentos que está corrompida
                 
                 if filtros.get('natureza_juridica'):
                     where_clauses.append("e.natureza_juridica = ?")
@@ -391,19 +296,14 @@ class CNPJApp:
                 
                 where_sql = " AND ".join(where_clauses) if where_clauses else "1=1"
                 
-                # Sempre usar JOIN completo para todos os filtros funcionarem
-                from_clause = """
-                    FROM empresas e
-                    LEFT JOIN naturezas n ON e.natureza_juridica = n.codigo_natureza
-                    LEFT JOIN simples s ON e.cnpj_basico = s.cnpj_basico
-                    LEFT JOIN estabelecimentos est ON e.cnpj_basico = est.cnpj_basico
-                """
+
                 
                 # Contar total
                 cursor = self.db.connection.cursor()
                 sql_count = f"""
-                    SELECT COUNT(DISTINCT e.cnpj_basico) 
-                    {from_clause}
+                    SELECT COUNT(*) 
+                    FROM empresas e
+                    LEFT JOIN simples s ON e.cnpj_basico = s.cnpj_basico
                     WHERE {where_sql}
                 """
                 
@@ -415,7 +315,7 @@ class CNPJApp:
                 offset = (page - 1) * per_page
                 
                 sql_data = f"""
-                    SELECT DISTINCT
+                    SELECT 
                         e.cnpj_basico,
                         e.razao_social,
                         n.descricao_natureza,
@@ -429,7 +329,9 @@ class CNPJApp:
                              WHEN s.opcao_simples = 'N' THEN 'Não'
                              ELSE 'N/A' END as simples_nacional,
                         s.data_opcao_simples
-                    {from_clause}
+                    FROM empresas e
+                    LEFT JOIN naturezas n ON e.natureza_juridica = n.codigo_natureza
+                    LEFT JOIN simples s ON e.cnpj_basico = s.cnpj_basico
                     WHERE {where_sql}
                     ORDER BY e.razao_social
                     LIMIT ? OFFSET ?
@@ -481,361 +383,174 @@ class CNPJApp:
                 if not self.db.connect():
                     return jsonify({"error": "Database connection failed"}), 500
                 
-                # Construir consulta simples para exportação
+                # Construir consulta dinâmica (igual ao query)
                 where_clauses = []
                 params = []
-                
-                if filtros.get('razao_social'):
-                    where_clauses.append("UPPER(e.razao_social) LIKE UPPER(?)")
-                    params.append(f"%{filtros['razao_social']}%")
                 
                 if filtros.get('uf'):
                     where_clauses.append("est.uf = ?")
                     params.append(filtros['uf'])
                 
                 if filtros.get('cnae'):
-                    where_clauses.append("est.cnae_principal = ?")
+                    where_clauses.append("est.cnae_fiscal_principal = ?")
                     params.append(filtros['cnae'])
                 
-                if filtros.get('natureza_juridica'):
-                    where_clauses.append("e.natureza_juridica = ?")
-                    params.append(filtros['natureza_juridica'])
+                if filtros.get('municipio'):
+                    where_clauses.append("est.municipio = ?")
+                    params.append(filtros['municipio'])
                 
-                if filtros.get('porte'):
-                    where_clauses.append("e.porte = ?")
-                    params.append(filtros['porte'])
+                if filtros.get('bairro'):
+                    where_clauses.append("UPPER(est.bairro) LIKE UPPER(?)")
+                    params.append(f"%{filtros['bairro']}%")
                 
-                if filtros.get('opcao_simples'):
-                    where_clauses.append("s.opcao_simples = ?")
-                    params.append(filtros['opcao_simples'])
+                if filtros.get('matriz_filial'):
+                    where_clauses.append("est.identificador_matriz_filial = ?")
+                    params.append(filtros['matriz_filial'])
                 
                 where_sql = " AND ".join(where_clauses) if where_clauses else "1=1"
                 
-                # Determinar se precisa do JOIN com estabelecimentos
-                needs_estabelecimentos_join = filtros.get('uf') or filtros.get('cnae')
-                
-                # Consulta COMPLETA para exportação com todos os dados
-                if needs_estabelecimentos_join:
-                    sql_export = f"""
-                        SELECT 
-                            substr('00000000' || e.cnpj_basico, -8) || substr('0000' || COALESCE(est.cnpj_ordem, '0001'), -4) || substr('00' || COALESCE(est.cnpj_dv, '00'), -2) as cnpj_completo,
-                            e.razao_social,
-                            COALESCE(est.nome_fantasia, '') as nome_fantasia,
-                            COALESCE(n.descricao_natureza, '') as natureza_juridica,
-                            CASE WHEN e.porte = '01' THEN 'Micro Empresa'
-                                 WHEN e.porte = '03' THEN 'Empresa de Pequeno Porte'
-                                 WHEN e.porte = '05' THEN 'Demais'
-                                 ELSE 'Não Informado' END as porte,
-                            CASE WHEN s.opcao_simples = 'S' THEN 'Sim' 
-                                 WHEN s.opcao_simples = 'N' THEN 'Não'
-                                 ELSE 'N/A' END as simples_nacional,
-                            COALESCE(s.data_opcao_simples, '') as data_opcao_simples,
-                            COALESCE(est.situacao, '') as situacao,
-                            COALESCE(est.data_situacao, '') as data_situacao,
-                            COALESCE(cnae.descricao_cnae, '') as cnae_principal_desc,
-                            COALESCE(est.cnae_principal, '') as cnae_principal,
-                            COALESCE(est.tipo_logradouro, '') as tipo_logradouro,
-                            COALESCE(est.logradouro, '') as logradouro,
-                            COALESCE(est.numero, '') as numero,
-                            COALESCE(est.complemento, '') as complemento,
-                            COALESCE(est.bairro, '') as bairro,
-                            COALESCE(est.cep, '') as cep,
-                            COALESCE(est.uf, '') as uf,
-                            COALESCE(mun.nome_municipio, '') as municipio,
-                            COALESCE(est.ddd1, '') as ddd1,
-                            COALESCE(est.telefone1, '') as telefone1,
-                            COALESCE(est.ddd2, '') as ddd2,
-                            COALESCE(est.telefone2, '') as telefone2,
-                            COALESCE(est.email, '') as email,
-                            COALESCE(e.capital_social, '') as capital_social,
-                            GROUP_CONCAT(COALESCE(soc.nome_socio, '') || CASE WHEN COALESCE(qual.descricao_qualificacao, '') != '' THEN ' (' || qual.descricao_qualificacao || ')' ELSE '' END || CASE WHEN COALESCE(soc.cnpj_cpf_socio, '') != '' THEN ' - ' || soc.cnpj_cpf_socio ELSE '' END, '; ') as socios
-                        FROM empresas e
-                        LEFT JOIN naturezas n ON e.natureza_juridica = n.codigo_natureza
-                        LEFT JOIN simples s ON e.cnpj_basico = s.cnpj_basico
-                        LEFT JOIN estabelecimentos est ON e.cnpj_basico = est.cnpj_basico
-                        LEFT JOIN cnaes cnae ON est.cnae_principal = cnae.codigo_cnae
-                        LEFT JOIN municipios mun ON est.municipio = mun.codigo_municipio
-                        LEFT JOIN socios soc ON e.cnpj_basico = soc.cnpj_basico
-                        LEFT JOIN qualificacoes qual ON soc.qualificacao_socio = qual.codigo_qualificacao
-                        WHERE {where_sql}
-                        GROUP BY e.cnpj_basico, est.cnpj_ordem, est.cnpj_dv
-                        ORDER BY e.razao_social
-                        LIMIT 5000
-                    """
-                    headers = ['CNPJ_COMPLETO', 'RAZAO_SOCIAL', 'NOME_FANTASIA', 'NATUREZA_JURIDICA', 'PORTE', 
-                              'SIMPLES_NACIONAL', 'DATA_OPCAO_SIMPLES', 'SITUACAO', 'DATA_SITUACAO', 
-                              'CNAE_PRINCIPAL_DESC', 'CNAE_PRINCIPAL', 'TIPO_LOGRADOURO', 'LOGRADOURO', 'NUMERO', 
-                              'COMPLEMENTO', 'BAIRRO', 'CEP', 'UF', 'MUNICIPIO', 'DDD1', 'TELEFONE1', 'DDD2', 
-                              'TELEFONE2', 'EMAIL', 'CAPITAL_SOCIAL', 'SOCIOS']
-                else:
-                    # Consulta sem JOIN - pegar dados da matriz de cada empresa
-                    sql_export = f"""
-                        SELECT 
-                            substr('00000000' || e.cnpj_basico, -8) || substr('0000' || COALESCE(est.cnpj_ordem, '0001'), -4) || substr('00' || COALESCE(est.cnpj_dv, '00'), -2) as cnpj_completo,
-                            e.razao_social,
-                            COALESCE(est.nome_fantasia, '') as nome_fantasia,
-                            COALESCE(n.descricao_natureza, '') as natureza_juridica,
-                            CASE WHEN e.porte = '01' THEN 'Micro Empresa'
-                                 WHEN e.porte = '03' THEN 'Empresa de Pequeno Porte'
-                                 WHEN e.porte = '05' THEN 'Demais'
-                                 ELSE 'Não Informado' END as porte,
-                            CASE WHEN s.opcao_simples = 'S' THEN 'Sim' 
-                                 WHEN s.opcao_simples = 'N' THEN 'Não'
-                                 ELSE 'N/A' END as simples_nacional,
-                            COALESCE(s.data_opcao_simples, '') as data_opcao_simples,
-                            COALESCE(est.situacao, '') as situacao,
-                            COALESCE(est.data_situacao, '') as data_situacao,
-                            COALESCE(cnae.descricao_cnae, '') as cnae_principal_desc,
-                            COALESCE(est.cnae_principal, '') as cnae_principal,
-                            COALESCE(est.tipo_logradouro, '') as tipo_logradouro,
-                            COALESCE(est.logradouro, '') as logradouro,
-                            COALESCE(est.numero, '') as numero,
-                            COALESCE(est.complemento, '') as complemento,
-                            COALESCE(est.bairro, '') as bairro,
-                            COALESCE(est.cep, '') as cep,
-                            COALESCE(est.uf, '') as uf,
-                            COALESCE(mun.nome_municipio, '') as municipio,
-                            COALESCE(est.ddd1, '') as ddd1,
-                            COALESCE(est.telefone1, '') as telefone1,
-                            COALESCE(est.ddd2, '') as ddd2,
-                            COALESCE(est.telefone2, '') as telefone2,
-                            COALESCE(est.email, '') as email,
-                            COALESCE(e.capital_social, '') as capital_social,
-                            GROUP_CONCAT(COALESCE(soc.nome_socio, '') || CASE WHEN COALESCE(qual.descricao_qualificacao, '') != '' THEN ' (' || qual.descricao_qualificacao || ')' ELSE '' END || CASE WHEN COALESCE(soc.cnpj_cpf_socio, '') != '' THEN ' - ' || soc.cnpj_cpf_socio ELSE '' END, '; ') as socios
-                        FROM empresas e
-                        LEFT JOIN naturezas n ON e.natureza_juridica = n.codigo_natureza
-                        LEFT JOIN simples s ON e.cnpj_basico = s.cnpj_basico
-                        LEFT JOIN estabelecimentos est ON e.cnpj_basico = est.cnpj_basico AND est.matriz_filial = '1'
-                        LEFT JOIN cnaes cnae ON est.cnae_principal = cnae.codigo_cnae
-                        LEFT JOIN municipios mun ON est.municipio = mun.codigo_municipio
-                        LEFT JOIN socios soc ON e.cnpj_basico = soc.cnpj_basico
-                        LEFT JOIN qualificacoes qual ON soc.qualificacao_socio = qual.codigo_qualificacao
-                        WHERE {where_sql}
-                        GROUP BY e.cnpj_basico, est.cnpj_ordem, est.cnpj_dv
-                        ORDER BY e.razao_social
-                        LIMIT 5000
-                    """
-                    headers = ['CNPJ_COMPLETO', 'RAZAO_SOCIAL', 'NOME_FANTASIA', 'NATUREZA_JURIDICA', 'PORTE', 
-                              'SIMPLES_NACIONAL', 'DATA_OPCAO_SIMPLES', 'SITUACAO', 'DATA_SITUACAO', 
-                              'CNAE_PRINCIPAL_DESC', 'CNAE_PRINCIPAL', 'TIPO_LOGRADOURO', 'LOGRADOURO', 'NUMERO', 
-                              'COMPLEMENTO', 'BAIRRO', 'CEP', 'UF', 'MUNICIPIO', 'DDD1', 'TELEFONE1', 'DDD2', 
-                              'TELEFONE2', 'EMAIL', 'CAPITAL_SOCIAL', 'SOCIOS']
+                # Consulta completa para exportação (baseada no melhorar_arquivo_consolidado.py)
+                sql_export = f"""
+                    SELECT DISTINCT
+                        -- CNPJ formatado
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 1, 2) || '.' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 3, 3) || '.' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 6, 3) || '/' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 9, 4) || '-' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 13, 2) as cnpj_formatado,
+                        
+                        (est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv) as cnpj_completo,
+                        est.cnpj_basico,
+                        COALESCE(emp.razao_social, '') as razao_social,
+                        COALESCE(est.nome_fantasia, '') as nome_fantasia,
+                        COALESCE(nat.descricao_natureza, '') as descricao_natureza,
+                        COALESCE(emp.porte, '') as porte,
+                        COALESCE(emp.capital_social, '') as capital_social,
+                        COALESCE(c.descricao_cnae, '') as descricao_cnae,
+                        
+                        -- Situação empresa
+                        CASE 
+                            WHEN est.situacao_cadastral = '02' THEN 'ATIVA'
+                            WHEN est.situacao_cadastral = '03' THEN 'SUSPENSA'
+                            WHEN est.situacao_cadastral = '04' THEN 'INAPTA'
+                            WHEN est.situacao_cadastral = '08' THEN 'BAIXADA'
+                            ELSE 'NÃO INFORMADO'
+                        END as situacao_empresa,
+                        
+                        COALESCE(est.motivo_situacao_cadastral, '') as descricao_motivo,
+                        
+                        -- Data formatada
+                        CASE 
+                            WHEN LENGTH(est.data_situacao_cadastral) = 8 THEN
+                                SUBSTR(est.data_situacao_cadastral, 7, 2) || '/' ||
+                                SUBSTR(est.data_situacao_cadastral, 5, 2) || '/' ||
+                                SUBSTR(est.data_situacao_cadastral, 1, 4)
+                            ELSE COALESCE(est.data_situacao_cadastral, '')
+                        END as data_situacao,
+                        
+                        -- Endereço completo
+                        TRIM(
+                            COALESCE(est.tipo_logradouro || ' ', '') ||
+                            COALESCE(est.logradouro, '') ||
+                            CASE WHEN est.numero IS NOT NULL AND est.numero != '' 
+                                 THEN ', nº ' || est.numero ELSE '' END ||
+                            CASE WHEN est.complemento IS NOT NULL AND est.complemento != '' 
+                                 THEN ' (' || est.complemento || ')' ELSE '' END ||
+                            CASE WHEN est.bairro IS NOT NULL AND est.bairro != '' 
+                                 THEN ' - ' || est.bairro ELSE '' END
+                        ) as endereco_completo,
+                        
+                        -- CEP formatado
+                        CASE 
+                            WHEN LENGTH(est.cep) >= 8 THEN
+                                SUBSTR(est.cep, 1, 5) || '-' || SUBSTR(est.cep, 6, 3)
+                            ELSE COALESCE(est.cep, '')
+                        END as cep,
+                        
+                        est.uf,
+                        COALESCE(m.nome_municipio, '') as nome_municipio,
+                        
+                        -- Telefone formatado
+                        CASE 
+                            WHEN est.ddd_1 IS NOT NULL AND est.telefone_1 IS NOT NULL THEN
+                                '(' || est.ddd_1 || ') ' ||
+                                CASE 
+                                    WHEN LENGTH(est.telefone_1) = 9 THEN
+                                        SUBSTR(est.telefone_1, 1, 5) || '-' || SUBSTR(est.telefone_1, 6, 4)
+                                    WHEN LENGTH(est.telefone_1) = 8 THEN
+                                        SUBSTR(est.telefone_1, 1, 4) || '-' || SUBSTR(est.telefone_1, 5, 4)
+                                    ELSE est.telefone_1
+                                END
+                            ELSE ''
+                        END as telefone_formatado,
+                        
+                        COALESCE(est.correio_eletronico, '') as email,
+                        COALESCE(s.opcao_simples, 'N') as opcao_simples,
+                        COALESCE(s.opcao_mei, 'N') as opcao_mei,
+                        est.identificador_matriz_filial as matriz_filial
+                    FROM estabelecimentos est
+                    LEFT JOIN empresas emp ON est.cnpj_basico = emp.cnpj_basico
+                    LEFT JOIN simples s ON est.cnpj_basico = s.cnpj_basico
+                    LEFT JOIN cnaes c ON est.cnae_fiscal_principal = c.codigo_cnae
+                    LEFT JOIN naturezas nat ON emp.natureza_juridica = nat.codigo_natureza
+                    LEFT JOIN municipios m ON est.municipio = m.codigo_municipio
+                    WHERE {where_sql}
+                    ORDER BY est.cnpj_basico, est.cnpj_ordem
+                """
                 
                 # Executar consulta
                 cursor = self.db.connection.cursor()
                 inicio = time.time()
-                print(f"🔍 Executando consulta de exportação...")
                 cursor.execute(sql_export, params)
                 
-                # Buscar resultados
-                dados_csv = cursor.fetchall()
+                # Buscar resultados em chunks para economizar memória
+                chunk_size = 10000
+                dados_csv = []
+                
+                # Headers
+                headers = [
+                    'CNPJ_FORMATADO', 'CNPJ_COMPLETO', 'CNPJ_BASICO', 'RAZAO_SOCIAL', 
+                    'NOME_FANTASIA', 'DESCRICAO_NATUREZA', 'PORTE', 'CAPITAL_SOCIAL',
+                    'DESCRICAO_CNAE', 'SITUACAO_EMPRESA', 'DESCRICAO_MOTIVO', 'DATA_SITUACAO',
+                    'ENDERECO_COMPLETO', 'CEP', 'UF', 'NOME_MUNICIPIO', 'TELEFONE_FORMATADO',
+                    'EMAIL', 'OPCAO_SIMPLES', 'OPCAO_MEI', 'MATRIZ_FILIAL'
+                ]
+                
+                # Processar resultados
+                total_registros = 0
+                while True:
+                    rows = cursor.fetchmany(chunk_size)
+                    if not rows:
+                        break
+                    
+                    for row in rows:
+                        dados_csv.append(row)
+                        total_registros += 1
+                
                 tempo = time.time() - inicio
                 self.db.disconnect()
                 
-                print(f"✅ Consulta executada em {tempo:.2f}s - {len(dados_csv)} registros encontrados")
+                # Criar DataFrame e CSV
+                df = pd.DataFrame(dados_csv, columns=headers)
                 
-                if not dados_csv:
-                    return jsonify({
-                        "success": False,
-                        "error": "Nenhum dado encontrado com os filtros aplicados",
-                        "total_registros": 0
-                    })
-                
-                # Criar DataFrame otimizado
-                print(f"🔧 Criando DataFrame otimizado com {len(dados_csv)} registros e {len(headers)} colunas")
-                print(f"🔧 Headers: {headers}")
-                try:
-                    # Criar DataFrame e remover registros vazios
-                    df = pd.DataFrame(dados_csv, columns=headers)
-                    
-                    # Otimizações de performance e limpeza
-                    df = df.dropna(how='all')  # Remove linhas completamente vazias
-                    df = df.drop_duplicates()  # Remove duplicatas
-                    
-                    print(f"✅ DataFrame otimizado criado: {df.shape} (removidas linhas vazias/duplicadas)")
-                except Exception as e:
-                    print(f"❌ ERRO ao criar DataFrame: {e}")
-                    raise e
-                
-                # Aplicar formatações específicas aos dados
-                print(f"🔧 Aplicando formatações...")
-                try:
-                    # Formatação do CNPJ completo (com pontos, barras e hífen)
-                    if 'CNPJ_COMPLETO' in df.columns:
-                        def format_cnpj_completo(x):
-                            if pd.isna(x) or str(x).strip() == '' or str(x) == 'None':
-                                return ''
-                            # Extrair apenas números e garantir 14 dígitos
-                            clean = ''.join(filter(str.isdigit, str(x)))
-                            if len(clean) >= 8:  # CNPJ básico de 8 dígitos mínimo
-                                # Completar com zeros se necessário
-                                clean = clean.zfill(14)
-                                return f"{clean[:2]}.{clean[2:5]}.{clean[5:8]}/{clean[8:12]}-{clean[12:14]}"
-                            return str(x)
-                        df['CNPJ_COMPLETO'] = df['CNPJ_COMPLETO'].apply(format_cnpj_completo)
-                    
-                    # Formatação do CEP (com hífen e remoção de .0)
-                    if 'CEP' in df.columns:
-                        def format_cep(x):
-                            if pd.isna(x) or str(x).strip() == '' or str(x) == 'None':
-                                return ''
-                            # Remover .0 e extrair apenas números
-                            clean_str = str(x).replace('.0', '').replace('.', '')
-                            clean = ''.join(filter(str.isdigit, clean_str))
-                            if len(clean) == 8:
-                                return f"{clean[:5]}-{clean[5:]}"
-                            elif len(clean) > 0:
-                                return clean
-                            return ''
-                        df['CEP'] = df['CEP'].apply(format_cep)
-                    
-                    # Formatação dos telefones (melhorada para remover .0 e aplicar hífen)
-                    phone_fields = ['TELEFONE1', 'TELEFONE2']
-                    for field in phone_fields:
-                        if field in df.columns:
-                            def format_phone(x):
-                                if pd.isna(x) or str(x).strip() == '' or str(x) == 'None' or str(x) == '0.0' or str(x) == '0':
-                                    return ''
-                                # Remover .0 e extrair apenas números
-                                clean_str = str(x).replace('.0', '').replace('.', '')
-                                clean = ''.join(filter(str.isdigit, clean_str))
-                                if len(clean) == 8:
-                                    return f"{clean[:4]}-{clean[4:]}"
-                                elif len(clean) == 9:
-                                    return f"{clean[:5]}-{clean[5:]}"
-                                elif len(clean) > 0:
-                                    return clean
-                                return ''
-                            df[field] = df[field].apply(format_phone)
-                    
-                    # Formatação dos DDDs (remover .0)
-                    ddd_fields = ['DDD1', 'DDD2']
-                    for field in ddd_fields:
-                        if field in df.columns:
-                            def format_ddd(x):
-                                if pd.isna(x) or str(x).strip() == '' or str(x) == 'None' or str(x) == '0.0' or str(x) == '0':
-                                    return ''
-                                # Remover .0 e extrair apenas números
-                                clean_str = str(x).replace('.0', '').replace('.', '')
-                                clean = ''.join(filter(str.isdigit, clean_str))
-                                return clean if clean else ''
-                            df[field] = df[field].apply(format_ddd)
-                    
-                    # Formatação do capital social (como moeda brasileira)
-                    if 'CAPITAL_SOCIAL' in df.columns:
-                        def format_capital(x):
-                            if pd.isna(x) or str(x).strip() == '' or str(x) == 'None' or str(x) == '0':
-                                return 'R$ 0,00'
-                            try:
-                                # Tentar converter para float
-                                clean_value = str(x).replace(',', '.')
-                                value = float(clean_value)
-                                return f"R$ {value:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
-                            except:
-                                return str(x)
-                        df['CAPITAL_SOCIAL'] = df['CAPITAL_SOCIAL'].apply(format_capital)
-                    
-                    # Padronização de campos de texto (title case aprimorado)
-                    text_fields = ['RAZAO_SOCIAL', 'NOME_FANTASIA', 'TIPO_LOGRADOURO', 'LOGRADOURO', 'BAIRRO', 'MUNICIPIO']
-                    for field in text_fields:
-                        if field in df.columns:
-                            def format_text(x):
-                                if pd.isna(x) or str(x).strip() == '' or str(x) == 'None':
-                                    return ''
-                                # Aplicar title case mas manter algumas palavras em minúsculo
-                                text = str(x).strip()
-                                if text.isupper() or text.islower():
-                                    return text.title()
-                                return text
-                            df[field] = df[field].apply(format_text)
-                    
-                    # Formatação de datas (formato brasileiro DD/MM/AAAA)
-                    date_fields = ['DATA_OPCAO_SIMPLES', 'DATA_SITUACAO']
-                    for field in date_fields:
-                        if field in df.columns:
-                            def format_date(x):
-                                if pd.isna(x) or str(x).strip() == '' or str(x) == 'None':
-                                    return ''
-                                clean = ''.join(filter(str.isdigit, str(x)))
-                                if len(clean) == 8:
-                                    return f"{clean[6:8]}/{clean[4:6]}/{clean[:4]}"
-                                return str(x)
-                            df[field] = df[field].apply(format_date)
-                    
-                    # Formatação do CNAE (código estruturado)
-                    if 'CNAE_PRINCIPAL' in df.columns:
-                        def format_cnae(x):
-                            if pd.isna(x) or str(x).strip() == '' or str(x) == 'None':
-                                return ''
-                            clean = ''.join(filter(str.isdigit, str(x)))
-                            if len(clean) == 7:
-                                return f"{clean[:2]}.{clean[2:4]}-{clean[4]}-{clean[5:7]}"
-                            return str(x)
-                        df['CNAE_PRINCIPAL'] = df['CNAE_PRINCIPAL'].apply(format_cnae)
-                    
-                    # Formatação da coluna SOCIOS (limpeza e organização aprimorada)
-                    if 'SOCIOS' in df.columns:
-                        def format_socios(x):
-                            if pd.isna(x) or str(x).strip() == '' or str(x) == 'None':
-                                return ''
-                            # Limpar formatação problemática
-                            text = str(x)
-                            # Remover entradas vazias ou mal formatadas
-                            text = text.replace(' - ; ', '; ').replace('()', '').replace(' () ', ' ')
-                            text = text.replace(' - ', ' - ')
-                            # Limpar múltiplos separadores
-                            parts = [part.strip() for part in text.split(';') if part.strip() and part.strip() != '-' and part.strip() != '()']
-                            return '; '.join(parts) if parts else ''
-                        df['SOCIOS'] = df['SOCIOS'].apply(format_socios)
-                    
-                    print(f"✅ Formatações aplicadas com sucesso")
-                    
-                except Exception as e:
-                    print(f"⚠️ Erro nas formatações (continuando sem formatação): {e}")
-                
-                # Gerar arquivo CSV otimizado
-                print(f"🔧 Gerando arquivo CSV otimizado...")
-                try:
-                    # Remover linhas vazias e otimizar DataFrame
-                    df_clean = df.dropna(how='all')  # Remove linhas completamente vazias
-                    df_clean = df_clean.fillna('')   # Substitui NaN por string vazia
-                    
-                    # Gerar CSV sem linhas vazias
-                    output = io.StringIO()
-                    df_clean.to_csv(output, sep=';', index=False, encoding='utf-8', 
-                                   lineterminator='\n')  # Força terminador de linha único
-                    
-                    # Limpar linhas vazias adicionais
-                    csv_content = output.getvalue()
-                    csv_lines = [line for line in csv_content.split('\n') if line.strip()]
-                    csv_content = '\n'.join(csv_lines)
-                    
-                    output = io.StringIO(csv_content)
-                    output.seek(0)
-                    print(f"✅ CSV otimizado gerado: {len(csv_content)} caracteres, {len(csv_lines)} linhas")
-                except Exception as e:
-                    print(f"❌ ERRO ao gerar CSV: {e}")
-                    raise e
+                # Gerar arquivo CSV
+                output = io.StringIO()
+                df.to_csv(output, sep=';', index=False, encoding='utf-8')
+                output.seek(0)
                 
                 # Criar arquivo temporário
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                 filename = f"cnpj_exportacao_{timestamp}.csv"
                 
                 # Salvar arquivo temporário
-                print(f"🔧 Salvando arquivo: {filename}")
-                try:
-                    with open(filename, 'w', encoding='utf-8') as f:
-                        f.write(output.getvalue())
-                    print(f"✅ Arquivo salvo com sucesso: {filename}")
-                except Exception as e:
-                    print(f"❌ ERRO ao salvar arquivo: {e}")
-                    raise e
+                with open(filename, 'w', encoding='utf-8') as f:
+                    f.write(output.getvalue())
                 
                 # Retornar informações da exportação
                 return jsonify({
                     "success": True,
                     "filename": filename,
-                    "total_registros": len(dados_csv),
+                    "total_registros": total_registros,
                     "execution_time": round(tempo, 3),
                     "filters_applied": filtros,
                     "download_url": f"/download/{filename}",
@@ -843,13 +558,7 @@ class CNPJApp:
                 })
                 
             except Exception as e:
-                print(f"❌ ERRO na exportação: {str(e)}")
-                print(f"❌ Tipo do erro: {type(e).__name__}")
-                import traceback
-                print(f"❌ Traceback: {traceback.format_exc()}")
-                if self.db.connection:
-                    self.db.disconnect()
-                return jsonify({"error": f"Erro na exportação: {str(e)}"}), 500
+                return jsonify({"error": str(e)}), 500
         
         @self.app.route('/download/<filename>')
         def download_file(filename):
