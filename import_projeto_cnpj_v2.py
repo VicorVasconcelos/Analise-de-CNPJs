@@ -45,25 +45,24 @@ class CNPJProjectImporter:
             'Estabelecimentos0': {
                 'table': 'estabelecimentos',
                 'columns': [
-                    'cnpj_basico', 'cnpj_ordem', 'cnpj_dv', 'matriz_filial',
-                    'nome_fantasia', 'situacao', 'data_situacao',
-                    'motivo_situacao', 'nome_cidade_exterior', 'pais',
-                    'data_inicio', 'cnae_principal', 'cnae_secundario',
-                    'tipo_logradouro', 'logradouro', 'numero', 'complemento',
-                    'bairro', 'cep', 'uf', 'municipio', 'ddd1', 'telefone1',
-                    'ddd2', 'telefone2', 'fax_ddd', 'fax_numero', 'email',
-                    'situacao_especial', 'data_situacao_especial'
+                    'cnpj_basico', 'cnpj_ordem', 'cnpj_dv', 'identificador_matriz_filial',
+                    'nome_fantasia', 'situacao_cadastral', 'data_situacao_cadastral',
+                    'motivo_situacao_cadastral', 'nome_cidade_exterior', 'pais',
+                    'data_inicio_atividade', 'cnae_fiscal_principal', 'cnae_fiscal_secundaria',
+                    'tipo_logradouro', 'logradouro', 'numero', 'complemento', 'bairro',
+                    'cep', 'uf', 'municipio', 'ddd_1', 'telefone_1', 'ddd_2', 'telefone_2',
+                    'ddd_fax', 'fax', 'correio_eletronico', 'situacao_especial', 'data_situacao_especial'
                 ],
+                'encoding': 'latin1'
+            },
+            'Municipios': {
+                'table': 'municipios',
+                'columns': ['codigo_municipio', 'nome_municipio'],
                 'encoding': 'latin1'
             },
             'Motivos': {
                 'table': 'motivos',
                 'columns': ['codigo_motivo', 'descricao_motivo'],
-                'encoding': 'latin1'
-            },
-            'Municipios': {
-                'table': 'municipios',
-                'columns': ['codigo_municipio', 'descricao_municipio'],
                 'encoding': 'latin1'
             },
             'Naturezas': {
@@ -73,7 +72,7 @@ class CNPJProjectImporter:
             },
             'Paises': {
                 'table': 'paises',
-                'columns': ['codigo_pais', 'descricao_pais'],
+                'columns': ['codigo_pais', 'nome_pais'],
                 'encoding': 'latin1'
             },
             'Qualificacoes': {
@@ -84,14 +83,13 @@ class CNPJProjectImporter:
             'Simples': {
                 'table': 'simples',
                 'columns': [
-                    'cnpj_basico', 'opcao_simples', 'data_opcao_simples',
-                    'data_exclusao_simples', 'opcao_mei', 'data_opcao_mei',
-                    'data_exclusao_mei'
+                    'cnpj_basico', 'opcao_simples', 'data_opcao_simples', 'data_exclusao_simples',
+                    'opcao_mei', 'data_opcao_mei', 'data_exclusao_mei'
                 ],
                 'encoding': 'latin1'
             }
         }
-    
+
     def connect_db(self):
         """Conecta ao banco de dados"""
         try:
@@ -106,7 +104,7 @@ class CNPJProjectImporter:
         except Exception as e:
             logging.error(f"Erro ao conectar no banco: {e}")
             return False
-    
+
     def find_csv_file(self, folder_name):
         """Encontra o arquivo CSV na pasta especificada"""
         folder_path = self.data_path / folder_name
@@ -123,7 +121,7 @@ class CNPJProjectImporter:
         csv_file = csv_files[0]
         logging.info(f"Arquivo encontrado: {csv_file} ({csv_file.stat().st_size / (1024*1024):.1f} MB)")
         return csv_file
-    
+
     def get_table_count(self, table_name):
         """Retorna o número de registros na tabela"""
         try:
@@ -132,7 +130,7 @@ class CNPJProjectImporter:
             return cursor.fetchone()[0]
         except:
             return 0
-    
+
     def import_table(self, folder_name, config):
         """Importa dados de uma tabela específica"""
         csv_file = self.find_csv_file(folder_name)
@@ -212,31 +210,29 @@ class CNPJProjectImporter:
         except Exception as e:
             logging.error(f"ERRO ao importar {table_name}: {e}")
             return False
-    
+
     def create_indexes(self):
         """Criar índices para performance"""
         logging.info("Criando índices para performance...")
         
         indexes = [
+            "CREATE INDEX IF NOT EXISTS idx_empresas_cnpj_basico ON empresas(cnpj_basico)",
+            "CREATE INDEX IF NOT EXISTS idx_estabelecimentos_cnpj_basico ON estabelecimentos(cnpj_basico)",
             "CREATE INDEX IF NOT EXISTS idx_estabelecimentos_uf ON estabelecimentos(uf)",
-            "CREATE INDEX IF NOT EXISTS idx_estabelecimentos_cnae ON estabelecimentos(cnae_principal)",
             "CREATE INDEX IF NOT EXISTS idx_estabelecimentos_municipio ON estabelecimentos(municipio)",
-            "CREATE INDEX IF NOT EXISTS idx_estabelecimentos_situacao ON estabelecimentos(situacao_cadastral)",
-            "CREATE INDEX IF NOT EXISTS idx_estabelecimentos_cnpj ON estabelecimentos(cnpj_basico, cnpj_ordem, cnpj_dv)",
-            "CREATE INDEX IF NOT EXISTS idx_empresas_cnpj ON empresas(cnpj_basico)",
-            "CREATE INDEX IF NOT EXISTS idx_simples_cnpj ON simples(cnpj_basico)"
+            "CREATE INDEX IF NOT EXISTS idx_estabelecimentos_cnae ON estabelecimentos(cnae_fiscal_principal)",
+            "CREATE INDEX IF NOT EXISTS idx_simples_cnpj_basico ON simples(cnpj_basico)"
         ]
         
         for index_sql in indexes:
             try:
                 self.connection.execute(index_sql)
-                logging.info(f"   Índice criado")
             except Exception as e:
-                logging.warning(f"   Erro ao criar índice: {e}")
+                logging.warning(f"Erro ao criar índice: {e}")
         
         self.connection.commit()
         logging.info("Índices criados com sucesso!")
-    
+
     def import_all_data(self):
         """Importa todos os dados do projeto CNPJ"""
         if not self.connect_db():
@@ -286,15 +282,21 @@ class CNPJProjectImporter:
         
         self.connection.close()
         return success_count >= (total_tables - 2)  # Permitir falha em até 2 tabelas grandes
-    
+
     def show_final_stats(self):
         """Mostra estatísticas finais do banco"""
         logging.info("\nESTATÍSTICAS FINAIS:")
         
-        for folder_name, config in self.folder_mapping.items():
-            table_name = config['table']
-            count = self.get_table_count(table_name)
-            logging.info(f"   {table_name:15}: {count:,} registros")
+        tables = ['empresas', 'estabelecimentos', 'simples', 'cnaes', 'municipios', 'naturezas']
+        
+        for table in tables:
+            try:
+                cursor = self.connection.cursor()
+                cursor.execute(f"SELECT COUNT(*) FROM {table}")
+                count = cursor.fetchone()[0]
+                logging.info(f"   {table.capitalize():<15}: {count:,} registros")
+            except:
+                logging.info(f"   {table.capitalize():<15}: Erro ao contar")
 
 def main():
     """Função principal"""

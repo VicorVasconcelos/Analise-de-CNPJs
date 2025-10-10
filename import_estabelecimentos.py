@@ -44,7 +44,7 @@ class EstabelecimentosImporter:
         except Exception as e:
             logging.error(f"Erro ao conectar: {e}")
             return False
-    
+
     def create_estabelecimentos_table(self):
         """Criar tabela estabelecimentos otimizada"""
         try:
@@ -103,7 +103,7 @@ class EstabelecimentosImporter:
         except Exception as e:
             logging.error(f"Erro ao criar tabela: {e}")
             return False
-    
+
     def import_estabelecimentos(self):
         """Importar dados de estabelecimentos"""
         try:
@@ -180,7 +180,7 @@ class EstabelecimentosImporter:
         except Exception as e:
             logging.error(f"Erro na importação: {e}")
             return False
-    
+
     def import_municipios(self):
         """Importar dados de municípios"""
         try:

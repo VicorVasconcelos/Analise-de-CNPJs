@@ -16,7 +16,7 @@ class CNPJImporter:
         self.data_dir = Path(data_dir)
         self.db = CNPJDatabase(db_path)
         self.chunk_size = 10000  # Processar 10k registros por vez
-        
+
     def find_csv_files(self):
         """Localiza todos os arquivos CSV nas subpastas"""
         print("🔍 LOCALIZANDO ARQUIVOS CSV...")
@@ -56,7 +56,7 @@ class CNPJImporter:
                 print(f"   ⚠️  {tabela:<20} - Pasta não encontrada: {pasta}")
         
         return arquivos_encontrados
-    
+
     def import_table_reference(self, tabela, arquivo_info):
         """Importa tabelas de referência pequenas (completas)"""
         arquivo = arquivo_info['arquivo']
@@ -111,7 +111,7 @@ class CNPJImporter:
         except Exception as e:
             print(f"   ❌ Erro na importação: {e}")
             return False
-    
+
     def import_table_large(self, tabela, arquivo_info):
         """Importa tabelas grandes em chunks"""
         arquivo = arquivo_info['arquivo']
@@ -194,7 +194,7 @@ class CNPJImporter:
             if self.db.connection:
                 self.db.disconnect()
             return False
-    
+
     def import_all(self):
         """Importa todos os arquivos CSV para o banco"""
         print("🚀 INICIANDO IMPORTAÇÃO COMPLETA DOS DADOS CNPJ")

@@ -165,19 +165,19 @@ async function loadStats() {
                 <div class="stat-label">Empresas</div>
             </div>
             <div class="stat-card">
-                <i class="fas fa-users"></i>
-                <div class="stat-value">${formatNumber(data.tabelas.simples || 0)}</div>
-                <div class="stat-label">Simples Nacional</div>
-            </div>
-            <div class="stat-card">
                 <i class="fas fa-industry"></i>
                 <div class="stat-value">${formatNumber(data.tabelas.cnaes || 0)}</div>
-                <div class="stat-label">CNAEs Diferentes</div>
+                <div class="stat-label">CNAEs Disponíveis</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-map-marker-alt"></i>
+                <div class="stat-value">${data.top_ufs && data.top_ufs.length}</div>
+                <div class="stat-label">Estados (UFs)</div>
             </div>
             <div class="stat-card">
                 <i class="fas fa-chart-pie"></i>
                 <div class="stat-value">${data.top_naturezas[0]?.natureza?.slice(0, 15) || 'N/A'}...</div>
-                <div class="stat-label">Principal Natureza<br><small>(${formatNumber(data.top_naturezas[0]?.total || 0)} empresas)</small></div>
+                <div class="stat-label">Principal Natureza<br><small>(${formatNumber(data.top_naturezas[0]?.total || 0)} empresas)</small></div>   
             </div>
         `;
     } catch (error) {
@@ -209,14 +209,23 @@ async function loadFilters() {
         
         const data = await response.json();
         
-        // Carregar UFs
+        // Helper to safely read value/label from various backend shapes
+        function readValue(o, keys) {
+            for (const k of keys) if (o && o[k] !== undefined) return o[k];
+            return '';
+        }
+
+        // Carregar UFs (suporta {value,label} ou {uf,count})
         const ufSelect = document.getElementById('uf');
         if (ufSelect) {
             ufSelect.innerHTML = '<option value="">Todos os estados</option>';
-            data.ufs.forEach(uf => {
+            const ufsArr = data.ufs || [];
+            ufsArr.forEach(uf => {
                 const option = document.createElement('option');
-                option.value = uf.value;
-                option.textContent = `${uf.label} (${uf.count.toLocaleString()} empresas)`;
+                const val = readValue(uf, ['value', 'uf']);
+                const label = readValue(uf, ['label', 'uf']);
+                option.value = val || label || '';
+                option.textContent = label || val || '';
                 ufSelect.appendChild(option);
             });
         }
@@ -234,13 +243,18 @@ async function loadFilters() {
         }
         
         // Carregar Naturezas Jurídicas
+        // Carregar Naturezas Jurídicas (vários formatos: data.naturezas OR data.naturezas_juridicas)
         const naturezaSelect = document.getElementById('natureza_juridica');
         if (naturezaSelect) {
             naturezaSelect.innerHTML = '<option value="">Todas as naturezas</option>';
-            data.naturezas.forEach(natureza => {
+            const natArr = data.naturezas || data.naturezas_juridicas || [];
+            natArr.forEach(natureza => {
                 const option = document.createElement('option');
-                option.value = natureza.value;
-                option.textContent = natureza.label;
+                // suporte a {value,label} ou {codigo,descricao}
+                const val = readValue(natureza, ['value', 'codigo']);
+                const label = readValue(natureza, ['label', 'descricao']);
+                option.value = val || label || '';
+                option.textContent = label || val || '';
                 naturezaSelect.appendChild(option);
             });
         }
@@ -249,11 +263,29 @@ async function loadFilters() {
         const porteSelect = document.getElementById('porte');
         if (porteSelect) {
             porteSelect.innerHTML = '<option value="">Todos os portes</option>';
-            data.portes.forEach(porte => {
+            const porteArr = data.portes || [];
+            porteArr.forEach(porte => {
                 const option = document.createElement('option');
-                option.value = porte.value;
-                option.textContent = porte.label;
+                const val = readValue(porte, ['value']);
+                const label = readValue(porte, ['label']);
+                option.value = val || label || '';
+                option.textContent = label || val || '';
                 porteSelect.appendChild(option);
+            });
+        }
+        
+        // Carregar Situações Cadastrais
+        const situacaoSelect = document.getElementById('situacao_cadastral');
+        if (situacaoSelect) {
+            situacaoSelect.innerHTML = '<option value="">Todas as situações</option>';
+            const situArr = data.situacoes_cadastrais || [];
+            situArr.forEach(situacao => {
+                const option = document.createElement('option');
+                const val = readValue(situacao, ['value']);
+                const label = readValue(situacao, ['label']);
+                option.value = val || label || '';
+                option.textContent = label || val || '';
+                situacaoSelect.appendChild(option);
             });
         }
         
@@ -261,10 +293,13 @@ async function loadFilters() {
         const simplesSelect = document.getElementById('opcao_simples');
         if (simplesSelect) {
             simplesSelect.innerHTML = '<option value="">Todas as opções</option>';
-            data.simples_opcoes.forEach(opcao => {
+            const simplesArr = data.simples_opcoes || [];
+            simplesArr.forEach(opcao => {
                 const option = document.createElement('option');
-                option.value = opcao.value;
-                option.textContent = opcao.label;
+                const val = readValue(opcao, ['value']);
+                const label = readValue(opcao, ['label']);
+                option.value = val || label || '';
+                option.textContent = label || val || '';
                 simplesSelect.appendChild(option);
             });
         }
@@ -324,6 +359,11 @@ async function handleSearch(event) {
         // Porte da Empresa
         if (formData.get('porte')) {
             currentFilters.porte = formData.get('porte');
+        }
+        
+        // Situação Cadastral
+        if (formData.get('situacao_cadastral')) {
+            currentFilters.situacao_cadastral = formData.get('situacao_cadastral');
         }
         
         // Opção Simples Nacional
@@ -389,7 +429,7 @@ function displayResults(results) {
     if (!results || results.length === 0) {
         resultsBody.innerHTML = `
             <tr>
-                <td colspan="6" style="text-align: center; padding: 40px; color: #7f8c8d;">
+                <td colspan="8" style="text-align: center; padding: 40px; color: #7f8c8d;">
                     <i class="fas fa-search" style="font-size: 2em; margin-bottom: 10px;"></i><br>
                     Nenhum resultado encontrado com os filtros aplicados.
                 </td>
@@ -401,12 +441,14 @@ function displayResults(results) {
     
     resultsBody.innerHTML = results.map(row => `
         <tr>
-            <td>${row.cnpj_basico || '-'}</td>
+            <td>${row.cnpj_formatado || '-'}</td>
             <td>${row.razao_social || '-'}</td>
-            <td>${row.natureza_juridica || '-'}</td>
+            <td>${row.nome_fantasia || '-'}</td>
+            <td>${row.situacao || '-'}</td>
+            <td>${row.uf || '-'}</td>
+            <td>${row.municipio || '-'}</td>
             <td>${row.porte || '-'}</td>
-            <td>${row.simples_nacional || '-'}</td>
-            <td>${row.data_opcao_simples || '-'}</td>
+            <td>${row.natureza_juridica || '-'}</td>
         </tr>
     `).join('');
     
@@ -532,6 +574,7 @@ function clearFilters() {
     filtersForm.reset();
     document.getElementById('uf').selectedIndex = -1;
     document.getElementById('cnae').selectedIndex = -1;
+    document.getElementById('situacao_cadastral').selectedIndex = -1;
     currentFilters = {};
     hideResultsSection();
 }

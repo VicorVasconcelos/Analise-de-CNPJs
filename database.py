@@ -15,35 +15,46 @@ class CNPJDatabase:
     def connect(self):
         """Conecta ao banco de dados SQLite"""
         try:
-            self.connection = sqlite3.connect(self.db_path)
+            # Conectar com timeout e permitir uso de objetos em múltiplas threads
+            self.connection = sqlite3.connect(self.db_path, timeout=30, check_same_thread=False)
+            # Performance pragmas: journaling WAL, menor sync e cache em memória
+            try:
+                self.connection.execute("PRAGMA journal_mode = WAL")
+                self.connection.execute("PRAGMA synchronous = NORMAL")
+                self.connection.execute("PRAGMA temp_store = MEMORY")
+                # cache_size em páginas (p.ex. 100k) - ajuste conforme memória disponível
+                self.connection.execute("PRAGMA cache_size = 100000")
+            except Exception:
+                # Alguns pragmas podem não estar disponíveis em builds específicos; ignorar falhas
+                pass
             # Desabilitar chaves estrangeiras temporariamente para importação
             self.connection.execute("PRAGMA foreign_keys = OFF")
-            print(f"✅ Conectado ao banco: {self.db_path}")
+            print(f"OK - Conectado ao banco: {self.db_path}")
             return True
         except Exception as e:
-            print(f"❌ Erro ao conectar: {e}")
+            print(f"ERRO - Erro ao conectar: {e}")
             return False
     
     def disconnect(self):
         """Desconecta do banco de dados"""
         if self.connection:
             self.connection.close()
-            print("🔌 Desconectado do banco")
+            print("Desconectado do banco")
     
     def create_tables(self):
         """Cria todas as tabelas necessárias do sistema CNPJ"""
-        print("🏗️  CRIANDO ESTRUTURA DO BANCO DE DADOS")
+        print("CRIANDO ESTRUTURA DO BANCO DE DADOS")
         print("=" * 60)
         
         if not self.connection:
-            print("❌ Não conectado ao banco")
+            print("ERRO - Nao conectado ao banco")
             return False
         
         try:
             cursor = self.connection.cursor()
             
             # 1. TABELA EMPRESAS (1.7GB)
-            print("📊 Criando tabela: empresas")
+            print("Criando tabela: empresas")
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS empresas (
                     cnpj_basico TEXT PRIMARY KEY,
