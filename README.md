@@ -1,135 +1,153 @@
-# Sistema de Análise de Dados Abertos do CNPJ
+# Sistema de Análise de Dados do CNPJ
 
-## 📋 Descrição
+Este repositório contém o backend (Flask), frontend (HTML/CSS/JS) e scripts auxiliares para importar, indexar e gerar agregados a partir dos dados do CNPJ.
 
-Sistema completo para análise e exportação de dados do CNPJ da Receita Federal do Brasil. Permite filtrar estabelecimentos por UF, CNAE, município, bairro e outras características, gerando arquivos CSV personalizados conforme os filtros aplicados pelo usuário.
+📌 Resumo rápido
+- Backend: Python 3.13, Flask, SQLite
+- Frontend: `index.html`, `script.js`, `styles.css` (Vanilla JS)
+- Scripts auxiliares: importadores, criação de índices e geração de `aggregates_*`
 
-## 🚀 Funcionalidades
+---
 
-- **Interface Web Moderna**: Design responsivo com filtros intuitivos
-- **Filtros Avançados**: UF, CNAE, município, bairro, situação cadastral, porte da empresa
-- **Exportação Personalizada**: Gera CSV com dados formatados conforme filtros
-- **Performance Otimizada**: Consultas rápidas com índices no banco de dados
-- **Paginação**: Navegação eficiente pelos resultados
-- **API REST**: Backend robusto com 7 endpoints
+## 🗂️ Estrutura do repositório (arquivos principais)
 
-## 🛠️ Tecnologias Utilizadas
-
-- **Backend**: Python 3.13, Flask, SQLite
-- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
-- **Processamento**: pandas para manipulação de dados
-- **Interface**: Design moderno com Font Awesome
-
-## 📁 Estrutura do Projeto
+Arquivos presentes na raiz do projeto (exemplo representativo):
 
 ```
-Dashboard/
-├── app.py                          # Backend Flask com APIs
-├── database.py                     # Estrutura do banco de dados
-├── import_data.py                  # Script de importação dos CSVs
-├── test_queries.py                 # Testes de consultas
-├── test_api.py                     # Testes das APIs
-├── index.html                      # Interface principal
-├── styles.css                      # Estilos responsivos
-├── script.js                       # JavaScript interativo
-├── cnpj_database.db               # Banco SQLite (criado após import)
-├── cnpj_consolidado_final.csv     # Arquivo de exemplo/template
-└── README.md                      # Esta documentação
+.gitattributes
+.gitignore
+analyze_and_bench.py
+analyze_and_bench_safe.py
+analyze_db.py
+app.py
+cnpj_database.db
+cnpj_exportacao_20251010_100841.csv
+create_aggregates.py
+create_indexes.sql
+create_indexes_temp.sql
+database.py
+importador_estabelecimentos_completo.py
+import_data.py
+import_estabelecimentos.py
+import_projeto_cnpj.py
+import_projeto_cnpj_v2.py
+index.html
+inspect_db.py
+last_filters_response.json
+README.md
+response.json
+response_filters.json
+script.js
+server.err
+server.log
+styles.css
 ```
 
-## 🏃‍♂️ Como Executar
+> Nota: a pasta `exports/` é usada pelas rotinas de exportação (pode ser criada automaticamente pelo servidor).
 
-### 1. Pré-requisitos
+---
 
-- Python 3.13 ou superior
-- Ambiente virtual Python (recomendado)
+## ⚙️ Pré-requisitos
 
-### 2. Instalação
+- Python 3.10+ (3.13 recomendado)
+- Recomenda-se criar um ambiente virtual (venv)
 
-```bash
-# Clone ou baixe o projeto
-cd Dashboard
+## ▶️ Instalação (Windows - PowerShell)
 
-# Ative o ambiente virtual (se usar)
-.venv\Scripts\activate
-
-# Instale as dependências
+```powershell
+cd "C:\Users\victor.vasconcelos\Documents\Dashboard"
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install --upgrade pip
 pip install flask flask-cors pandas requests
 ```
 
-### 3. Preparação dos Dados
-# Sistema de Análise CNPJ
+---
 
-Um projeto para analisar, filtrar e exportar os dados abertos do CNPJ (Receita Federal). Este repositório contém o backend em Flask, o frontend em HTML/CSS/vanilla JS e scripts de importação/otimização para o banco SQLite.
+## 📦 Preparação dos dados (resumo)
 
-Principais pontos
-- Backend: Flask + SQLite (arquivo: `cnpj_database.db`)
-- Frontend: `index.html`, `script.js`, `styles.css`
-- Tabelas de referência e agregados para acelerar filtros: `aggregates_*`
+1) Backup do DB (sempre antes de alterações):
 
-Estrutura relevante
-- `app.py` — servidor Flask com endpoints: `/health`, `/stats`, `/filters`, `/query`, `/export`
-- `database.py` — conexão com SQLite e PRAGMA de performance
-- `import_*` scripts — importadores para empresas, estabelecimentos e tabelas de referência
-- `create_aggregates.py` — monta as tabelas `aggregates_*` para acelerar `/filters`
-- `create_indexes.sql` — instruções para criar índices importantes
-- `script.js`, `index.html`, `styles.css` — frontend
-- `exports/` — pasta onde arquivos CSV exportados são salvos
-
-Requisitos
-- Python 3.10+ (3.13 recomendado)
-- Dependências: `flask`, `flask-cors`, `pandas`, `requests` (instale via `pip`)
-
-Como rodar (desenvolvimento)
-1. No diretório do projeto, ative o venv (opcional):
-   `.venv\Scripts\activate`
-2. Instale dependências se necessário:
-   `pip install flask flask-cors pandas requests`
-3. Inicie o servidor:
-   `python app.py`
-4. Abra no navegador: `http://localhost:5000`
-
-Backup do banco (sempre antes de alterações)
-- Faça uma cópia do arquivo: `Copy-Item cnpj_database.db cnpj_database.db.backup_$(Get-Date -Format yyyyMMdd_HHmmss).db`
-
-Índices e aggregates
-- Crie índices (uma vez) com `create_indexes.sql` ou via sqlite3:
-  `sqlite3 cnpj_database.db ".read create_indexes.sql"`
-- Gere/atualize as tabelas de agregados:
-  `python create_aggregates.py`
-  Essas tabelas (`aggregates_ufs`, `aggregates_cnaes`, `aggregates_naturezas`, `aggregates_portes`, `aggregates_simples`) reduzem consultas demoradas no `/filters`.
-
-Cache
-- `/stats` e `/filters` usam cache TTL em memória (em `app.py`).
-- Se atualizar aggregates, reinicie o servidor ou force refresh do cache.
-
-Fluxo de atualização da base
-1. Backup do DB
-2. Parar servidor
-3. Executar importadores (empresas, estabelecimentos, referências)
-4. Criar índices
-5. Rodar `create_aggregates.py`
-6. Executar `ANALYZE;` no sqlite3
-7. Reiniciar servidor
-
-Testes
-- `test_api.py` e `test_queries.py` — scripts de verificação. Execute com `python` ou `pytest`.
-
-Dicas de troubleshooting rápido
-- Se dropdowns aparecerem vazios, abra DevTools → Network → verifique `/filters` e confirme que o JSON tem `value`/`label` (o frontend já é tolerante a variações).
-- Se `/filters` estiver lento, verifique se `aggregates_*` existem.
-
-Git — commit e push
 ```powershell
-cd "C:\Users\victor.vasconcelos\Documents\Dashboard"
-git add README.md
-git commit -m "docs: atualizar README com processo de atualização, índices e aggregates"
-git push origin perf-improvements
+Copy-Item cnpj_database.db cnpj_database.db.backup_$(Get-Date -Format yyyyMMdd_HHmmss).db
 ```
 
-Contato
-- Para dúvidas ou testes locais, inicie o servidor (`python app.py`) e acesse `http://localhost:5000`.
+2) Executar importadores (quando necessário):
+
+```powershell
+python import_projeto_cnpj.py
+python import_estabelecimentos.py
+```
+
+3) Criar índices (apenas uma vez ou após import):
+
+```powershell
+sqlite3 cnpj_database.db ".read create_indexes.sql"
+```
+
+4) Gerar aggregates para acelerar `/filters`:
+
+```powershell
+python create_aggregates.py
+```
+
+5) (Opcional) executar `ANALYZE;` no sqlite3 para atualizar estatísticas do otimizador.
 
 ---
+
+## 🧭 Como rodar (desenvolvimento)
+
+```powershell
+python app.py
+```
+
+Abra no navegador: http://localhost:5000
+
+---
+
+## 🚀 Endpoints principais
+
+- `/health` — checagem rápida
+- `/stats` — estatísticas do banco
+- `/filters` — lista de filtros pré-computados (ufs, cnaes, naturezas, etc.)
+- `/query` — executa consulta com filtros e paginação
+- `/export` — gera CSVs na pasta `exports/`
+
+---
+
+## 🎯 Destaques e mudanças recentes
+
+- O backend foi otimizado com tabelas de agregados (`aggregates_*`) para acelerar `/filters` e `/stats`.
+- O endpoint `/export` passou a respeitar os mesmos filtros aplicados em `/query`, garantindo consistência entre a UI e o CSV gerado.
+- O dropdown de UFs agora é apresentado em ordem alfabética (backend + frontend).
+
+---
+
+## ⚠️ Observações importantes
+
+- O arquivo `cnpj_database.db` pode ser muito grande. Considere usar Git LFS ou manter o arquivo em armazenamento externo.
+- Exportações muito grandes podem demorar; o servidor gera CSVs em chunks, mas cargas grandes devem ser executadas como jobs de background para maior robustez.
+
+---
+
+## 🧰 Dicas de manutenção
+
+- Sempre faça backup antes de rodar importadores.
+- Após criar índices, rode `ANALYZE;` no Sqlite.
+- Para re-gerar agregados: `python create_aggregates.py`.
+
+---
+
+## 🧪 Testes
+
+- Atualmente não há testes automatizados no repositório. Posso adicionar testes de smoke para `/health`, `/filters` e `/query` se desejar.
+
+---
+
+## 📞 Contato
+
+- **Desenvolvedor principal:** Victor Vasconcelos — +55 61 98438-5187
+
+---
+
 Atualizado em: 2025-10-10
-**Desenvolvido para análise de dados abertos do CNPJ - Receita Federal do Brasil**

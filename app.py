@@ -66,6 +66,65 @@ class CNPJApp:
                 return wrapper
             return decorator
         
+        def build_where_and_params(filtros):
+            """Constrói where_clauses e params a partir do payload de filtros.
+            Mesmo comportamento usado por /query para manter consistência com /export.
+            """
+            where_clauses = []
+            params = []
+
+            if filtros.get('razao_social'):
+                where_clauses.append("(e.razao_social LIKE ? OR est.nome_fantasia LIKE ?)")
+                termo = f"%{filtros['razao_social']}%"
+                params.extend([termo, termo])
+
+            if filtros.get('uf'):
+                where_clauses.append("est.uf = ?")
+                params.append(filtros['uf'])
+
+            if filtros.get('cnae'):
+                where_clauses.append("est.cnae_fiscal_principal = ?")
+                params.append(filtros['cnae'])
+
+            if filtros.get('natureza_juridica'):
+                where_clauses.append("e.natureza_juridica = ?")
+                params.append(filtros['natureza_juridica'])
+
+            if filtros.get('porte'):
+                porte_filtro = filtros['porte']
+                if porte_filtro == 'MEI':
+                    where_clauses.append("s.opcao_mei = 'S'")
+                elif porte_filtro == 'MICRO':
+                    where_clauses.append("e.porte IN ('49', '50')")
+                elif porte_filtro == 'PEQUENO':
+                    where_clauses.append("e.porte IN ('05', '16', '17', '19')")
+                elif porte_filtro == 'MEDIO':
+                    where_clauses.append("e.porte IN ('43', '34', '65', '59')")
+                elif porte_filtro == 'GRANDE':
+                    where_clauses.append("e.porte NOT IN ('49', '50', '05', '16', '17', '19', '43', '34', '65', '59') AND e.porte IS NOT NULL AND e.porte != ''")
+
+            if filtros.get('situacao_cadastral'):
+                where_clauses.append("est.situacao_cadastral = ?")
+                params.append(filtros['situacao_cadastral'])
+
+            if filtros.get('opcao_simples'):
+                where_clauses.append("s.opcao_simples = ?")
+                params.append(filtros['opcao_simples'])
+
+            if filtros.get('municipio'):
+                where_clauses.append("est.municipio = ?")
+                params.append(filtros['municipio'])
+
+            if filtros.get('bairro'):
+                where_clauses.append("UPPER(est.bairro) LIKE UPPER(?)")
+                params.append(f"%{filtros['bairro']}%")
+
+            if filtros.get('matriz_filial'):
+                where_clauses.append("est.identificador_matriz_filial = ?")
+                params.append(filtros['matriz_filial'])
+
+            return where_clauses, params
+
         @self.app.route('/')
         def home():
             """Servir a interface web do sistema"""
@@ -284,19 +343,20 @@ class CNPJApp:
                 # Preferir tabelas de aggregates (pré-computadas) se existirem
                 cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='aggregates_ufs'")
                 t0 = time.time()
-                if cursor.fetchone():
-                    cursor.execute("SELECT uf, total_estabelecimentos as total FROM aggregates_ufs ORDER BY total DESC")
-                    ufs = [{"value": uf, "label": (uf or ''), "count": total} for uf, total in cursor.fetchall()]
-                else:
-                    # UFs disponíveis - usar estabelecimentos_completos que tem todos os ~25M estabelecimentos
-                    cursor.execute("""
-                        SELECT uf, COUNT(*) as total_estabelecimentos
-                        FROM estabelecimentos_completos
-                        WHERE uf IS NOT NULL AND uf != ''
-                        GROUP BY uf 
-                        ORDER BY total_estabelecimentos DESC
-                    """)
-                    ufs = [{"value": uf, "label": (uf or ''), "count": total} for uf, total in cursor.fetchall()]
+                    if cursor.fetchone():
+                        # aggregates_ufs existe - usamos os dados, ordenando por uf ASC para o dropdown
+                        cursor.execute("SELECT uf, total_estabelecimentos as total FROM aggregates_ufs ORDER BY uf ASC")
+                        ufs = [{"value": uf, "label": (uf or ''), "count": total} for uf, total in cursor.fetchall()]
+                    else:
+                        # UFs disponíveis - usar estabelecimentos_completos e ordenar por uf ASC
+                        cursor.execute("""
+                            SELECT uf, COUNT(*) as total_estabelecimentos
+                            FROM estabelecimentos_completos
+                            WHERE uf IS NOT NULL AND uf != ''
+                            GROUP BY uf 
+                            ORDER BY uf ASC
+                        """)
+                        ufs = [{"value": uf, "label": (uf or ''), "count": total} for uf, total in cursor.fetchall()]
                 t_ufs = time.time() - t0
                 print(f"[TIMING] /filters ufs: {t_ufs:.3f}s, found {len(ufs)} ufs")
 
@@ -469,48 +529,8 @@ class CNPJApp:
                 if not self.db.connect():
                     return jsonify({"error": "Database connection failed"}), 500
 
-                # Construir consulta dinâmica - usando dados dos estabelecimentos como base
-                where_clauses = []
-                params = []
-
-                if filtros.get('razao_social'):
-                    where_clauses.append("(e.razao_social LIKE ? OR est.nome_fantasia LIKE ?)")
-                    termo = f"%{filtros['razao_social']}%"
-                    params.extend([termo, termo])
-
-                if filtros.get('uf'):
-                    where_clauses.append("est.uf = ?")
-                    params.append(filtros['uf'])
-
-                if filtros.get('cnae'):
-                    where_clauses.append("est.cnae_fiscal_principal = ?")
-                    params.append(filtros['cnae'])
-
-                if filtros.get('natureza_juridica'):
-                    where_clauses.append("e.natureza_juridica = ?")
-                    params.append(filtros['natureza_juridica'])
-
-                if filtros.get('porte'):
-                    porte_filtro = filtros['porte']
-                    if porte_filtro == 'MEI':
-                        where_clauses.append("s.opcao_mei = 'S'")
-                    elif porte_filtro == 'MICRO':
-                        where_clauses.append("e.porte IN ('49', '50')")
-                    elif porte_filtro == 'PEQUENO':
-                        where_clauses.append("e.porte IN ('05', '16', '17', '19')")
-                    elif porte_filtro == 'MEDIO':
-                        where_clauses.append("e.porte IN ('43', '34', '65', '59')")
-                    elif porte_filtro == 'GRANDE':
-                        where_clauses.append("e.porte NOT IN ('49', '50', '05', '16', '17', '19', '43', '34', '65', '59') AND e.porte IS NOT NULL AND e.porte != ''")
-
-                if filtros.get('situacao_cadastral'):
-                    where_clauses.append("est.situacao_cadastral = ?")
-                    params.append(filtros['situacao_cadastral'])
-
-                if filtros.get('opcao_simples'):
-                    where_clauses.append("s.opcao_simples = ?")
-                    params.append(filtros['opcao_simples'])
-
+                # Construir consulta dinâmica - usando a função centralizada para consistência com /export
+                where_clauses, params = build_where_and_params(filtros)
                 where_sql = " AND ".join(where_clauses) if where_clauses else "1=1"
 
                 # Contar total - baseado nos dados dos estabelecimentos
@@ -614,34 +634,8 @@ class CNPJApp:
                 if not self.db.connect():
                     return jsonify({"error": "Database connection failed"}), 500
                 
-                # Construir consulta dinâmica (igual ao query)
-                where_clauses = []
-                params = []
-                
-                if filtros.get('uf'):
-                    where_clauses.append("est.uf = ?")
-                    params.append(filtros['uf'])
-                
-                if filtros.get('cnae'):
-                    where_clauses.append("est.cnae_fiscal_principal = ?")
-                    params.append(filtros['cnae'])
-                
-                if filtros.get('municipio'):
-                    where_clauses.append("est.municipio = ?")
-                    params.append(filtros['municipio'])
-                
-                if filtros.get('bairro'):
-                    where_clauses.append("UPPER(est.bairro) LIKE UPPER(?)")
-                    params.append(f"%{filtros['bairro']}%")
-                
-                if filtros.get('situacao_cadastral'):
-                    where_clauses.append("est.situacao_cadastral = ?")
-                    params.append(filtros['situacao_cadastral'])
-                
-                if filtros.get('matriz_filial'):
-                    where_clauses.append("est.identificador_matriz_filial = ?")
-                    params.append(filtros['matriz_filial'])
-                
+                # Construir consulta dinâmica (igual ao query) usando helper centralizado
+                where_clauses, params = build_where_and_params(filtros)
                 where_sql = " AND ".join(where_clauses) if where_clauses else "1=1"
                 
                 # Consulta completa para exportação (baseada no melhorar_arquivo_consolidado.py)

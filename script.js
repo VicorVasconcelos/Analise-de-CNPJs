@@ -220,7 +220,13 @@ async function loadFilters() {
         if (ufSelect) {
             ufSelect.innerHTML = '<option value="">Todos os estados</option>';
             const ufsArr = data.ufs || [];
-            ufsArr.forEach(uf => {
+            // Ordenar UFs alfabeticamente (case-insensitive), suportando formatos {value,label} ou {uf,count}
+            const sortedUfs = ufsArr.slice().sort((a, b) => {
+                const aLabel = (readValue(a, ['label', 'uf']) || '').toString().toUpperCase();
+                const bLabel = (readValue(b, ['label', 'uf']) || '').toString().toUpperCase();
+                return aLabel.localeCompare(bLabel);
+            });
+            sortedUfs.forEach(uf => {
                 const option = document.createElement('option');
                 const val = readValue(uf, ['value', 'uf']);
                 const label = readValue(uf, ['label', 'uf']);
