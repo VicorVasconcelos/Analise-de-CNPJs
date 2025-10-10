@@ -6,6 +6,8 @@
     <title>Sistema de Análise de Dados Abertos do CNPJ</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Usando versão vanilla JS (script.js) -->
 </head>
 <body>
     <header class="header">
@@ -91,6 +93,17 @@
                     </div>
 
                     <div class="filter-group">
+                        <label for="situacao_cadastral">
+                            <i class="fas fa-info-circle"></i>
+                            Situação Cadastral
+                        </label>
+                        <select id="situacao_cadastral" name="situacao_cadastral">
+                            <option value="">Todas as situações</option>
+                            <!-- Opções carregadas via JavaScript -->
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
                         <label for="opcao_simples">
                             <i class="fas fa-check-circle"></i>
                             Simples Nacional
@@ -132,12 +145,14 @@
                 <table id="resultsTable" class="results-table">
                     <thead>
                         <tr>
-                            <th>CNPJ Básico</th>
+                            <th>CNPJ</th>
                             <th>Razão Social</th>
-                            <th>Natureza Jurídica</th>
+                            <th>Nome Fantasia</th>
+                            <th>Situação</th>
+                            <th>UF</th>
+                            <th>Município</th>
                             <th>Porte da Empresa</th>
-                            <th>Simples Nacional</th>
-                            <th>Data Opção Simples</th>
+                            <th>Natureza Jurídica</th>
                         </tr>
                     </thead>
                     <tbody id="resultsBody">
@@ -167,6 +182,7 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <!-- Script principal (vanilla JS) -->
+    <script src="/script.js"></script>
 </body>
 </html>

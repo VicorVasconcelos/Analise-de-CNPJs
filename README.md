@@ -58,225 +58,78 @@ pip install flask flask-cors pandas requests
 ```
 
 ### 3. Preparação dos Dados
+# Sistema de Análise CNPJ
 
-1. **Baixe os dados do CNPJ** da Receita Federal:
-   - Site: https://dadosabertos.rfb.gov.br/CNPJ/
-   - Arquivos necessários (9 CSVs, ~9.8GB total):
-     - Empresas.csv (5.4GB)
-     - Estabelecimentos.csv (2.4GB)
-     - Simples.csv (88KB)
-     - Cnaes.csv (59KB)
-     - Municipios.csv (228KB)
-     - Naturezas.csv (3KB)
-     - Motivos.csv (2KB)
-     - Paises.csv (8KB)
-     - Qualificacoes.csv (2KB)
+Um projeto para analisar, filtrar e exportar os dados abertos do CNPJ (Receita Federal). Este repositório contém o backend em Flask, o frontend em HTML/CSS/vanilla JS e scripts de importação/otimização para o banco SQLite.
 
-2. **Coloque os arquivos** na pasta do projeto
+Principais pontos
+- Backend: Flask + SQLite (arquivo: `cnpj_database.db`)
+- Frontend: `index.html`, `script.js`, `styles.css`
+- Tabelas de referência e agregados para acelerar filtros: `aggregates_*`
 
-3. **Execute a importação**:
-```bash
-python import_data.py
-```
-⚠️ **Nota**: A importação pode demorar várias horas devido ao tamanho dos dados.
+Estrutura relevante
+- `app.py` — servidor Flask com endpoints: `/health`, `/stats`, `/filters`, `/query`, `/export`
+- `database.py` — conexão com SQLite e PRAGMA de performance
+- `import_*` scripts — importadores para empresas, estabelecimentos e tabelas de referência
+- `create_aggregates.py` — monta as tabelas `aggregates_*` para acelerar `/filters`
+- `create_indexes.sql` — instruções para criar índices importantes
+- `script.js`, `index.html`, `styles.css` — frontend
+- `exports/` — pasta onde arquivos CSV exportados são salvos
 
-### 4. Inicialização do Sistema
+Requisitos
+- Python 3.10+ (3.13 recomendado)
+- Dependências: `flask`, `flask-cors`, `pandas`, `requests` (instale via `pip`)
 
-1. **Inicie o servidor Flask**:
-```bash
-python app.py
-```
+Como rodar (desenvolvimento)
+1. No diretório do projeto, ative o venv (opcional):
+   `.venv\Scripts\activate`
+2. Instale dependências se necessário:
+   `pip install flask flask-cors pandas requests`
+3. Inicie o servidor:
+   `python app.py`
+4. Abra no navegador: `http://localhost:5000`
 
-2. **Abra o navegador** em: `http://localhost:5000`
+Backup do banco (sempre antes de alterações)
+- Faça uma cópia do arquivo: `Copy-Item cnpj_database.db cnpj_database.db.backup_$(Get-Date -Format yyyyMMdd_HHmmss).db`
 
-3. **Acesse a interface** em: `index.html` (abra diretamente no navegador)
+Índices e aggregates
+- Crie índices (uma vez) com `create_indexes.sql` ou via sqlite3:
+  `sqlite3 cnpj_database.db ".read create_indexes.sql"`
+- Gere/atualize as tabelas de agregados:
+  `python create_aggregates.py`
+  Essas tabelas (`aggregates_ufs`, `aggregates_cnaes`, `aggregates_naturezas`, `aggregates_portes`, `aggregates_simples`) reduzem consultas demoradas no `/filters`.
 
-## 🔧 Uso do Sistema
+Cache
+- `/stats` e `/filters` usam cache TTL em memória (em `app.py`).
+- Se atualizar aggregates, reinicie o servidor ou force refresh do cache.
 
-### Interface Web
+Fluxo de atualização da base
+1. Backup do DB
+2. Parar servidor
+3. Executar importadores (empresas, estabelecimentos, referências)
+4. Criar índices
+5. Rodar `create_aggregates.py`
+6. Executar `ANALYZE;` no sqlite3
+7. Reiniciar servidor
 
-1. **Status**: Verifica conexão com a API
-2. **Estatísticas**: Mostra resumo dos dados
-3. **Filtros**: Selecione critérios de busca:
-   - **UF**: Estados (múltipla seleção)
-   - **CNAE**: Atividades econômicas (múltipla seleção)
-   - **Município**: Nome da cidade
-   - **Bairro**: Nome do bairro
-   - **Situação**: Ativa, Suspensa, Baixada, etc.
-   - **Porte**: Micro, Pequena, etc.
+Testes
+- `test_api.py` e `test_queries.py` — scripts de verificação. Execute com `python` ou `pytest`.
 
-4. **Resultados**: Tabela paginada com dados encontrados
-5. **Exportação**: Download do CSV com todos os registros filtrados
+Dicas de troubleshooting rápido
+- Se dropdowns aparecerem vazios, abra DevTools → Network → verifique `/filters` e confirme que o JSON tem `value`/`label` (o frontend já é tolerante a variações).
+- Se `/filters` estiver lento, verifique se `aggregates_*` existem.
 
-### APIs Disponíveis
-
-| Endpoint | Método | Descrição |
-|----------|--------|-----------|
-| `/` | GET | Informações da API |
-| `/health` | GET | Status da aplicação |
-| `/stats` | GET | Estatísticas gerais |
-| `/filters` | GET | Opções de filtros |
-| `/query` | POST | Busca com filtros |
-| `/export` | POST | Gera CSV para download |
-| `/download/<filename>` | GET | Download de arquivo |
-
-### Exemplo de Uso da API
-
-```python
-import requests
-
-# Buscar empresas de SP do setor de tecnologia
-filters = {
-    "uf": ["SP"],
-    "cnae_principal": ["6201-5", "6202-3"],
-    "situacao_cadastral": "02",  # Ativa
-    "page": 1,
-    "per_page": 100
-}
-
-response = requests.post("http://localhost:5000/query", json=filters)
-data = response.json()
-
-print(f"Encontradas {data['total']} empresas")
-for empresa in data['data']:
-    print(f"{empresa['razao_social']} - {empresa['municipio']}")
+Git — commit e push
+```powershell
+cd "C:\Users\victor.vasconcelos\Documents\Dashboard"
+git add README.md
+git commit -m "docs: atualizar README com processo de atualização, índices e aggregates"
+git push origin perf-improvements
 ```
 
-## 📊 Estrutura do Banco de Dados
-
-### Tabelas Principais
-
-- **empresas**: Dados básicos das empresas (CNPJ, razão social, etc.)
-- **estabelecimentos**: Filiais e matriz (endereço, CNAE, situação)
-- **simples**: Empresas do Simples Nacional
-
-### Tabelas de Referência
-
-- **cnaes**: Códigos de atividade econômica
-- **municipios**: Códigos e nomes dos municípios
-- **naturezas**: Natureza jurídica
-- **motivos**: Motivos de situação cadastral
-- **paises**: Códigos de países
-- **qualificacoes**: Qualificação dos responsáveis
-
-### Índices para Performance
-
-- `idx_estabelecimentos_uf`: Busca por UF
-- `idx_estabelecimentos_cnae`: Busca por CNAE
-- `idx_estabelecimentos_municipio`: Busca por município
-- `idx_estabelecimentos_situacao`: Busca por situação
-
-## 🧪 Testes
-
-### Executar Testes das APIs
-
-```bash
-python test_api.py
-```
-
-### Executar Testes de Consultas
-
-```bash
-python test_queries.py
-```
-
-### Testes Esperados
-
-- ✅ Conexão com API
-- ✅ Carregamento de estatísticas
-- ✅ Filtros funcionais
-- ✅ Busca com múltiplos critérios
-- ✅ Exportação de CSV
-- ✅ Download de arquivos
-- ✅ Paginação de resultados
-
-## 📈 Performance
-
-### Métricas Observadas (100 registros de teste)
-
-- **Consultas simples**: ~0.001s
-- **Consultas complexas**: ~0.002s
-- **Exportação CSV**: ~0.002s
-- **Carregamento de filtros**: ~0.001s
-
-### Otimizações Implementadas
-
-- Índices específicos para campos de filtro
-- Paginação para grandes resultados
-- Processamento em chunks para importação
-- Cache de opções de filtros
-
-## 🔍 Troubleshooting
-
-### Problemas Comuns
-
-1. **Erro de conexão com API**
-   - Verifique se `python app.py` está rodando
-   - Confirme que a porta 5000 está livre
-
-2. **Banco de dados vazio**
-   - Execute `python import_data.py`
-   - Verifique se os arquivos CSV estão na pasta
-
-3. **Erro ao importar dados**
-   - Confirme que tem espaço em disco suficiente
-   - Verifique se os CSVs estão no formato correto
-
-4. **Interface não carrega dados**
-   - Abra o console do navegador (F12)
-   - Verifique erros de CORS ou conectividade
-
-### Logs e Debug
-
-```bash
-# Executar Flask em modo debug
-export FLASK_ENV=development
-python app.py
-
-# Ver logs de importação
-python import_data.py > import.log 2>&1
-```
-
-## 📝 Formatos de Saída
-
-### CSV Exportado
-
-O arquivo CSV gerado contém as seguintes colunas formatadas:
-
-- **CNPJ**: XX.XXX.XXX/XXXX-XX
-- **Razão Social**: Nome da empresa
-- **Nome Fantasia**: Nome comercial
-- **UF**: Estado
-- **Município**: Cidade
-- **Bairro**: Bairro
-- **Endereço Completo**: Logradouro formatado
-- **CEP**: XXXXX-XXX
-- **CNAE Principal**: Código da atividade
-- **Situação Cadastral**: Texto descritivo
-- **Porte da Empresa**: Texto descritivo
-- **Data de Início**: DD/MM/AAAA
-
-## 🤝 Contribuições
-
-Para contribuir com o projeto:
-
-1. Faça um fork do repositório
-2. Crie uma branch para sua feature
-3. Implemente e teste suas modificações
-4. Abra um Pull Request
-
-## 📄 Licença
-
-Este projeto é destinado ao uso educacional e análise de dados públicos da Receita Federal do Brasil.
-
-## 📞 Suporte
-
-Para dúvidas ou problemas:
-
-1. Verifique a seção de Troubleshooting
-2. Execute os testes para validar a instalação
-3. Consulte os logs de erro do Flask
+Contato
+- Para dúvidas ou testes locais, inicie o servidor (`python app.py`) e acesse `http://localhost:5000`.
 
 ---
-
+Atualizado em: 2025-10-10
 **Desenvolvido para análise de dados abertos do CNPJ - Receita Federal do Brasil**
