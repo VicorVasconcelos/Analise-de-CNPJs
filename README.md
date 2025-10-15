@@ -151,3 +151,13 @@ Abra no navegador: http://localhost:5000
 ---
 
 Atualizado em: 2025-10-10
+
+---
+
+##  Repository cleanup (2025-10-15)
+
+Uma limpeza controlada de artefatos (exports, logs e relatórios) foi executada. Mantivemos apenas o backup mais recente em rchive/:
+
+- rchive/cnpj_database.db.bak_20251015_165130.db
+
+Se precisar restaurar qualquer relatório removido, recupere-o do histórico do Git.
