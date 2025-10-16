@@ -1,99 +1,9 @@
 {
   "ufs": [
     {
-      "value": "SP",
-      "label": "SP",
-      "count": 7174079
-    },
-    {
-      "value": "MG",
-      "label": "MG",
-      "count": 2701708
-    },
-    {
-      "value": "RJ",
-      "label": "RJ",
-      "count": 2127823
-    },
-    {
-      "value": "PR",
-      "label": "PR",
-      "count": 1684414
-    },
-    {
-      "value": "RS",
-      "label": "RS",
-      "count": 1674515
-    },
-    {
-      "value": "BA",
-      "label": "BA",
-      "count": 1238190
-    },
-    {
-      "value": "SC",
-      "label": "SC",
-      "count": 1199959
-    },
-    {
-      "value": "GO",
-      "label": "GO",
-      "count": 900815
-    },
-    {
-      "value": "PE",
-      "label": "PE",
-      "count": 745351
-    },
-    {
-      "value": "CE",
-      "label": "CE",
-      "count": 705195
-    },
-    {
-      "value": "ES",
-      "label": "ES",
-      "count": 529400
-    },
-    {
-      "value": "PA",
-      "label": "PA",
-      "count": 511214
-    },
-    {
-      "value": "MT",
-      "label": "MT",
-      "count": 479456
-    },
-    {
-      "value": "DF",
-      "label": "DF",
-      "count": 431828
-    },
-    {
-      "value": "MA",
-      "label": "MA",
-      "count": 369914
-    },
-    {
-      "value": "MS",
-      "label": "MS",
-      "count": 333898
-    },
-    {
-      "value": "PB",
-      "label": "PB",
-      "count": 321048
-    },
-    {
-      "value": "RN",
-      "label": "RN",
-      "count": 286998
-    },
-    {
-      "value": "AM",
-      "label": "AM",
-      "count": 265800
+      "value": "AC",
+      "label": "AC",
+      "count": 56930
     },
     {
       "value": "AL",
@@ -101,34 +11,9 @@
       "count": 237372
     },
     {
-      "value": "PI",
-      "label": "PI",
-      "count": 215392
-    },
-    {
-      "value": "RO",
-      "label": "RO",
-      "count": 171834
-    },
-    {
-      "value": "TO",
-      "label": "TO",
-      "count": 168886
-    },
-    {
-      "value": "SE",
-      "label": "SE",
-      "count": 166599
-    },
-    {
-      "value": "EX",
-      "label": "EX",
-      "count": 58285
-    },
-    {
-      "value": "AC",
-      "label": "AC",
-      "count": 56930
+      "value": "AM",
+      "label": "AM",
+      "count": 265800
     },
     {
       "value": "AP",
@@ -136,9 +21,124 @@
       "count": 54753
     },
     {
+      "value": "BA",
+      "label": "BA",
+      "count": 1238190
+    },
+    {
+      "value": "CE",
+      "label": "CE",
+      "count": 705195
+    },
+    {
+      "value": "DF",
+      "label": "DF",
+      "count": 431828
+    },
+    {
+      "value": "ES",
+      "label": "ES",
+      "count": 529400
+    },
+    {
+      "value": "EX",
+      "label": "EX",
+      "count": 58285
+    },
+    {
+      "value": "GO",
+      "label": "GO",
+      "count": 900815
+    },
+    {
+      "value": "MA",
+      "label": "MA",
+      "count": 369914
+    },
+    {
+      "value": "MG",
+      "label": "MG",
+      "count": 2701708
+    },
+    {
+      "value": "MS",
+      "label": "MS",
+      "count": 333898
+    },
+    {
+      "value": "MT",
+      "label": "MT",
+      "count": 479456
+    },
+    {
+      "value": "PA",
+      "label": "PA",
+      "count": 511214
+    },
+    {
+      "value": "PB",
+      "label": "PB",
+      "count": 321048
+    },
+    {
+      "value": "PE",
+      "label": "PE",
+      "count": 745351
+    },
+    {
+      "value": "PI",
+      "label": "PI",
+      "count": 215392
+    },
+    {
+      "value": "PR",
+      "label": "PR",
+      "count": 1684414
+    },
+    {
+      "value": "RJ",
+      "label": "RJ",
+      "count": 2127823
+    },
+    {
+      "value": "RN",
+      "label": "RN",
+      "count": 286998
+    },
+    {
+      "value": "RO",
+      "label": "RO",
+      "count": 171834
+    },
+    {
       "value": "RR",
       "label": "RR",
       "count": 48192
+    },
+    {
+      "value": "RS",
+      "label": "RS",
+      "count": 1674515
+    },
+    {
+      "value": "SC",
+      "label": "SC",
+      "count": 1199959
+    },
+    {
+      "value": "SE",
+      "label": "SE",
+      "count": 166599
+    },
+    {
+      "value": "SP",
+      "label": "SP",
+      "count": 7174079
+    },
+    {
+      "value": "TO",
+      "label": "TO",
+      "count": 168886
     }
   ],
   "cnaes": [
@@ -7137,5 +7137,5 @@
     }
   ],
   "has_estabelecimentos": true,
-  "timestamp": "2025-10-10T10:05:47.194805"
+  "timestamp": "2025-10-16T11:09:40.809189"
 }

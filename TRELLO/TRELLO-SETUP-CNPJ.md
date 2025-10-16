@@ -217,7 +217,7 @@ git push origin master
 
 ---
 
-## � Payloads de exemplo
+## 📡 Payloads de exemplo
 
 Use estes exemplos ao preencher cards de integração, testes ou ao documentar a API.
 
@@ -269,7 +269,7 @@ Exemplo para `/export` (usa os mesmos filtros):
 
 ---
 
-## � Boas práticas e observações
+## 💡 Boas práticas e observações
 
 - Sempre gerar `create_aggregates.py` após grandes imports para acelerar `/filters`.
 - Evitar expor o `cnpj_database.db` sem controle: prefira exportar CSVs e compartilhar amostras.

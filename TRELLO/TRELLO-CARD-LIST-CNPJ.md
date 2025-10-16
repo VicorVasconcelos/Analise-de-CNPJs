@@ -34,7 +34,7 @@ Contato do projeto: Victor Vasconcelos — +55 61 98438-5187
 - [ ] Métricas coletadas (tempo médio, p95) para o endpoint
 
 📊 ESTIMATIVA: 1h
-🏷️ LABELS: � Alto, 🧰 Backend, 🧪 Testes
+🏷️ LABELS: 🟠 Alto, 🧰 Backend, 🧪 Testes
 📍 LISTA: 🏗️ EM DESENVOLVIMENTO
 
 🔴 Card 3: Agregar índices essenciais

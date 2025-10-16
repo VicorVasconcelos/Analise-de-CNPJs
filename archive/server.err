@@ -1,0 +1,1219 @@
+Traceback (most recent call last):
+  File "C:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 864, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 849, in main
+    print("\U0001f4e1 Endpoints dispon�veis:")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\victor.vasconcelos\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f4e1' in position 0: character maps to <undefined>
+2025-10-10 16:21:30,973 ERROR Exception in /export: Traceback (most recent call last):
+  File "c:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 864, in export_data
+    cursor.execute(sql_export, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: near "CASE": syntax error
+
+2025-10-10 16:21:30,973 ERROR Exception in /export: Traceback (most recent call last):
+  File "c:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 864, in export_data
+    cursor.execute(sql_export, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: near "CASE": syntax error
+
+
+[2025-10-10T16:21:30.993632] Exception in /export:
+Traceback (most recent call last):
+  File "c:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 864, in export_data
+    cursor.execute(sql_export, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: near "CASE": syntax error
+
+2025-10-10 16:35:30,488 ERROR Exception in /export: Traceback (most recent call last):
+  File "c:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 888, in export_data
+    rows = cursor.fetchmany(chunk_size)
+sqlite3.ProgrammingError: Cannot operate on a closed database.
+
+2025-10-10 16:35:30,488 ERROR Exception in /export: Traceback (most recent call last):
+  File "c:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 888, in export_data
+    rows = cursor.fetchmany(chunk_size)
+sqlite3.ProgrammingError: Cannot operate on a closed database.
+
+
+[2025-10-10T16:35:30.508329] Exception in /export:
+Traceback (most recent call last):
+  File "c:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 888, in export_data
+    rows = cursor.fetchmany(chunk_size)
+sqlite3.ProgrammingError: Cannot operate on a closed database.
+
+2025-10-10 17:11:10,086 ERROR Exception in /export: Traceback (most recent call last):
+  File "c:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 864, in export_data
+    cursor.execute(sql_export, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: near "FROM": syntax error
+
+2025-10-10 17:11:10,086 ERROR Exception in /export: Traceback (most recent call last):
+  File "c:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 864, in export_data
+    cursor.execute(sql_export, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: near "FROM": syntax error
+
+
+[2025-10-10T17:11:10.101544] Exception in /export:
+Traceback (most recent call last):
+  File "c:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 864, in export_data
+    cursor.execute(sql_export, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: near "FROM": syntax error
+
+
+--- SQL_EXPORT START ---
+
+                    SELECT DISTINCT
+                        -- CNPJ formatado (renomeado para apenas CNPJ)
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 1, 2) || '.' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 3, 3) || '.' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 6, 3) || '/' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 9, 4) || '-' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 13, 2) as cnpj,
+                        
+                        COALESCE(emp.razao_social, '') as razao_social,
+                        COALESCE(est.nome_fantasia, '') as nome_fantasia,
+                        
+                        -- Situação empresa
+                        CASE 
+                            WHEN est.situacao_cadastral = '02' THEN 'ATIVA'
+                            WHEN est.situacao_cadastral = '03' THEN 'SUSPENSA'
+                            WHEN est.situacao_cadastral = '04' THEN 'INAPTA'
+                            WHEN est.situacao_cadastral = '08' THEN 'BAIXADA'
+                            ELSE 'NÃO INFORMADO'
+                        END as situacao_empresa,
+                        
+                        -- Data formatada
+                        CASE 
+                            WHEN LENGTH(est.data_situacao_cadastral) = 8 THEN
+                                SUBSTR(est.data_situacao_cadastral, 7, 2) || '/' ||
+                                SUBSTR(est.data_situacao_cadastral, 5, 2) || '/' ||
+                                SUBSTR(est.data_situacao_cadastral, 1, 4)
+                            ELSE COALESCE(est.data_situacao_cadastral, '')
+                        END as data_situacao,
+                        
+                        COALESCE(est.motivo_situacao_cadastral, '') as descricao_motivo,
+                        
+                    -- Endereço completo
+                        TRIM(
+                            COALESCE(est.tipo_logradouro || ' ', '') ||
+                            COALESCE(est.logradouro, '') ||
+                            CASE WHEN est.numero IS NOT NULL AND est.numero != '' 
+                                 THEN ', nº ' || est.numero ELSE '' END ||
+                            CASE WHEN est.complemento IS NOT NULL AND est.complemento != '' 
+                                 THEN ' (' || est.complemento || ')' ELSE '' END
+                        ) as endereco_completo,
+
+                        -- Bairro (moved next to endereco)
+                        COALESCE(est.bairro, '') as bairro,
+
+                        -- CEP formatado
+                        CASE 
+                            WHEN LENGTH(est.cep) >= 8 THEN
+                                SUBSTR(est.cep, 1, 5) || '-' || SUBSTR(est.cep, 6, 3)
+                            ELSE COALESCE(est.cep, '')
+                        END as cep,
+
+                        est.uf,
+                        COALESCE(m.nome_municipio, '') as nome_municipio,
+
+                        -- Telefone formatado
+                        CASE 
+                            WHEN est.ddd_1 IS NOT NULL AND est.telefone_1 IS NOT NULL THEN
+                                '(' || est.ddd_1 || ') ' ||
+                                CASE 
+                                    WHEN LENGTH(est.telefone_1) = 9 THEN
+                                        SUBSTR(est.telefone_1, 1, 5) || '-' || SUBSTR(est.telefone_1, 6, 4)
+                                    WHEN LENGTH(est.telefone_1) = 8 THEN
+                                        SUBSTR(est.telefone_1, 1, 4) || '-' || SUBSTR(est.telefone_1, 5, 4)
+                                    ELSE est.telefone_1
+                                END
+                            ELSE ''
+                        END as telefone_formatado,
+
+                        COALESCE(est.correio_eletronico, '') as email,
+                        COALESCE(c.descricao_cnae, '') as descricao_cnae,
+                        COALESCE(nat.descricao_natureza, '') as descricao_natureza,
+                        CASE WHEN s.opcao_mei = 'S' THEN 'Microempreendedor Individual (MEI)'
+                             WHEN emp.porte IN ('49', '50') THEN 'Microempresa (ME)'
+                             WHEN emp.porte IN ('05', '16', '17', '19') THEN 'Empresa de Pequeno Porte (EPP)'
+                             WHEN emp.porte IN ('43', '34', '65', '59') THEN 'Empresa de Médio Porte'
+                             WHEN emp.porte NOT IN ('49', '50', '05', '16', '17', '19', '43', '34', '65', '59') 
+                                  AND emp.porte IS NOT NULL AND emp.porte != '' THEN 'Grande Empresa'
+                             ELSE 'Não Informado' END as porte,
+                        
+                        -- Capital social corrigido - garantir que apareça
+                        CASE 
+                            WHEN emp.capital_social IS NOT NULL AND emp.capital_social != '' AND emp.capital_social != '0' THEN
+                                'R$ ' || REPLACE(
+                                    printf("%.2f", CAST(emp.capital_social AS REAL) / 100.0),
+                                    '.', ','
+                                )
+                            ELSE 'Não Informado'
+                        END as capital_social,
+                        
+                        CASE WHEN s.opcao_simples = 'S' THEN 'Sim'
+                             WHEN s.opcao_simples = 'N' THEN 'Não'
+                             ELSE 'N/A' END as opcao_simples,
+                             
+                        CASE WHEN s.opcao_mei = 'S' THEN 'Sim'
+                             WHEN s.opcao_mei = 'N' THEN 'Não'
+                             ELSE 'N/A' END as opcao_mei,
+                             
+                    CASE WHEN est.identificador_matriz_filial = '1' THEN 'Matriz'
+                        WHEN est.identificador_matriz_filial = '2' THEN 'Filial'
+                        ELSE 'N/A' END as matriz_filial,
+                    
+
+                FROM estabelecimentos_completos est
+                    LEFT JOIN empresas_completas emp ON est.cnpj_basico = emp.cnpj_basico
+                    LEFT JOIN simples s ON est.cnpj_basico = s.cnpj_basico
+                    LEFT JOIN cnaes c ON est.cnae_fiscal_principal = c.codigo_cnae
+                    LEFT JOIN naturezas nat ON emp.natureza_juridica = nat.codigo_natureza
+                    LEFT JOIN municipios m ON est.municipio = m.codigo_municipio
+                    WHERE est.uf = ? AND est.cnae_fiscal_principal = ? AND est.situacao_cadastral = ?
+                    ORDER BY emp.razao_social, est.cnpj_ordem
+                
+--- SQL_EXPORT PARAMS: ['DF', '5611200', '02'] ---
+2025-10-10 17:16:28,362 ERROR Exception in /export: Traceback (most recent call last):
+  File "c:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 873, in export_data
+    cursor.execute(sql_export, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: near "FROM": syntax error
+
+2025-10-10 17:16:28,362 ERROR Exception in /export: Traceback (most recent call last):
+  File "c:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 873, in export_data
+    cursor.execute(sql_export, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: near "FROM": syntax error
+
+
+[2025-10-10T17:16:28.382006] Exception in /export:
+Traceback (most recent call last):
+  File "c:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 873, in export_data
+    cursor.execute(sql_export, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: near "FROM": syntax error
+
+
+--- SQL_EXPORT START ---
+
+                    SELECT DISTINCT
+                        -- CNPJ formatado (renomeado para apenas CNPJ)
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 1, 2) || '.' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 3, 3) || '.' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 6, 3) || '/' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 9, 4) || '-' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 13, 2) as cnpj,
+                        
+                        COALESCE(emp.razao_social, '') as razao_social,
+                        COALESCE(est.nome_fantasia, '') as nome_fantasia,
+                        
+                        -- Situação empresa
+                        CASE 
+                            WHEN est.situacao_cadastral = '02' THEN 'ATIVA'
+                            WHEN est.situacao_cadastral = '03' THEN 'SUSPENSA'
+                            WHEN est.situacao_cadastral = '04' THEN 'INAPTA'
+                            WHEN est.situacao_cadastral = '08' THEN 'BAIXADA'
+                            ELSE 'NÃO INFORMADO'
+                        END as situacao_empresa,
+                        
+                        -- Data formatada
+                        CASE 
+                            WHEN LENGTH(est.data_situacao_cadastral) = 8 THEN
+                                SUBSTR(est.data_situacao_cadastral, 7, 2) || '/' ||
+                                SUBSTR(est.data_situacao_cadastral, 5, 2) || '/' ||
+                                SUBSTR(est.data_situacao_cadastral, 1, 4)
+                            ELSE COALESCE(est.data_situacao_cadastral, '')
+                        END as data_situacao,
+                        
+                        COALESCE(est.motivo_situacao_cadastral, '') as descricao_motivo,
+                        
+                    -- Endereço completo
+                        TRIM(
+                            COALESCE(est.tipo_logradouro || ' ', '') ||
+                            COALESCE(est.logradouro, '') ||
+                            CASE WHEN est.numero IS NOT NULL AND est.numero != '' 
+                                 THEN ', nº ' || est.numero ELSE '' END ||
+                            CASE WHEN est.complemento IS NOT NULL AND est.complemento != '' 
+                                 THEN ' (' || est.complemento || ')' ELSE '' END
+                        ) as endereco_completo,
+
+                        -- Bairro (moved next to endereco)
+                        COALESCE(est.bairro, '') as bairro,
+
+                        -- CEP formatado
+                        CASE 
+                            WHEN LENGTH(est.cep) >= 8 THEN
+                                SUBSTR(est.cep, 1, 5) || '-' || SUBSTR(est.cep, 6, 3)
+                            ELSE COALESCE(est.cep, '')
+                        END as cep,
+
+                        est.uf,
+                        COALESCE(m.nome_municipio, '') as nome_municipio,
+
+                        -- Telefone formatado
+                        CASE 
+                            WHEN est.ddd_1 IS NOT NULL AND est.telefone_1 IS NOT NULL THEN
+                                '(' || est.ddd_1 || ') ' ||
+                                CASE 
+                                    WHEN LENGTH(est.telefone_1) = 9 THEN
+                                        SUBSTR(est.telefone_1, 1, 5) || '-' || SUBSTR(est.telefone_1, 6, 4)
+                                    WHEN LENGTH(est.telefone_1) = 8 THEN
+                                        SUBSTR(est.telefone_1, 1, 4) || '-' || SUBSTR(est.telefone_1, 5, 4)
+                                    ELSE est.telefone_1
+                                END
+                            ELSE ''
+                        END as telefone_formatado,
+
+                        COALESCE(est.correio_eletronico, '') as email,
+                        COALESCE(c.descricao_cnae, '') as descricao_cnae,
+                        COALESCE(nat.descricao_natureza, '') as descricao_natureza,
+                        CASE WHEN s.opcao_mei = 'S' THEN 'Microempreendedor Individual (MEI)'
+                             WHEN emp.porte IN ('49', '50') THEN 'Microempresa (ME)'
+                             WHEN emp.porte IN ('05', '16', '17', '19') THEN 'Empresa de Pequeno Porte (EPP)'
+                             WHEN emp.porte IN ('43', '34', '65', '59') THEN 'Empresa de Médio Porte'
+                             WHEN emp.porte NOT IN ('49', '50', '05', '16', '17', '19', '43', '34', '65', '59') 
+                                  AND emp.porte IS NOT NULL AND emp.porte != '' THEN 'Grande Empresa'
+                             ELSE 'Não Informado' END as porte,
+                        
+                        -- Capital social corrigido - garantir que apareça
+                        CASE 
+                            WHEN emp.capital_social IS NOT NULL AND emp.capital_social != '' AND emp.capital_social != '0' THEN
+                                'R$ ' || REPLACE(
+                                    printf("%.2f", CAST(emp.capital_social AS REAL) / 100.0),
+                                    '.', ','
+                                )
+                            ELSE 'Não Informado'
+                        END as capital_social,
+                        
+                        CASE WHEN s.opcao_simples = 'S' THEN 'Sim'
+                             WHEN s.opcao_simples = 'N' THEN 'Não'
+                             ELSE 'N/A' END as opcao_simples,
+                             
+                        CASE WHEN s.opcao_mei = 'S' THEN 'Sim'
+                             WHEN s.opcao_mei = 'N' THEN 'Não'
+                             ELSE 'N/A' END as opcao_mei,
+                             
+                    CASE WHEN est.identificador_matriz_filial = '1' THEN 'Matriz'
+                        WHEN est.identificador_matriz_filial = '2' THEN 'Filial'
+                        ELSE 'N/A' END as matriz_filial,
+                    '' as socios, '' as socios_cpfs, '' as socios_qualificacao
+
+                FROM estabelecimentos_completos est
+                    LEFT JOIN empresas_completas emp ON est.cnpj_basico = emp.cnpj_basico
+                    LEFT JOIN simples s ON est.cnpj_basico = s.cnpj_basico
+                    LEFT JOIN cnaes c ON est.cnae_fiscal_principal = c.codigo_cnae
+                    LEFT JOIN naturezas nat ON emp.natureza_juridica = nat.codigo_natureza
+                    LEFT JOIN municipios m ON est.municipio = m.codigo_municipio
+                    WHERE est.uf = ? AND est.cnae_fiscal_principal = ? AND est.situacao_cadastral = ?
+                    ORDER BY emp.razao_social, est.cnpj_ordem
+                
+--- SQL_EXPORT PARAMS: ['DF', '5611200', '02'] ---
+
+--- SQL_EXPORT START ---
+
+                    SELECT DISTINCT
+                        -- CNPJ formatado (renomeado para apenas CNPJ)
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 1, 2) || '.' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 3, 3) || '.' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 6, 3) || '/' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 9, 4) || '-' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 13, 2) as cnpj,
+                        
+                        COALESCE(emp.razao_social, '') as razao_social,
+                        COALESCE(est.nome_fantasia, '') as nome_fantasia,
+                        
+                        -- Situação empresa
+                        CASE 
+                            WHEN est.situacao_cadastral = '02' THEN 'ATIVA'
+                            WHEN est.situacao_cadastral = '03' THEN 'SUSPENSA'
+                            WHEN est.situacao_cadastral = '04' THEN 'INAPTA'
+                            WHEN est.situacao_cadastral = '08' THEN 'BAIXADA'
+                            ELSE 'NÃO INFORMADO'
+                        END as situacao_empresa,
+                        
+                        -- Data formatada
+                        CASE 
+                            WHEN LENGTH(est.data_situacao_cadastral) = 8 THEN
+                                SUBSTR(est.data_situacao_cadastral, 7, 2) || '/' ||
+                                SUBSTR(est.data_situacao_cadastral, 5, 2) || '/' ||
+                                SUBSTR(est.data_situacao_cadastral, 1, 4)
+                            ELSE COALESCE(est.data_situacao_cadastral, '')
+                        END as data_situacao,
+                        
+                        COALESCE(est.motivo_situacao_cadastral, '') as descricao_motivo,
+                        
+                    -- Endereço completo
+                        TRIM(
+                            COALESCE(est.tipo_logradouro || ' ', '') ||
+                            COALESCE(est.logradouro, '') ||
+                            CASE WHEN est.numero IS NOT NULL AND est.numero != '' 
+                                 THEN ', nº ' || est.numero ELSE '' END ||
+                            CASE WHEN est.complemento IS NOT NULL AND est.complemento != '' 
+                                 THEN ' (' || est.complemento || ')' ELSE '' END
+                        ) as endereco_completo,
+
+                        -- Bairro (moved next to endereco)
+                        COALESCE(est.bairro, '') as bairro,
+
+                        -- CEP formatado
+                        CASE 
+                            WHEN LENGTH(est.cep) >= 8 THEN
+                                SUBSTR(est.cep, 1, 5) || '-' || SUBSTR(est.cep, 6, 3)
+                            ELSE COALESCE(est.cep, '')
+                        END as cep,
+
+                        est.uf,
+                        COALESCE(m.nome_municipio, '') as nome_municipio,
+
+                        -- Telefone formatado
+                        CASE 
+                            WHEN est.ddd_1 IS NOT NULL AND est.telefone_1 IS NOT NULL THEN
+                                '(' || est.ddd_1 || ') ' ||
+                                CASE 
+                                    WHEN LENGTH(est.telefone_1) = 9 THEN
+                                        SUBSTR(est.telefone_1, 1, 5) || '-' || SUBSTR(est.telefone_1, 6, 4)
+                                    WHEN LENGTH(est.telefone_1) = 8 THEN
+                                        SUBSTR(est.telefone_1, 1, 4) || '-' || SUBSTR(est.telefone_1, 5, 4)
+                                    ELSE est.telefone_1
+                                END
+                            ELSE ''
+                        END as telefone_formatado,
+
+                        COALESCE(est.correio_eletronico, '') as email,
+                        COALESCE(c.descricao_cnae, '') as descricao_cnae,
+                        COALESCE(nat.descricao_natureza, '') as descricao_natureza,
+                        CASE WHEN s.opcao_mei = 'S' THEN 'Microempreendedor Individual (MEI)'
+                             WHEN emp.porte IN ('49', '50') THEN 'Microempresa (ME)'
+                             WHEN emp.porte IN ('05', '16', '17', '19') THEN 'Empresa de Pequeno Porte (EPP)'
+                             WHEN emp.porte IN ('43', '34', '65', '59') THEN 'Empresa de Médio Porte'
+                             WHEN emp.porte NOT IN ('49', '50', '05', '16', '17', '19', '43', '34', '65', '59') 
+                                  AND emp.porte IS NOT NULL AND emp.porte != '' THEN 'Grande Empresa'
+                             ELSE 'Não Informado' END as porte,
+                        
+                        -- Capital social corrigido - garantir que apareça
+                        CASE 
+                            WHEN emp.capital_social IS NOT NULL AND emp.capital_social != '' AND emp.capital_social != '0' THEN
+                                'R$ ' || REPLACE(
+                                    printf("%.2f", CAST(emp.capital_social AS REAL) / 100.0),
+                                    '.', ','
+                                )
+                            ELSE 'Não Informado'
+                        END as capital_social,
+                        
+                        CASE WHEN s.opcao_simples = 'S' THEN 'Sim'
+                             WHEN s.opcao_simples = 'N' THEN 'Não'
+                             ELSE 'N/A' END as opcao_simples,
+                             
+                        CASE WHEN s.opcao_mei = 'S' THEN 'Sim'
+                             WHEN s.opcao_mei = 'N' THEN 'Não'
+                             ELSE 'N/A' END as opcao_mei,
+                             
+                    CASE WHEN est.identificador_matriz_filial = '1' THEN 'Matriz'
+                        WHEN est.identificador_matriz_filial = '2' THEN 'Filial'
+                        ELSE 'N/A' END as matriz_filial,
+                    '' as socios, '' as socios_cpfs, '' as socios_qualificacao
+
+                FROM estabelecimentos_completos est
+                    LEFT JOIN empresas_completas emp ON est.cnpj_basico = emp.cnpj_basico
+                    LEFT JOIN simples s ON est.cnpj_basico = s.cnpj_basico
+                    LEFT JOIN cnaes c ON est.cnae_fiscal_principal = c.codigo_cnae
+                    LEFT JOIN naturezas nat ON emp.natureza_juridica = nat.codigo_natureza
+                    LEFT JOIN municipios m ON est.municipio = m.codigo_municipio
+                    WHERE est.uf = ? AND e.porte NOT IN ('49', '50', '05', '16', '17', '19', '43', '34', '65', '59') AND e.porte IS NOT NULL AND e.porte != '' AND est.situacao_cadastral = ?
+                    ORDER BY emp.razao_social, est.cnpj_ordem
+                
+--- SQL_EXPORT PARAMS: ['DF', '02'] ---
+2025-10-10 17:24:12,415 ERROR Exception in /export: Traceback (most recent call last):
+  File "c:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 875, in export_data
+    cursor.execute(sql_export, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: e.porte
+
+2025-10-10 17:24:12,415 ERROR Exception in /export: Traceback (most recent call last):
+  File "c:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 875, in export_data
+    cursor.execute(sql_export, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: e.porte
+
+
+[2025-10-10T17:24:12.431613] Exception in /export:
+Traceback (most recent call last):
+  File "c:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 875, in export_data
+    cursor.execute(sql_export, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: e.porte
+
+
+--- SQL_EXPORT START ---
+
+                    SELECT DISTINCT
+                        -- CNPJ formatado (renomeado para apenas CNPJ)
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 1, 2) || '.' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 3, 3) || '.' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 6, 3) || '/' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 9, 4) || '-' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 13, 2) as cnpj,
+                        
+                        COALESCE(emp.razao_social, '') as razao_social,
+                        COALESCE(est.nome_fantasia, '') as nome_fantasia,
+                        
+                        -- Situação empresa
+                        CASE 
+                            WHEN est.situacao_cadastral = '02' THEN 'ATIVA'
+                            WHEN est.situacao_cadastral = '03' THEN 'SUSPENSA'
+                            WHEN est.situacao_cadastral = '04' THEN 'INAPTA'
+                            WHEN est.situacao_cadastral = '08' THEN 'BAIXADA'
+                            ELSE 'NÃO INFORMADO'
+                        END as situacao_empresa,
+                        
+                        -- Data formatada
+                        CASE 
+                            WHEN LENGTH(est.data_situacao_cadastral) = 8 THEN
+                                SUBSTR(est.data_situacao_cadastral, 7, 2) || '/' ||
+                                SUBSTR(est.data_situacao_cadastral, 5, 2) || '/' ||
+                                SUBSTR(est.data_situacao_cadastral, 1, 4)
+                            ELSE COALESCE(est.data_situacao_cadastral, '')
+                        END as data_situacao,
+                        
+                        COALESCE(est.motivo_situacao_cadastral, '') as descricao_motivo,
+                        
+                    -- Endereço completo
+                        TRIM(
+                            COALESCE(est.tipo_logradouro || ' ', '') ||
+                            COALESCE(est.logradouro, '') ||
+                            CASE WHEN est.numero IS NOT NULL AND est.numero != '' 
+                                 THEN ', nº ' || est.numero ELSE '' END ||
+                            CASE WHEN est.complemento IS NOT NULL AND est.complemento != '' 
+                                 THEN ' (' || est.complemento || ')' ELSE '' END
+                        ) as endereco_completo,
+
+                        -- Bairro (moved next to endereco)
+                        COALESCE(est.bairro, '') as bairro,
+
+                        -- CEP formatado
+                        CASE 
+                            WHEN LENGTH(est.cep) >= 8 THEN
+                                SUBSTR(est.cep, 1, 5) || '-' || SUBSTR(est.cep, 6, 3)
+                            ELSE COALESCE(est.cep, '')
+                        END as cep,
+
+                        est.uf,
+                        COALESCE(m.nome_municipio, '') as nome_municipio,
+
+                        -- Telefone formatado
+                        CASE 
+                            WHEN est.ddd_1 IS NOT NULL AND est.telefone_1 IS NOT NULL THEN
+                                '(' || est.ddd_1 || ') ' ||
+                                CASE 
+                                    WHEN LENGTH(est.telefone_1) = 9 THEN
+                                        SUBSTR(est.telefone_1, 1, 5) || '-' || SUBSTR(est.telefone_1, 6, 4)
+                                    WHEN LENGTH(est.telefone_1) = 8 THEN
+                                        SUBSTR(est.telefone_1, 1, 4) || '-' || SUBSTR(est.telefone_1, 5, 4)
+                                    ELSE est.telefone_1
+                                END
+                            ELSE ''
+                        END as telefone_formatado,
+
+                        COALESCE(est.correio_eletronico, '') as email,
+                        COALESCE(c.descricao_cnae, '') as descricao_cnae,
+                        COALESCE(nat.descricao_natureza, '') as descricao_natureza,
+                        CASE WHEN s.opcao_mei = 'S' THEN 'Microempreendedor Individual (MEI)'
+                             WHEN emp.porte IN ('49', '50') THEN 'Microempresa (ME)'
+                             WHEN emp.porte IN ('05', '16', '17', '19') THEN 'Empresa de Pequeno Porte (EPP)'
+                             WHEN emp.porte IN ('43', '34', '65', '59') THEN 'Empresa de Médio Porte'
+                             WHEN emp.porte NOT IN ('49', '50', '05', '16', '17', '19', '43', '34', '65', '59') 
+                                  AND emp.porte IS NOT NULL AND emp.porte != '' THEN 'Grande Empresa'
+                             ELSE 'Não Informado' END as porte,
+                        
+                        -- Capital social corrigido - garantir que apareça
+                        CASE 
+                            WHEN emp.capital_social IS NOT NULL AND emp.capital_social != '' AND emp.capital_social != '0' THEN
+                                'R$ ' || REPLACE(
+                                    printf("%.2f", CAST(emp.capital_social AS REAL) / 100.0),
+                                    '.', ','
+                                )
+                            ELSE 'Não Informado'
+                        END as capital_social,
+                        
+                        CASE WHEN s.opcao_simples = 'S' THEN 'Sim'
+                             WHEN s.opcao_simples = 'N' THEN 'Não'
+                             ELSE 'N/A' END as opcao_simples,
+                             
+                        CASE WHEN s.opcao_mei = 'S' THEN 'Sim'
+                             WHEN s.opcao_mei = 'N' THEN 'Não'
+                             ELSE 'N/A' END as opcao_mei,
+                             
+                    CASE WHEN est.identificador_matriz_filial = '1' THEN 'Matriz'
+                        WHEN est.identificador_matriz_filial = '2' THEN 'Filial'
+                        ELSE 'N/A' END as matriz_filial,
+                    '' as socios, '' as socios_cpfs, '' as socios_qualificacao
+
+                FROM estabelecimentos_completos est
+                    LEFT JOIN empresas_completas emp ON est.cnpj_basico = emp.cnpj_basico
+                    LEFT JOIN simples s ON est.cnpj_basico = s.cnpj_basico
+                    LEFT JOIN cnaes c ON est.cnae_fiscal_principal = c.codigo_cnae
+                    LEFT JOIN naturezas nat ON emp.natureza_juridica = nat.codigo_natureza
+                    LEFT JOIN municipios m ON est.municipio = m.codigo_municipio
+                    WHERE est.uf = ? AND est.situacao_cadastral = ?
+                    ORDER BY emp.razao_social, est.cnpj_ordem
+                
+--- SQL_EXPORT PARAMS: ['DF', '02'] ---
+
+--- SQL_EXPORT START ---
+
+                    SELECT DISTINCT
+                        -- CNPJ formatado (renomeado para apenas CNPJ)
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 1, 2) || '.' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 3, 3) || '.' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 6, 3) || '/' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 9, 4) || '-' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 13, 2) as cnpj,
+                        
+                        COALESCE(e.razao_social, '') as razao_social,
+                        COALESCE(est.nome_fantasia, '') as nome_fantasia,
+                        
+                        -- Situação empresa
+                        CASE 
+                            WHEN est.situacao_cadastral = '02' THEN 'ATIVA'
+                            WHEN est.situacao_cadastral = '03' THEN 'SUSPENSA'
+                            WHEN est.situacao_cadastral = '04' THEN 'INAPTA'
+                            WHEN est.situacao_cadastral = '08' THEN 'BAIXADA'
+                            ELSE 'NÃO INFORMADO'
+                        END as situacao_empresa,
+                        
+                        -- Data formatada
+                        CASE 
+                            WHEN LENGTH(est.data_situacao_cadastral) = 8 THEN
+                                SUBSTR(est.data_situacao_cadastral, 7, 2) || '/' ||
+                                SUBSTR(est.data_situacao_cadastral, 5, 2) || '/' ||
+                                SUBSTR(est.data_situacao_cadastral, 1, 4)
+                            ELSE COALESCE(est.data_situacao_cadastral, '')
+                        END as data_situacao,
+                        
+                        COALESCE(est.motivo_situacao_cadastral, '') as descricao_motivo,
+                        
+                    -- Endereço completo
+                        TRIM(
+                            COALESCE(est.tipo_logradouro || ' ', '') ||
+                            COALESCE(est.logradouro, '') ||
+                            CASE WHEN est.numero IS NOT NULL AND est.numero != '' 
+                                 THEN ', nº ' || est.numero ELSE '' END ||
+                            CASE WHEN est.complemento IS NOT NULL AND est.complemento != '' 
+                                 THEN ' (' || est.complemento || ')' ELSE '' END
+                        ) as endereco_completo,
+
+                        -- Bairro (moved next to endereco)
+                        COALESCE(est.bairro, '') as bairro,
+
+                        -- CEP formatado
+                        CASE 
+                            WHEN LENGTH(est.cep) >= 8 THEN
+                                SUBSTR(est.cep, 1, 5) || '-' || SUBSTR(est.cep, 6, 3)
+                            ELSE COALESCE(est.cep, '')
+                        END as cep,
+
+                        est.uf,
+                        COALESCE(m.nome_municipio, '') as nome_municipio,
+
+                        -- Telefone formatado
+                        CASE 
+                            WHEN est.ddd_1 IS NOT NULL AND est.telefone_1 IS NOT NULL THEN
+                                '(' || est.ddd_1 || ') ' ||
+                                CASE 
+                                    WHEN LENGTH(est.telefone_1) = 9 THEN
+                                        SUBSTR(est.telefone_1, 1, 5) || '-' || SUBSTR(est.telefone_1, 6, 4)
+                                    WHEN LENGTH(est.telefone_1) = 8 THEN
+                                        SUBSTR(est.telefone_1, 1, 4) || '-' || SUBSTR(est.telefone_1, 5, 4)
+                                    ELSE est.telefone_1
+                                END
+                            ELSE ''
+                        END as telefone_formatado,
+
+                        COALESCE(est.correio_eletronico, '') as email,
+                        COALESCE(c.descricao_cnae, '') as descricao_cnae,
+                        COALESCE(nat.descricao_natureza, '') as descricao_natureza,
+                    CASE WHEN s.opcao_mei = 'S' THEN 'Microempreendedor Individual (MEI)'
+                        WHEN e.porte IN ('49', '50') THEN 'Microempresa (ME)'
+                        WHEN e.porte IN ('05', '16', '17', '19') THEN 'Empresa de Pequeno Porte (EPP)'
+                        WHEN e.porte IN ('43', '34', '65', '59') THEN 'Empresa de Médio Porte'
+                        WHEN e.porte NOT IN ('49', '50', '05', '16', '17', '19', '43', '34', '65', '59') 
+                            AND e.porte IS NOT NULL AND e.porte != '' THEN 'Grande Empresa'
+                             ELSE 'Não Informado' END as porte,
+                        
+                        -- Capital social corrigido - garantir que apareça
+                        CASE 
+                            WHEN e.capital_social IS NOT NULL AND e.capital_social != '' AND e.capital_social != '0' THEN
+                                'R$ ' || REPLACE(
+                                    printf("%.2f", CAST(emp.capital_social AS REAL) / 100.0),
+                                    '.', ','
+                                )
+                            ELSE 'Não Informado'
+                        END as capital_social,
+                        
+                        CASE WHEN s.opcao_simples = 'S' THEN 'Sim'
+                             WHEN s.opcao_simples = 'N' THEN 'Não'
+                             ELSE 'N/A' END as opcao_simples,
+                             
+                        CASE WHEN s.opcao_mei = 'S' THEN 'Sim'
+                             WHEN s.opcao_mei = 'N' THEN 'Não'
+                             ELSE 'N/A' END as opcao_mei,
+                             
+                    CASE WHEN est.identificador_matriz_filial = '1' THEN 'Matriz'
+                        WHEN est.identificador_matriz_filial = '2' THEN 'Filial'
+                        ELSE 'N/A' END as matriz_filial,
+                    COALESCE(socios_agg.socios_nomes, '') as nome_socio, COALESCE(socios_agg.socios_quals, '') as qualificacao_socio, COALESCE(socios_agg.socios_cpfs, '') as cnpj_cpf_socio
+
+                    FROM estabelecimentos_completos est
+                    LEFT JOIN empresas_completas e ON est.cnpj_basico = e.cnpj_basico
+                    LEFT JOIN simples s ON est.cnpj_basico = s.cnpj_basico
+                    LEFT JOIN cnaes c ON est.cnae_fiscal_principal = c.codigo_cnae
+                    LEFT JOIN naturezas nat ON e.natureza_juridica = nat.codigo_natureza
+                    LEFT JOIN municipios m ON est.municipio = m.codigo_municipio
+                    LEFT JOIN (
+                        SELECT cnpj_basico, GROUP_CONCAT(nome_socio, ' | ') as socios_nomes, GROUP_CONCAT(qualificacao_socio, ' | ') as socios_quals, GROUP_CONCAT(cnpj_cpf_socio, ' | ') as socios_cpfs FROM socios GROUP BY cnpj_basico
+                    ) as socios_agg ON socios_agg.cnpj_basico = e.cnpj_basico
+                    WHERE est.uf = ? AND EXISTS (SELECT 1 FROM socios s2 WHERE s2.cnpj_basico = est.cnpj_basico)
+                    ORDER BY emp.razao_social, est.cnpj_ordem
+                
+--- SQL_EXPORT PARAMS: ['DF'] ---
+2025-10-13 12:18:47,268 ERROR Exception in /export: Traceback (most recent call last):
+  File "C:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 883, in export_data
+    cursor.execute(sql_export, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: emp.capital_social
+
+2025-10-13 12:18:47,268 ERROR Exception in /export: Traceback (most recent call last):
+  File "C:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 883, in export_data
+    cursor.execute(sql_export, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: emp.capital_social
+
+
+[2025-10-13T12:18:47.303652] Exception in /export:
+Traceback (most recent call last):
+  File "C:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 883, in export_data
+    cursor.execute(sql_export, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: emp.capital_social
+
+
+--- SQL_EXPORT START ---
+
+                    SELECT DISTINCT
+                        -- CNPJ formatado (renomeado para apenas CNPJ)
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 1, 2) || '.' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 3, 3) || '.' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 6, 3) || '/' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 9, 4) || '-' ||
+                        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 13, 2) as cnpj,
+                        
+                        COALESCE(e.razao_social, '') as razao_social,
+                        COALESCE(est.nome_fantasia, '') as nome_fantasia,
+                        
+                        -- Situação empresa
+                        CASE 
+                            WHEN est.situacao_cadastral = '02' THEN 'ATIVA'
+                            WHEN est.situacao_cadastral = '03' THEN 'SUSPENSA'
+                            WHEN est.situacao_cadastral = '04' THEN 'INAPTA'
+                            WHEN est.situacao_cadastral = '08' THEN 'BAIXADA'
+                            ELSE 'NÃO INFORMADO'
+                        END as situacao_empresa,
+                        
+                        -- Data formatada
+                        CASE 
+                            WHEN LENGTH(est.data_situacao_cadastral) = 8 THEN
+                                SUBSTR(est.data_situacao_cadastral, 7, 2) || '/' ||
+                                SUBSTR(est.data_situacao_cadastral, 5, 2) || '/' ||
+                                SUBSTR(est.data_situacao_cadastral, 1, 4)
+                            ELSE COALESCE(est.data_situacao_cadastral, '')
+                        END as data_situacao,
+                        
+                        COALESCE(est.motivo_situacao_cadastral, '') as descricao_motivo,
+                        
+                    -- Endereço completo
+                        TRIM(
+                            COALESCE(est.tipo_logradouro || ' ', '') ||
+                            COALESCE(est.logradouro, '') ||
+                            CASE WHEN est.numero IS NOT NULL AND est.numero != '' 
+                                 THEN ', nº ' || est.numero ELSE '' END ||
+                            CASE WHEN est.complemento IS NOT NULL AND est.complemento != '' 
+                                 THEN ' (' || est.complemento || ')' ELSE '' END
+                        ) as endereco_completo,
+
+                        -- Bairro (moved next to endereco)
+                        COALESCE(est.bairro, '') as bairro,
+
+                        -- CEP formatado
+                        CASE 
+                            WHEN LENGTH(est.cep) >= 8 THEN
+                                SUBSTR(est.cep, 1, 5) || '-' || SUBSTR(est.cep, 6, 3)
+                            ELSE COALESCE(est.cep, '')
+                        END as cep,
+
+                        est.uf,
+                        COALESCE(m.nome_municipio, '') as nome_municipio,
+
+                        -- Telefone formatado
+                        CASE 
+                            WHEN est.ddd_1 IS NOT NULL AND est.telefone_1 IS NOT NULL THEN
+                                '(' || est.ddd_1 || ') ' ||
+                                CASE 
+                                    WHEN LENGTH(est.telefone_1) = 9 THEN
+                                        SUBSTR(est.telefone_1, 1, 5) || '-' || SUBSTR(est.telefone_1, 6, 4)
+                                    WHEN LENGTH(est.telefone_1) = 8 THEN
+                                        SUBSTR(est.telefone_1, 1, 4) || '-' || SUBSTR(est.telefone_1, 5, 4)
+                                    ELSE est.telefone_1
+                                END
+                            ELSE ''
+                        END as telefone_formatado,
+
+                        COALESCE(est.correio_eletronico, '') as email,
+                        COALESCE(c.descricao_cnae, '') as descricao_cnae,
+                        COALESCE(nat.descricao_natureza, '') as descricao_natureza,
+                    CASE WHEN s.opcao_mei = 'S' THEN 'Microempreendedor Individual (MEI)'
+                        WHEN e.porte IN ('49', '50') THEN 'Microempresa (ME)'
+                        WHEN e.porte IN ('05', '16', '17', '19') THEN 'Empresa de Pequeno Porte (EPP)'
+                        WHEN e.porte IN ('43', '34', '65', '59') THEN 'Empresa de Médio Porte'
+                        WHEN e.porte NOT IN ('49', '50', '05', '16', '17', '19', '43', '34', '65', '59') 
+                            AND e.porte IS NOT NULL AND e.porte != '' THEN 'Grande Empresa'
+                             ELSE 'Não Informado' END as porte,
+                        
+                        -- Capital social corrigido - garantir que apareça
+                        CASE 
+                            WHEN e.capital_social IS NOT NULL AND e.capital_social != '' AND e.capital_social != '0' THEN
+                                'R$ ' || REPLACE(
+                                    printf("%.2f", CAST(emp.capital_social AS REAL) / 100.0),
+                                    '.', ','
+                                )
+                            ELSE 'Não Informado'
+                        END as capital_social,
+                        
+                        CASE WHEN s.opcao_simples = 'S' THEN 'Sim'
+                             WHEN s.opcao_simples = 'N' THEN 'Não'
+                             ELSE 'N/A' END as opcao_simples,
+                             
+                        CASE WHEN s.opcao_mei = 'S' THEN 'Sim'
+                             WHEN s.opcao_mei = 'N' THEN 'Não'
+                             ELSE 'N/A' END as opcao_mei,
+                             
+                    CASE WHEN est.identificador_matriz_filial = '1' THEN 'Matriz'
+                        WHEN est.identificador_matriz_filial = '2' THEN 'Filial'
+                        ELSE 'N/A' END as matriz_filial,
+                    COALESCE(socios_agg.socios_nomes, '') as nome_socio, COALESCE(socios_agg.socios_quals, '') as qualificacao_socio, COALESCE(socios_agg.socios_cpfs, '') as cnpj_cpf_socio
+
+                    FROM estabelecimentos_completos est
+                    LEFT JOIN empresas_completas e ON est.cnpj_basico = e.cnpj_basico
+                    LEFT JOIN simples s ON est.cnpj_basico = s.cnpj_basico
+                    LEFT JOIN cnaes c ON est.cnae_fiscal_principal = c.codigo_cnae
+                    LEFT JOIN naturezas nat ON e.natureza_juridica = nat.codigo_natureza
+                    LEFT JOIN municipios m ON est.municipio = m.codigo_municipio
+                    LEFT JOIN (
+                        SELECT cnpj_basico, GROUP_CONCAT(nome_socio, ' | ') as socios_nomes, GROUP_CONCAT(qualificacao_socio, ' | ') as socios_quals, GROUP_CONCAT(cnpj_cpf_socio, ' | ') as socios_cpfs FROM socios GROUP BY cnpj_basico
+                    ) as socios_agg ON socios_agg.cnpj_basico = e.cnpj_basico
+                    WHERE est.uf = ? AND EXISTS (SELECT 1 FROM socios s2 WHERE s2.cnpj_basico = est.cnpj_basico)
+                    ORDER BY emp.razao_social, est.cnpj_ordem
+                
+--- SQL_EXPORT PARAMS: ['DF'] ---
+2025-10-13 12:36:51,316 ERROR Exception in /export: Traceback (most recent call last):
+  File "C:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 883, in export_data
+    cursor.execute(sql_export, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: emp.capital_social
+
+2025-10-13 12:36:51,316 ERROR Exception in /export: Traceback (most recent call last):
+  File "C:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 883, in export_data
+    cursor.execute(sql_export, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: emp.capital_social
+
+
+[2025-10-13T12:36:51.318540] Exception in /export:
+Traceback (most recent call last):
+  File "C:\Users\victor.vasconcelos\Documents\Dashboard\app.py", line 883, in export_data
+    cursor.execute(sql_export, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: emp.capital_social
+
+
+--- INTERNAL EXPORT SQL START ---
+
+    SELECT DISTINCT
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 1, 2) || '.' ||
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 3, 3) || '.' ||
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 6, 3) || '/' ||
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 9, 4) || '-' ||
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 13, 2) as cnpj,
+        COALESCE(e.razao_social, '') as razao_social,
+        COALESCE(est.nome_fantasia, '') as nome_fantasia,
+        CASE WHEN est.situacao_cadastral = '02' THEN 'ATIVA' ELSE 'NÃO INFORMADO' END as situacao_empresa,
+        CASE WHEN LENGTH(est.data_situacao_cadastral) = 8 THEN SUBSTR(est.data_situacao_cadastral, 7, 2) || '/' || SUBSTR(est.data_situacao_cadastral, 5, 2) || '/' || SUBSTR(est.data_situacao_cadastral, 1, 4) ELSE COALESCE(est.data_situacao_cadastral, '') END as data_situacao,
+        COALESCE(est.motivo_situacao_cadastral, '') as descricao_motivo,
+        TRIM(COALESCE(est.tipo_logradouro || ' ', '') || COALESCE(est.logradouro, '') || CASE WHEN est.numero IS NOT NULL AND est.numero != '' THEN ', nº ' || est.numero ELSE '' END || CASE WHEN est.complemento IS NOT NULL AND est.complemento != '' THEN ' (' || est.complemento || ')' ELSE '' END) as endereco_completo,
+        COALESCE(est.bairro, '') as bairro,
+        CASE WHEN LENGTH(est.cep) >= 8 THEN SUBSTR(est.cep, 1, 5) || '-' || SUBSTR(est.cep, 6, 3) ELSE COALESCE(est.cep, '') END as cep,
+        est.uf,
+        COALESCE(m.nome_municipio, '') as nome_municipio,
+        CASE WHEN est.ddd_1 IS NOT NULL AND est.telefone_1 IS NOT NULL THEN '(' || est.ddd_1 || ') ' || CASE WHEN LENGTH(est.telefone_1) = 9 THEN SUBSTR(est.telefone_1, 1, 5) || '-' || SUBSTR(est.telefone_1, 6, 4) WHEN LENGTH(est.telefone_1) = 8 THEN SUBSTR(est.telefone_1, 1, 4) || '-' || SUBSTR(est.telefone_1, 5, 4) ELSE est.telefone_1 END ELSE '' END as telefone_formatado,
+        COALESCE(est.correio_eletronico, '') as email,
+        COALESCE(c.descricao_cnae, '') as descricao_cnae,
+        COALESCE(nat.descricao_natureza, '') as descricao_natureza,
+        CASE WHEN s.opcao_mei = 'S' THEN 'Microempreendedor Individual (MEI)' WHEN e.porte IN ('49','50') THEN 'Microempresa (ME)' WHEN e.porte IN ('05','16','17','19') THEN 'Empresa de Pequeno Porte (EPP)' WHEN e.porte IN ('43','34','65','59') THEN 'Empresa de Médio Porte' WHEN e.porte NOT IN ('49','50','05','16','17','19','43','34','65','59') AND e.porte IS NOT NULL AND e.porte != '' THEN 'Grande Empresa' ELSE 'Não Informado' END as porte,
+        CASE WHEN e.capital_social IS NOT NULL AND e.capital_social != '' AND e.capital_social != '0' THEN 'R$ ' || REPLACE(printf("%.2f", CAST(e.capital_social AS REAL) / 100.0), '.', ',') ELSE 'Não Informado' END as capital_social,
+        CASE WHEN s.opcao_simples = 'S' THEN 'Sim' WHEN s.opcao_simples = 'N' THEN 'Não' ELSE 'N/A' END as opcao_simpl
+        , CASE WHEN s.opcao_mei = 'S' THEN 'Sim' WHEN s.opcao_mei = 'N' THEN 'Não' ELSE 'N/A' END as opcao_mei,
+        CASE WHEN est.identificador_matriz_filial = '1' THEN 'Matriz' WHEN est.identificador_matriz_filial = '2' THEN 'Filial' ELSE 'N/A' END as matriz_filial,
+        COALESCE(socios_agg.socios_nomes, '') as nome_socio, COALESCE(socios_agg.socios_quals, '') as qualificacao_socio, COALESCE(socios_agg.socios_cpfs, '') as cnpj_cpf_socio
+    FROM estabelecimentos_completos est
+    LEFT JOIN empresas_completas e ON est.cnpj_basico = e.cnpj_basico
+    LEFT JOIN simples s ON est.cnpj_basico = s.cnpj_basico
+    LEFT JOIN cnaes c ON est.cnae_fiscal_principal = c.codigo_cnae
+    LEFT JOIN naturezas nat ON e.natureza_juridica = nat.codigo_natureza
+    LEFT JOIN municipios m ON est.municipio = m.codigo_municipio
+    
+LEFT JOIN (
+ SELECT cnpj_basico, GROUP_CONCAT(nome_socio, ' | ') as socios_nomes, GROUP_CONCAT(qualificacao_socio, ' | ') as socios_quals, GROUP_CONCAT(cnpj_cpf_socio, ' | ') as socios_cpfs FROM socios GROUP BY cnpj_basico
+) as socios_agg ON socios_agg.cnpj_basico = e.cnpj_basico
+    WHERE est.uf = ? AND EXISTS (SELECT 1 FROM socios s2 WHERE s2.cnpj_basico = est.cnpj_basico)
+    ORDER BY e.razao_social, est.cnpj_ordem
+    
+--- PARAMS: ['DF'] ---
+
+--- INTERNAL EXPORT SQL START ---
+
+    SELECT DISTINCT
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 1, 2) || '.' ||
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 3, 3) || '.' ||
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 6, 3) || '/' ||
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 9, 4) || '-' ||
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 13, 2) as cnpj,
+        COALESCE(e.razao_social, '') as razao_social,
+        COALESCE(est.nome_fantasia, '') as nome_fantasia,
+        CASE WHEN est.situacao_cadastral = '02' THEN 'ATIVA' ELSE 'NÃO INFORMADO' END as situacao_empresa,
+        CASE WHEN LENGTH(est.data_situacao_cadastral) = 8 THEN SUBSTR(est.data_situacao_cadastral, 7, 2) || '/' || SUBSTR(est.data_situacao_cadastral, 5, 2) || '/' || SUBSTR(est.data_situacao_cadastral, 1, 4) ELSE COALESCE(est.data_situacao_cadastral, '') END as data_situacao,
+        COALESCE(est.motivo_situacao_cadastral, '') as descricao_motivo,
+        TRIM(COALESCE(est.tipo_logradouro || ' ', '') || COALESCE(est.logradouro, '') || CASE WHEN est.numero IS NOT NULL AND est.numero != '' THEN ', nº ' || est.numero ELSE '' END || CASE WHEN est.complemento IS NOT NULL AND est.complemento != '' THEN ' (' || est.complemento || ')' ELSE '' END) as endereco_completo,
+        COALESCE(est.bairro, '') as bairro,
+        CASE WHEN LENGTH(est.cep) >= 8 THEN SUBSTR(est.cep, 1, 5) || '-' || SUBSTR(est.cep, 6, 3) ELSE COALESCE(est.cep, '') END as cep,
+        est.uf,
+        COALESCE(m.nome_municipio, '') as nome_municipio,
+        CASE WHEN est.ddd_1 IS NOT NULL AND est.telefone_1 IS NOT NULL THEN '(' || est.ddd_1 || ') ' || CASE WHEN LENGTH(est.telefone_1) = 9 THEN SUBSTR(est.telefone_1, 1, 5) || '-' || SUBSTR(est.telefone_1, 6, 4) WHEN LENGTH(est.telefone_1) = 8 THEN SUBSTR(est.telefone_1, 1, 4) || '-' || SUBSTR(est.telefone_1, 5, 4) ELSE est.telefone_1 END ELSE '' END as telefone_formatado,
+        COALESCE(est.correio_eletronico, '') as email,
+        COALESCE(c.descricao_cnae, '') as descricao_cnae,
+        COALESCE(nat.descricao_natureza, '') as descricao_natureza,
+        CASE WHEN s.opcao_mei = 'S' THEN 'Microempreendedor Individual (MEI)' WHEN e.porte IN ('49','50') THEN 'Microempresa (ME)' WHEN e.porte IN ('05','16','17','19') THEN 'Empresa de Pequeno Porte (EPP)' WHEN e.porte IN ('43','34','65','59') THEN 'Empresa de Médio Porte' WHEN e.porte NOT IN ('49','50','05','16','17','19','43','34','65','59') AND e.porte IS NOT NULL AND e.porte != '' THEN 'Grande Empresa' ELSE 'Não Informado' END as porte,
+        CASE WHEN e.capital_social IS NOT NULL AND e.capital_social != '' AND e.capital_social != '0' THEN 'R$ ' || REPLACE(printf("%.2f", CAST(e.capital_social AS REAL) / 100.0), '.', ',') ELSE 'Não Informado' END as capital_social,
+        CASE WHEN s.opcao_simples = 'S' THEN 'Sim' WHEN s.opcao_simples = 'N' THEN 'Não' ELSE 'N/A' END as opcao_simpl
+        , CASE WHEN s.opcao_mei = 'S' THEN 'Sim' WHEN s.opcao_mei = 'N' THEN 'Não' ELSE 'N/A' END as opcao_mei,
+        CASE WHEN est.identificador_matriz_filial = '1' THEN 'Matriz' WHEN est.identificador_matriz_filial = '2' THEN 'Filial' ELSE 'N/A' END as matriz_filial,
+        COALESCE(socios_agg.socios_nomes, '') as nome_socio, COALESCE(socios_agg.socios_quals, '') as qualificacao_socio, COALESCE(socios_agg.socios_cpfs, '') as cnpj_cpf_socio
+    FROM estabelecimentos_completos est
+    LEFT JOIN empresas_completas e ON est.cnpj_basico = e.cnpj_basico
+    LEFT JOIN simples s ON est.cnpj_basico = s.cnpj_basico
+    LEFT JOIN cnaes c ON est.cnae_fiscal_principal = c.codigo_cnae
+    LEFT JOIN naturezas nat ON e.natureza_juridica = nat.codigo_natureza
+    LEFT JOIN municipios m ON est.municipio = m.codigo_municipio
+    
+LEFT JOIN (
+ SELECT cnpj_basico, GROUP_CONCAT(nome_socio, ' | ') as socios_nomes, GROUP_CONCAT(qualificacao_socio, ' | ') as socios_quals, GROUP_CONCAT(cnpj_cpf_socio, ' | ') as socios_cpfs FROM socios GROUP BY cnpj_basico
+) as socios_agg ON socios_agg.cnpj_basico = e.cnpj_basico
+    WHERE est.uf = ? AND EXISTS (SELECT 1 FROM socios s2 WHERE s2.cnpj_basico = est.cnpj_basico)
+    ORDER BY e.razao_social, est.cnpj_ordem
+    
+--- PARAMS: ['DF'] ---
+
+--- INTERNAL EXPORT SQL START ---
+
+    SELECT DISTINCT
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 1, 2) || '.' ||
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 3, 3) || '.' ||
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 6, 3) || '/' ||
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 9, 4) || '-' ||
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 13, 2) as cnpj,
+        COALESCE(e.razao_social, '') as razao_social,
+        COALESCE(est.nome_fantasia, '') as nome_fantasia,
+        CASE WHEN est.situacao_cadastral = '02' THEN 'ATIVA' ELSE 'NÃO INFORMADO' END as situacao_empresa,
+        CASE WHEN LENGTH(est.data_situacao_cadastral) = 8 THEN SUBSTR(est.data_situacao_cadastral, 7, 2) || '/' || SUBSTR(est.data_situacao_cadastral, 5, 2) || '/' || SUBSTR(est.data_situacao_cadastral, 1, 4) ELSE COALESCE(est.data_situacao_cadastral, '') END as data_situacao,
+    -- motivo_situacao_cadastral removed from export
+        TRIM(COALESCE(est.tipo_logradouro || ' ', '') || COALESCE(est.logradouro, '') || CASE WHEN est.numero IS NOT NULL AND est.numero != '' THEN ', nº ' || est.numero ELSE '' END || CASE WHEN est.complemento IS NOT NULL AND est.complemento != '' THEN ' (' || est.complemento || ')' ELSE '' END) as endereco_completo,
+        COALESCE(est.bairro, '') as bairro,
+        CASE WHEN LENGTH(est.cep) >= 8 THEN SUBSTR(est.cep, 1, 5) || '-' || SUBSTR(est.cep, 6, 3) ELSE COALESCE(est.cep, '') END as cep,
+        est.uf,
+        COALESCE(m.nome_municipio, '') as nome_municipio,
+        CASE WHEN est.ddd_1 IS NOT NULL AND est.telefone_1 IS NOT NULL THEN '(' || est.ddd_1 || ') ' || CASE WHEN LENGTH(est.telefone_1) = 9 THEN SUBSTR(est.telefone_1, 1, 5) || '-' || SUBSTR(est.telefone_1, 6, 4) WHEN LENGTH(est.telefone_1) = 8 THEN SUBSTR(est.telefone_1, 1, 4) || '-' || SUBSTR(est.telefone_1, 5, 4) ELSE est.telefone_1 END ELSE '' END as telefone_formatado,
+        COALESCE(est.correio_eletronico, '') as email,
+        COALESCE(c.descricao_cnae, '') as descricao_cnae,
+        COALESCE(nat.descricao_natureza, '') as descricao_natureza,
+        CASE WHEN s.opcao_mei = 'S' THEN 'Microempreendedor Individual (MEI)' WHEN e.porte IN ('49','50') THEN 'Microempresa (ME)' WHEN e.porte IN ('05','16','17','19') THEN 'Empresa de Pequeno Porte (EPP)' WHEN e.porte IN ('43','34','65','59') THEN 'Empresa de Médio Porte' WHEN e.porte NOT IN ('49','50','05','16','17','19','43','34','65','59') AND e.porte IS NOT NULL AND e.porte != '' THEN 'Grande Empresa' ELSE 'Não Informado' END as porte,
+        CASE WHEN e.capital_social IS NOT NULL AND e.capital_social != '' AND e.capital_social != '0' THEN 'R$ ' || REPLACE(printf("%.2f", CAST(e.capital_social AS REAL) / 100.0), '.', ',') ELSE 'Não Informado' END as capital_social,
+        CASE WHEN s.opcao_simples = 'S' THEN 'Sim' WHEN s.opcao_simples = 'N' THEN 'Não' ELSE 'N/A' END as opcao_simpl
+        , CASE WHEN s.opcao_mei = 'S' THEN 'Sim' WHEN s.opcao_mei = 'N' THEN 'Não' ELSE 'N/A' END as opcao_mei,
+        CASE WHEN est.identificador_matriz_filial = '1' THEN 'Matriz' WHEN est.identificador_matriz_filial = '2' THEN 'Filial' ELSE 'N/A' END as matriz_filial,
+        COALESCE(socios_agg.socios_nomes, '') as nome_socio, COALESCE(socios_agg.socios_quals, '') as qualificacao_socio, COALESCE(socios_agg.socios_cpfs, '') as cnpj_cpf_socio
+    FROM estabelecimentos_completos est
+    LEFT JOIN empresas_completas e ON est.cnpj_basico = e.cnpj_basico
+    LEFT JOIN simples s ON est.cnpj_basico = s.cnpj_basico
+    LEFT JOIN cnaes c ON est.cnae_fiscal_principal = c.codigo_cnae
+    LEFT JOIN naturezas nat ON e.natureza_juridica = nat.codigo_natureza
+    LEFT JOIN municipios m ON est.municipio = m.codigo_municipio
+    
+LEFT JOIN (
+ SELECT cnpj_basico, GROUP_CONCAT(nome_socio, ' | ') as socios_nomes, GROUP_CONCAT(qualificacao_socio, ' | ') as socios_quals, GROUP_CONCAT(cnpj_cpf_socio, ' | ') as socios_cpfs FROM socios GROUP BY cnpj_basico
+) as socios_agg ON socios_agg.cnpj_basico = e.cnpj_basico
+    WHERE est.uf = ? AND EXISTS (SELECT 1 FROM socios s2 WHERE s2.cnpj_basico = est.cnpj_basico)
+    ORDER BY e.razao_social, est.cnpj_ordem
+    
+--- PARAMS: ['DF'] ---
+
+--- INTERNAL EXPORT SQL START ---
+
+    SELECT DISTINCT
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 1, 2) || '.' ||
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 3, 3) || '.' ||
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 6, 3) || '/' ||
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 9, 4) || '-' ||
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 13, 2) as cnpj,
+        COALESCE(e.razao_social, '') as razao_social,
+        COALESCE(est.nome_fantasia, '') as nome_fantasia,
+        CASE WHEN est.situacao_cadastral = '02' THEN 'ATIVA' ELSE 'NÃO INFORMADO' END as situacao_empresa,
+        CASE WHEN LENGTH(est.data_situacao_cadastral) = 8 THEN SUBSTR(est.data_situacao_cadastral, 7, 2) || '/' || SUBSTR(est.data_situacao_cadastral, 5, 2) || '/' || SUBSTR(est.data_situacao_cadastral, 1, 4) ELSE COALESCE(est.data_situacao_cadastral, '') END as data_situacao,
+    -- motivo_situacao_cadastral removed from export
+        TRIM(COALESCE(est.tipo_logradouro || ' ', '') || COALESCE(est.logradouro, '') || CASE WHEN est.numero IS NOT NULL AND est.numero != '' THEN ', nº ' || est.numero ELSE '' END || CASE WHEN est.complemento IS NOT NULL AND est.complemento != '' THEN ' (' || est.complemento || ')' ELSE '' END) as endereco_completo,
+        COALESCE(est.bairro, '') as bairro,
+        CASE WHEN LENGTH(est.cep) >= 8 THEN SUBSTR(est.cep, 1, 5) || '-' || SUBSTR(est.cep, 6, 3) ELSE COALESCE(est.cep, '') END as cep,
+        est.uf,
+        COALESCE(m.nome_municipio, '') as nome_municipio,
+        CASE WHEN est.ddd_1 IS NOT NULL AND est.telefone_1 IS NOT NULL THEN '(' || est.ddd_1 || ') ' || CASE WHEN LENGTH(est.telefone_1) = 9 THEN SUBSTR(est.telefone_1, 1, 5) || '-' || SUBSTR(est.telefone_1, 6, 4) WHEN LENGTH(est.telefone_1) = 8 THEN SUBSTR(est.telefone_1, 1, 4) || '-' || SUBSTR(est.telefone_1, 5, 4) ELSE est.telefone_1 END ELSE '' END as telefone_formatado,
+        COALESCE(est.correio_eletronico, '') as email,
+        COALESCE(c.descricao_cnae, '') as descricao_cnae,
+        COALESCE(nat.descricao_natureza, '') as descricao_natureza,
+        CASE WHEN s.opcao_mei = 'S' THEN 'Microempreendedor Individual (MEI)' WHEN e.porte IN ('49','50') THEN 'Microempresa (ME)' WHEN e.porte IN ('05','16','17','19') THEN 'Empresa de Pequeno Porte (EPP)' WHEN e.porte IN ('43','34','65','59') THEN 'Empresa de Médio Porte' WHEN e.porte NOT IN ('49','50','05','16','17','19','43','34','65','59') AND e.porte IS NOT NULL AND e.porte != '' THEN 'Grande Empresa' ELSE 'Não Informado' END as porte,
+        CASE WHEN e.capital_social IS NOT NULL AND e.capital_social != '' AND e.capital_social != '0' THEN 'R$ ' || REPLACE(printf("%.2f", CAST(e.capital_social AS REAL) / 100.0), '.', ',') ELSE 'Não Informado' END as capital_social,
+        CASE WHEN s.opcao_simples = 'S' THEN 'Sim' WHEN s.opcao_simples = 'N' THEN 'Não' ELSE 'N/A' END as opcao_simpl
+        , CASE WHEN s.opcao_mei = 'S' THEN 'Sim' WHEN s.opcao_mei = 'N' THEN 'Não' ELSE 'N/A' END as opcao_mei,
+        CASE WHEN est.identificador_matriz_filial = '1' THEN 'Matriz' WHEN est.identificador_matriz_filial = '2' THEN 'Filial' ELSE 'N/A' END as matriz_filial,
+        COALESCE(socios_agg.socios_nomes, '') as nome_socio, COALESCE(socios_agg.socios_quals, '') as qualificacao_socio, COALESCE(socios_agg.socios_cpfs_mid6, '') as cpf_mid6
+    FROM estabelecimentos_completos est
+    LEFT JOIN empresas_completas e ON est.cnpj_basico = e.cnpj_basico
+    LEFT JOIN simples s ON est.cnpj_basico = s.cnpj_basico
+    LEFT JOIN cnaes c ON est.cnae_fiscal_principal = c.codigo_cnae
+    LEFT JOIN naturezas nat ON e.natureza_juridica = nat.codigo_natureza
+    LEFT JOIN municipios m ON est.municipio = m.codigo_municipio
+    
+LEFT JOIN (
+ SELECT cnpj_basico, GROUP_CONCAT(nome_socio, ' | ') as socios_nomes, GROUP_CONCAT(qualificacao_socio, ' | ') as socios_quals, GROUP_CONCAT(
+                            CASE WHEN instr(cnpj_cpf_socio, '*') > 0 THEN REPLACE(cnpj_cpf_socio, '*', '') WHEN LENGTH(COALESCE(cnpj_cpf_socio, '')) >= 11 THEN SUBSTR(cnpj_cpf_socio, 4, 6) ELSE '' END, ' | ') as socios_cpfs_mid6 FROM socios GROUP BY cnpj_basico
+) as socios_agg ON socios_agg.cnpj_basico = e.cnpj_basico
+    WHERE est.uf = ? AND EXISTS (SELECT 1 FROM socios s2 WHERE s2.cnpj_basico = est.cnpj_basico)
+    ORDER BY e.razao_social, est.cnpj_ordem
+    
+--- PARAMS: ['DF'] ---
+
+--- SQL_EXPORT START ---
+
+                    SELECT DISTINCT
+                        COALESCE(e.razao_social, '') as razao_social,
+                        COALESCE(est.nome_fantasia, '') as nome_fantasia,
+                        
+                        -- Situação empresa
+                        CASE 
+                            WHEN est.situacao_cadastral = '02' THEN 'ATIVA'
+                            WHEN est.situacao_cadastral = '03' THEN 'SUSPENSA'
+                            WHEN est.situacao_cadastral = '04' THEN 'INAPTA'
+                            WHEN est.situacao_cadastral = '08' THEN 'BAIXADA'
+                            ELSE 'NÃO INFORMADO'
+                        END as situacao_empresa,
+                        
+                        -- Data formatada
+                        CASE 
+                            WHEN LENGTH(est.data_situacao_cadastral) = 8 THEN
+                                SUBSTR(est.data_situacao_cadastral, 7, 2) || '/' ||
+                                SUBSTR(est.data_situacao_cadastral, 5, 2) || '/' ||
+                                SUBSTR(est.data_situacao_cadastral, 1, 4)
+                            ELSE COALESCE(est.data_situacao_cadastral, '')
+                        END as data_situacao,
+                        
+                        -- motivo_situacao removido para manter compatibilidade com o layout de exportacao anterior
+                        
+                    -- Endereço completo
+                        TRIM(
+                            COALESCE(est.tipo_logradouro || ' ', '') ||
+                            COALESCE(est.logradouro, '') ||
+                            CASE WHEN est.numero IS NOT NULL AND est.numero != '' 
+                                 THEN ', nº ' || est.numero ELSE '' END ||
+                            CASE WHEN est.complemento IS NOT NULL AND est.complemento != '' 
+                                 THEN ' (' || est.complemento || ')' ELSE '' END
+                        ) as endereco_completo,
+
+                        -- CEP formatado
+                        CASE 
+                            WHEN LENGTH(est.cep) >= 8 THEN
+                                SUBSTR(est.cep, 1, 5) || '-' || SUBSTR(est.cep, 6, 3)
+                            ELSE COALESCE(est.cep, '')
+                        END as cep,
+
+                        est.uf,
+                        COALESCE(m.nome_municipio, '') as nome_municipio,
+
+                        -- Telefone formatado
+                        CASE 
+                            WHEN est.ddd_1 IS NOT NULL AND est.telefone_1 IS NOT NULL THEN
+                                '(' || est.ddd_1 || ') ' ||
+                                CASE 
+                                    WHEN LENGTH(est.telefone_1) = 9 THEN
+                                        SUBSTR(est.telefone_1, 1, 5) || '-' || SUBSTR(est.telefone_1, 6, 4)
+                                    WHEN LENGTH(est.telefone_1) = 8 THEN
+                                        SUBSTR(est.telefone_1, 1, 4) || '-' || SUBSTR(est.telefone_1, 5, 4)
+                                    ELSE est.telefone_1
+                                END
+                            ELSE ''
+                        END as telefone_formatado,
+
+                        COALESCE(est.correio_eletronico, '') as email,
+                        COALESCE(c.descricao_cnae, '') as descricao_cnae,
+                        COALESCE(nat.descricao_natureza, '') as descricao_natureza,
+                        -- Bairro (moved to match reference export ordering)
+                        COALESCE(est.bairro, '') as bairro,
+                    CASE WHEN s.opcao_mei = 'S' THEN 'Microempreendedor Individual (MEI)'
+                        WHEN e.porte IN ('49', '50') THEN 'Microempresa (ME)'
+                        WHEN e.porte IN ('05', '16', '17', '19') THEN 'Empresa de Pequeno Porte (EPP)'
+                        WHEN e.porte IN ('43', '34', '65', '59') THEN 'Empresa de Médio Porte'
+                        WHEN e.porte NOT IN ('49', '50', '05', '16', '17', '19', '43', '34', '65', '59') 
+                            AND e.porte IS NOT NULL AND e.porte != '' THEN 'Grande Empresa'
+                             ELSE 'Não Informado' END as porte,
+                        
+                        -- Capital social corrigido - garantir que apareça
+                        CASE 
+                            WHEN e.capital_social IS NOT NULL AND e.capital_social != '' AND e.capital_social != '0' THEN
+                                'R$ ' || REPLACE(
+                                    printf("%.2f", CAST(e.capital_social AS REAL) / 100.0),
+                                    '.', ','
+                                )
+                            ELSE 'Não Informado'
+                        END as capital_social,
+                        
+                        CASE WHEN s.opcao_simples = 'S' THEN 'Sim'
+                             WHEN s.opcao_simples = 'N' THEN 'Não'
+                             ELSE 'N/A' END as opcao_simples,
+                             
+                        CASE WHEN s.opcao_mei = 'S' THEN 'Sim'
+                             WHEN s.opcao_mei = 'N' THEN 'Não'
+                             ELSE 'N/A' END as opcao_mei,
+                             
+                    CASE WHEN est.identificador_matriz_filial = '1' THEN 'Matriz'
+                        WHEN est.identificador_matriz_filial = '2' THEN 'Filial'
+                        ELSE 'N/A' END as matriz_filial,
+                    COALESCE(socios_agg.socios_nomes, '') as nome_socio, COALESCE(socios_agg.socios_quals, '') as qualificacao_socio, COALESCE(socios_agg.socios_cpfs_mid6, '') as cpf_mid6
+
+                    FROM estabelecimentos_completos est
+                    LEFT JOIN empresas_completas e ON est.cnpj_basico = e.cnpj_basico
+                    LEFT JOIN simples s ON est.cnpj_basico = s.cnpj_basico
+                    LEFT JOIN cnaes c ON est.cnae_fiscal_principal = c.codigo_cnae
+                    LEFT JOIN naturezas nat ON e.natureza_juridica = nat.codigo_natureza
+                    LEFT JOIN municipios m ON est.municipio = m.codigo_municipio
+                    LEFT JOIN (
+                        SELECT cnpj_basico, GROUP_CONCAT(nome_socio, ' | ') as socios_nomes, GROUP_CONCAT(qualificacao_socio, ' | ') as socios_quals, GROUP_CONCAT(
+                            CASE WHEN instr(cnpj_cpf_socio, '*') > 0 THEN REPLACE(cnpj_cpf_socio, '*', '') WHEN LENGTH(COALESCE(cnpj_cpf_socio, '')) >= 11 THEN SUBSTR(cnpj_cpf_socio, 4, 6) ELSE '' END, ' | ') as socios_cpfs_mid6 FROM socios GROUP BY cnpj_basico
+                    ) as socios_agg ON socios_agg.cnpj_basico = e.cnpj_basico
+                    WHERE est.uf = ? AND est.cnae_fiscal_principal = ?
+                    ORDER BY e.razao_social, est.cnpj_ordem
+                
+--- SQL_EXPORT PARAMS: ['DF', '4729601'] ---
+
+--- INTERNAL EXPORT SQL START ---
+
+    SELECT DISTINCT
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 1, 2) || '.' ||
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 3, 3) || '.' ||
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 6, 3) || '/' ||
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 9, 4) || '-' ||
+        SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 13, 2) as cnpj,
+        COALESCE(e.razao_social, '') as razao_social,
+        COALESCE(est.nome_fantasia, '') as nome_fantasia,
+        CASE WHEN est.situacao_cadastral = '02' THEN 'ATIVA' ELSE 'NÃO INFORMADO' END as situacao_empresa,
+        CASE WHEN LENGTH(est.data_situacao_cadastral) = 8 THEN SUBSTR(est.data_situacao_cadastral, 7, 2) || '/' || SUBSTR(est.data_situacao_cadastral, 5, 2) || '/' || SUBSTR(est.data_situacao_cadastral, 1, 4) ELSE COALESCE(est.data_situacao_cadastral, '') END as data_situacao,
+    -- motivo_situacao_cadastral removed from export
+        TRIM(COALESCE(est.tipo_logradouro || ' ', '') || COALESCE(est.logradouro, '') || CASE WHEN est.numero IS NOT NULL AND est.numero != '' THEN ', nº ' || est.numero ELSE '' END || CASE WHEN est.complemento IS NOT NULL AND est.complemento != '' THEN ' (' || est.complemento || ')' ELSE '' END) as endereco_completo,
+        COALESCE(est.bairro, '') as bairro,
+        CASE WHEN LENGTH(est.cep) >= 8 THEN SUBSTR(est.cep, 1, 5) || '-' || SUBSTR(est.cep, 6, 3) ELSE COALESCE(est.cep, '') END as cep,
+        est.uf,
+        COALESCE(m.nome_municipio, '') as nome_municipio,
+        CASE WHEN est.ddd_1 IS NOT NULL AND est.telefone_1 IS NOT NULL THEN '(' || est.ddd_1 || ') ' || CASE WHEN LENGTH(est.telefone_1) = 9 THEN SUBSTR(est.telefone_1, 1, 5) || '-' || SUBSTR(est.telefone_1, 6, 4) WHEN LENGTH(est.telefone_1) = 8 THEN SUBSTR(est.telefone_1, 1, 4) || '-' || SUBSTR(est.telefone_1, 5, 4) ELSE est.telefone_1 END ELSE '' END as telefone_formatado,
+        COALESCE(est.correio_eletronico, '') as email,
+        COALESCE(c.descricao_cnae, '') as descricao_cnae,
+        COALESCE(nat.descricao_natureza, '') as descricao_natureza,
+        CASE WHEN s.opcao_mei = 'S' THEN 'Microempreendedor Individual (MEI)' WHEN e.porte IN ('49','50') THEN 'Microempresa (ME)' WHEN e.porte IN ('05','16','17','19') THEN 'Empresa de Pequeno Porte (EPP)' WHEN e.porte IN ('43','34','65','59') THEN 'Empresa de Médio Porte' WHEN e.porte NOT IN ('49','50','05','16','17','19','43','34','65','59') AND e.porte IS NOT NULL AND e.porte != '' THEN 'Grande Empresa' ELSE 'Não Informado' END as porte,
+        CASE WHEN e.capital_social IS NOT NULL AND e.capital_social != '' AND e.capital_social != '0' THEN 'R$ ' || REPLACE(printf("%.2f", CAST(e.capital_social AS REAL) / 100.0), '.', ',') ELSE 'Não Informado' END as capital_social,
+        CASE WHEN s.opcao_simples = 'S' THEN 'Sim' WHEN s.opcao_simples = 'N' THEN 'Não' ELSE 'N/A' END as opcao_simpl
+        , CASE WHEN s.opcao_mei = 'S' THEN 'Sim' WHEN s.opcao_mei = 'N' THEN 'Não' ELSE 'N/A' END as opcao_mei,
+        CASE WHEN est.identificador_matriz_filial = '1' THEN 'Matriz' WHEN est.identificador_matriz_filial = '2' THEN 'Filial' ELSE 'N/A' END as matriz_filial,
+        COALESCE(socios_agg.socios_nomes, '') as nome_socio, COALESCE(socios_agg.socios_quals, '') as qualificacao_socio, COALESCE(socios_agg.socios_cpfs_mid6, '') as cpf_mid6
+    FROM estabelecimentos_completos est
+    LEFT JOIN empresas_completas e ON est.cnpj_basico = e.cnpj_basico
+    LEFT JOIN simples s ON est.cnpj_basico = s.cnpj_basico
+    LEFT JOIN cnaes c ON est.cnae_fiscal_principal = c.codigo_cnae
+    LEFT JOIN naturezas nat ON e.natureza_juridica = nat.codigo_natureza
+    LEFT JOIN municipios m ON est.municipio = m.codigo_municipio
+    
+LEFT JOIN (
+ SELECT cnpj_basico, GROUP_CONCAT(nome_socio, ' | ') as socios_nomes, GROUP_CONCAT(qualificacao_socio, ' | ') as socios_quals, GROUP_CONCAT(
+                            CASE WHEN instr(cnpj_cpf_socio, '*') > 0 THEN REPLACE(cnpj_cpf_socio, '*', '') WHEN LENGTH(COALESCE(cnpj_cpf_socio, '')) >= 11 THEN SUBSTR(cnpj_cpf_socio, 4, 6) ELSE '' END, ' | ') as socios_cpfs_mid6 FROM socios GROUP BY cnpj_basico
+) as socios_agg ON socios_agg.cnpj_basico = e.cnpj_basico
+    WHERE est.uf = ? AND EXISTS (SELECT 1 FROM socios s2 WHERE s2.cnpj_basico = est.cnpj_basico)
+    ORDER BY e.razao_social, est.cnpj_ordem
+    
+--- PARAMS: ['DF'] ---
+2025-10-14 11:11:05,359 ERROR Unhandled exception: Traceback (most recent call last):
+  File "C:\Users\victor.vasconcelos\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\victor.vasconcelos\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 891, in dispatch_request
+    self.raise_routing_exception(req)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\victor.vasconcelos\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 500, in raise_routing_exception
+    raise request.routing_exception  # type: ignore[misc]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\victor.vasconcelos\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\ctx.py", line 362, in match_request
+    result = self.url_adapter.match(return_rule=True)  # type: ignore
+  File "C:\Users\victor.vasconcelos\AppData\Local\Programs\Python\Python313\Lib\site-packages\werkzeug\routing\map.py", line 629, in match
+    raise NotFound() from None
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+2025-10-14 11:11:05,359 ERROR Unhandled exception: Traceback (most recent call last):
+  File "C:\Users\victor.vasconcelos\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\victor.vasconcelos\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 891, in dispatch_request
+    self.raise_routing_exception(req)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\victor.vasconcelos\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 500, in raise_routing_exception
+    raise request.routing_exception  # type: ignore[misc]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\victor.vasconcelos\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\ctx.py", line 362, in match_request
+    result = self.url_adapter.match(return_rule=True)  # type: ignore
+  File "C:\Users\victor.vasconcelos\AppData\Local\Programs\Python\Python313\Lib\site-packages\werkzeug\routing\map.py", line 629, in match
+    raise NotFound() from None
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+
+[2025-10-14T11:11:05.365114] Unhandled exception:
+Traceback (most recent call last):
+  File "C:\Users\victor.vasconcelos\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\victor.vasconcelos\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 891, in dispatch_request
+    self.raise_routing_exception(req)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\victor.vasconcelos\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 500, in raise_routing_exception
+    raise request.routing_exception  # type: ignore[misc]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\victor.vasconcelos\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\ctx.py", line 362, in match_request
+    result = self.url_adapter.match(return_rule=True)  # type: ignore
+  File "C:\Users\victor.vasconcelos\AppData\Local\Programs\Python\Python313\Lib\site-packages\werkzeug\routing\map.py", line 629, in match
+    raise NotFound() from None
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+

@@ -144,7 +144,10 @@ Abra no navegador: http://localhost:5000
 
 ---
 
-## 📞 Contato
+## � Expor uma interface rápida via Streamlit (para enviar ao seu amigo)
+
+---
+## �📞 Contato
 
 - **Desenvolvedor principal:** Victor Vasconcelos — +55 61 98438-5187
 
