@@ -789,7 +789,7 @@ class CNPJApp:
                     socios_select = (
                         "COALESCE(socios_agg.nome_socio, '') as nome_socio, "
                         # effective code: prefer socios table value, fallback to proposals
-                        "CASE WHEN (COALESCE(NULLIF(TRIM(socios_agg.qualificacao_socio),''), NULLIF(TRIM(proposals_qual.proposed_qual),''))) IS NOT NULL "
+                        "CASE WHEN (socios_agg.nome_socio IS NOT NULL AND TRIM(socios_agg.nome_socio) != '') AND (COALESCE(NULLIF(TRIM(socios_agg.qualificacao_socio),''), NULLIF(TRIM(proposals_qual.proposed_qual),''))) IS NOT NULL "
                         "THEN (COALESCE(NULLIF(TRIM(socios_agg.qualificacao_socio),''), NULLIF(TRIM(proposals_qual.proposed_qual),'')) || "
                         "COALESCE('' || (CASE WHEN q_map.descricao_qualificacao IS NOT NULL AND q_map.descricao_qualificacao != '' THEN ' - ' || q_map.descricao_qualificacao ELSE '' END), '')) "
                         "ELSE '' END as qualificacao_socio, "
@@ -799,7 +799,7 @@ class CNPJApp:
                         "ELSE socios_agg.cnpj_cpf_socio END as cpf_mid6"
                     )
                     socios_join = (
-                        "\n                    LEFT JOIN (\n                        SELECT s.cnpj_basico, s.nome_socio, s.qualificacao_socio, s.cnpj_cpf_socio\n                        FROM socios s\n                        INNER JOIN (SELECT cnpj_basico, MIN(rowid) as min_rowid FROM socios GROUP BY cnpj_basico) f\n                          ON f.cnpj_basico = s.cnpj_basico AND f.min_rowid = s.rowid\n                    ) as socios_agg ON socios_agg.cnpj_basico = e.cnpj_basico\n                    LEFT JOIN proposals_qual ON proposals_qual.cnpj_basico = socios_agg.cnpj_basico\n                    -- Map the effective code (socios.qualificacao_socio or proposals_qual.proposed_qual) to its description once\n                    LEFT JOIN qualificacoes q_map ON q_map.codigo_qualificacao = COALESCE(NULLIF(TRIM(socios_agg.qualificacao_socio),''), NULLIF(TRIM(proposals_qual.proposed_qual),''))"
+                        "\n                    LEFT JOIN (\n                        SELECT s.cnpj_basico, s.nome_socio, s.qualificacao_socio, s.cnpj_cpf_socio\n                        FROM socios s\n                        INNER JOIN (SELECT cnpj_basico, COALESCE(MIN(CASE WHEN TRIM(nome_socio) != '' THEN rowid END), MIN(rowid)) as min_rowid FROM socios GROUP BY cnpj_basico) f\n                        ON f.cnpj_basico = s.cnpj_basico AND f.min_rowid = s.rowid\n                    ) as socios_agg ON socios_agg.cnpj_basico = e.cnpj_basico\n                    -- Ensure proposals are linked to the establishment so proposed values are available even when no socios row exists\n                    LEFT JOIN proposals_qual ON proposals_qual.cnpj_basico = e.cnpj_basico\n                    -- Map the effective code (socios.qualificacao_socio or proposals_qual.proposed_qual) to its description once\n                    LEFT JOIN qualificacoes q_map ON q_map.codigo_qualificacao = COALESCE(NULLIF(TRIM(socios_agg.qualificacao_socio),''), NULLIF(TRIM(proposals_qual.proposed_qual),''))"
                     )
                 else:
                     # placeholders so CSV columns exist and SQL has no trailing comma

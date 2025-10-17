@@ -53,3 +53,6 @@ Thumbs.db
 
 # CSV exports (keep only the main consolidated file)
 cnpj_exportacao_*.csv
+
+# Local Trello credentials (do not commit)
+.trello_credentials.json

@@ -1,0 +1,77 @@
+[
+  {
+    "id": "68f29be81aae79a77cd6ff5c",
+    "name": "[FRONTEND] Ajustar `script.js` para formatos múltiplos",
+    "shortUrl": "https://trello.com/c/h15bWY9O"
+  },
+  {
+    "id": "68f29be99e1e9e1449c54c1f",
+    "name": "[FRONTEND] Footer com contato",
+    "shortUrl": "https://trello.com/c/DWGW1Hhi"
+  },
+  {
+    "id": "68f29bea22f8bf5baee828c3",
+    "name": "[FRONTEND] Ajustes visuais",
+    "shortUrl": "https://trello.com/c/iI5tkb4s"
+  },
+  {
+    "id": "68f2a07b9c4ffcbc889c96e1",
+    "name": "[DB] Validar DB e Git LFS",
+    "shortUrl": "https://trello.com/c/mSCScYDb"
+  },
+  {
+    "id": "68f2a07d9d9572bf51397727",
+    "name": "[BACKEND] Monitorar e otimizar /filters",
+    "shortUrl": "https://trello.com/c/lWqEZ8yx"
+  },
+  {
+    "id": "68f2a07e9f2e4bf992973536",
+    "name": "[DB] Criar índices para colunas de filtro",
+    "shortUrl": "https://trello.com/c/u5tApnA9"
+  },
+  {
+    "id": "68f2a080b564dcc2bb06594a",
+    "name": "[BACKEND] Paridade entre query e export",
+    "shortUrl": "https://trello.com/c/Yqx0muHV"
+  },
+  {
+    "id": "68f2a081605e25764e18e8eb",
+    "name": "[BACKEND] Cache TTL para /filters",
+    "shortUrl": "https://trello.com/c/MmvY9x8i"
+  },
+  {
+    "id": "68f2a08366dfd7efc2181240",
+    "name": "[DB] Gerar Aggregates",
+    "shortUrl": "https://trello.com/c/lcdfPHqD"
+  },
+  {
+    "id": "68f2a08488681389c5191364",
+    "name": "[BACKEND] Export streaming / background job",
+    "shortUrl": "https://trello.com/c/CmUL9bHb"
+  },
+  {
+    "id": "68f2a08652f23e5d9798ca31",
+    "name": "[FRONTEND] Ajustar `script.js` para formatos múltiplos",
+    "shortUrl": "https://trello.com/c/iThqoUia"
+  },
+  {
+    "id": "68f2a0879b7969aa6117d4e7",
+    "name": "[TESTES] Smoke tests endpoints",
+    "shortUrl": "https://trello.com/c/RgsF6Y9B"
+  },
+  {
+    "id": "68f2a0888345c8d78e83ed36",
+    "name": "[DOCS] Exemplos `/query` / `/export`",
+    "shortUrl": "https://trello.com/c/9KRGK51k"
+  },
+  {
+    "id": "68f2a08bdcecaa473d6b65f1",
+    "name": "[FRONTEND] Ajustes visuais",
+    "shortUrl": "https://trello.com/c/Wmcr8kQ5"
+  },
+  {
+    "id": "68f2a08ad0817f743e964a60",
+    "name": "[FRONTEND] Footer com contato",
+    "shortUrl": "https://trello.com/c/bu5lXGhY"
+  }
+]

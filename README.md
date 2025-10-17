@@ -130,6 +130,23 @@ Abra no navegador: http://localhost:5000
 
 ---
 
+## 📌 Exportação canônica (referência)
+
+O arquivo de exportação que deve ser tomado como referência para formato, ordem de colunas e conteúdo está em:
+
+`c:\Users\victor.vasconcelos\Documents\Dashboard\cnpj_exportacao_20251016_173832.csv`
+
+A partir deste ponto vamos manter este layout como *contrato* de saída. Todas as alterações na aplicação (backend ou frontend) devem preservar esse formato de exportação.
+
+Diretivas imediatas:
+- Não alterar a ordem das colunas nem os nomes de cabeçalho usados no CSV de referência.
+- Focar otimização na interface e no tempo de geração de export (performance do `/export`), sem mudar a estrutura definitiva do CSV.
+- Remover scripts auxiliares que geram exports de teste que não são usados em produção.
+
+Se quiser alterar o layout no futuro, o processo deve ser: definir nova versão do CSV, registrar mudança no README e atualizar o contrato de compatibilidade.
+
+---
+
 ## 🧰 Dicas de manutenção
 
 - Sempre faça backup antes de rodar importadores.
@@ -137,6 +154,17 @@ Abra no navegador: http://localhost:5000
 - Para re-gerar agregados: `python create_aggregates.py`.
 
 ---
+
+## 🛠️ VS Code - configurações recomendadas para este projeto
+
+Se o VS Code estiver lento ao abrir ou indexar o repositório, crie/ative o arquivo de workspace em `.vscode/settings.json` (já incluído) que aplica as seguintes otimizações:
+
+- Exclui a pasta `archive/`, binários e grandes CSVs do file watcher e das buscas.
+- Define a análise do Python (Pylance) para modo `basic` e limita a análise a arquivos abertos.
+- Desativa recomendações de extensão e telemetria para reduzir o ruído.
+
+Essas alterações melhoram significativamente a responsividade em máquinas com I/O limitado ou quando há muitos artefatos grandes no repositório.
+
 
 ## 🧪 Testes
 

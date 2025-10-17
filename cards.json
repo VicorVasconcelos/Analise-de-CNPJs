@@ -1,0 +1,149 @@
+[
+  {
+    "name": "[DB] Validar DB e Git LFS",
+    "desc": "Verificar se `cnpj_database.db` está corretamente trackeado em Git LFS, checar tamanho e instruir sobre quotas.",
+    "list_name": "A fazer",
+    "labels": [
+      "🔴 Crítico",
+      "🗄️ DB"
+    ],
+    "members": [
+      "Victor Vasconcelos"
+    ]
+  },
+  {
+    "name": "[BACKEND] Monitorar e otimizar /filters",
+    "desc": "Os erros 500 na rota `/filters` foram resolvidos e atualmente todas as chamadas retornam 200. Este card foca em monitoramento contínuo, melhorias de performance e garantia de formato de resposta.",
+    "list_name": "A fazer",
+    "labels": [
+      "🟠 Alto",
+      "🧰 Backend",
+      "🧪 Testes"
+    ],
+    "members": [
+      "Victor Vasconcelos"
+    ]
+  },
+  {
+    "name": "[DB] Criar índices para colunas de filtro",
+    "desc": "Criar/atualizar índices sugeridos (UF, cnae_fiscal_principal, natureza_juridica, municipio) para acelerar queries.",
+    "list_name": "A fazer",
+    "labels": [
+      "🔴 Crítico",
+      "🗄️ DB"
+    ],
+    "members": [
+      "Victor Vasconcelos"
+    ]
+  },
+  {
+    "name": "[BACKEND] Paridade entre query e export",
+    "desc": "Fazer com que `/export` receba o mesmo payload que `/query` e aplique identical WHERE.",
+    "list_name": "A fazer",
+    "labels": [
+      "🔴 Crítico",
+      "🧰 Backend",
+      "📊 Export"
+    ],
+    "members": [
+      "Victor Vasconcelos"
+    ]
+  },
+  {
+    "name": "[BACKEND] Cache TTL para /filters",
+    "desc": "Implementar cache em memória com TTL para reduzir carga nas primeiras chamadas.",
+    "list_name": "A fazer",
+    "labels": [
+      "🟠 Alto",
+      "🧰 Backend"
+    ],
+    "members": [
+      "Victor Vasconcelos"
+    ]
+  },
+  {
+    "name": "[DB] Gerar Aggregates",
+    "desc": "Script para criação/atualização de tabelas `aggregates_*` usadas por `/filters`.",
+    "list_name": "A fazer",
+    "labels": [
+      "🟠 Alto",
+      "🗄️ DB",
+      "📦 Importação"
+    ],
+    "members": [
+      "Victor Vasconcelos"
+    ]
+  },
+  {
+    "name": "[BACKEND] Export streaming / background job",
+    "desc": "Para exports grandes, implementar streaming de CSV ou job que gera o arquivo em disco e retorna link `/download`.",
+    "list_name": "A fazer",
+    "labels": [
+      "🟠 Alto",
+      "📊 Export"
+    ],
+    "members": [
+      "Victor Vasconcelos"
+    ]
+  },
+  {
+    "name": "[FRONTEND] Ajustar `script.js` para formatos múltiplos",
+    "desc": "Tornar o frontend tolerante a diferentes shapes de `ufs` e `naturezas` vindo do backend.",
+    "list_name": "A fazer",
+    "labels": [
+      "🟡",
+      "🧩 Frontend"
+    ],
+    "members": [
+      "Samuel"
+    ]
+  },
+  {
+    "name": "[TESTES] Smoke tests endpoints",
+    "desc": "Criar testes simples que verificam `/health`, `/filters` e `/query` para evitar regressões.",
+    "list_name": "A fazer",
+    "labels": [
+      "🟡",
+      "🧪 Testes"
+    ],
+    "members": [
+      "Victor Vasconcelos"
+    ]
+  },
+  {
+    "name": "[DOCS] Exemplos `/query` / `/export`",
+    "desc": "Incluir exemplos JSON de payloads e como gerar exports no README.",
+    "list_name": "A fazer",
+    "labels": [
+      "🟡",
+      "🟤 Docs"
+    ],
+    "members": [
+      "Victor Vasconcelos"
+    ]
+  },
+  {
+    "name": "[FRONTEND] Footer com contato",
+    "desc": "Adicionar pequeno footer no `index.html` com nome e telefone do responsável.",
+    "list_name": "Concluído",
+    "labels": [
+      "🟢",
+      "🧩 Frontend"
+    ],
+    "members": [
+      "Samuel"
+    ]
+  },
+  {
+    "name": "[FRONTEND] Ajustes visuais",
+    "desc": "Pequenos ajustes em `styles.css` para melhorar legibilidade",
+    "list_name": "A fazer",
+    "labels": [
+      "🟢",
+      "🧩 Frontend"
+    ],
+    "members": [
+      "Samuel"
+    ]
+  }
+]

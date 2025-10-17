@@ -1,9 +1,0 @@
-Repository cleanup report cleared on 2025-10-15.
-
-Note: previous report content was archived in Git history. The most recent full backup retained is:
-
-	archive/cnpj_database.db.bak_20251015_165130.db
-
-If you need the earlier cleanup list, recover it from Git history (e.g., `git show HEAD@{1}:tools/cleanup_report.txt`).
-
-End of automated cleanup report.
