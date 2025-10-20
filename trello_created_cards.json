@@ -1,77 +1,74 @@
 [
   {
-    "id": "68f29be81aae79a77cd6ff5c",
-    "name": "[FRONTEND] Ajustar `script.js` para formatos múltiplos",
-    "shortUrl": "https://trello.com/c/h15bWY9O"
-  },
-  {
-    "id": "68f29be99e1e9e1449c54c1f",
-    "name": "[FRONTEND] Footer com contato",
-    "shortUrl": "https://trello.com/c/DWGW1Hhi"
-  },
-  {
-    "id": "68f29bea22f8bf5baee828c3",
-    "name": "[FRONTEND] Ajustes visuais",
-    "shortUrl": "https://trello.com/c/iI5tkb4s"
-  },
-  {
     "id": "68f2a07b9c4ffcbc889c96e1",
     "name": "[DB] Validar DB e Git LFS",
-    "shortUrl": "https://trello.com/c/mSCScYDb"
+    "shortUrl": "https://trello.com/c/mSCScYDb",
+    "dateLastActivity": "2025-10-17T20:44:33.099Z"
   },
   {
     "id": "68f2a07d9d9572bf51397727",
     "name": "[BACKEND] Monitorar e otimizar /filters",
-    "shortUrl": "https://trello.com/c/lWqEZ8yx"
+    "shortUrl": "https://trello.com/c/lWqEZ8yx",
+    "dateLastActivity": "2025-10-18T14:25:19.304Z"
   },
   {
     "id": "68f2a07e9f2e4bf992973536",
     "name": "[DB] Criar índices para colunas de filtro",
-    "shortUrl": "https://trello.com/c/u5tApnA9"
+    "shortUrl": "https://trello.com/c/u5tApnA9",
+    "dateLastActivity": "2025-10-18T14:25:20.649Z"
   },
   {
     "id": "68f2a080b564dcc2bb06594a",
     "name": "[BACKEND] Paridade entre query e export",
-    "shortUrl": "https://trello.com/c/Yqx0muHV"
+    "shortUrl": "https://trello.com/c/Yqx0muHV",
+    "dateLastActivity": "2025-10-18T14:25:22.208Z"
   },
   {
     "id": "68f2a081605e25764e18e8eb",
     "name": "[BACKEND] Cache TTL para /filters",
-    "shortUrl": "https://trello.com/c/MmvY9x8i"
+    "shortUrl": "https://trello.com/c/MmvY9x8i",
+    "dateLastActivity": "2025-10-18T14:25:23.456Z"
   },
   {
     "id": "68f2a08366dfd7efc2181240",
     "name": "[DB] Gerar Aggregates",
-    "shortUrl": "https://trello.com/c/lcdfPHqD"
+    "shortUrl": "https://trello.com/c/lcdfPHqD",
+    "dateLastActivity": "2025-10-18T14:25:24.726Z"
   },
   {
     "id": "68f2a08488681389c5191364",
     "name": "[BACKEND] Export streaming / background job",
-    "shortUrl": "https://trello.com/c/CmUL9bHb"
+    "shortUrl": "https://trello.com/c/CmUL9bHb",
+    "dateLastActivity": "2025-10-17T20:44:40.480Z"
   },
   {
     "id": "68f2a08652f23e5d9798ca31",
     "name": "[FRONTEND] Ajustar `script.js` para formatos múltiplos",
-    "shortUrl": "https://trello.com/c/iThqoUia"
+    "shortUrl": "https://trello.com/c/iThqoUia",
+    "dateLastActivity": "2025-10-18T14:25:25.853Z"
   },
   {
     "id": "68f2a0879b7969aa6117d4e7",
     "name": "[TESTES] Smoke tests endpoints",
-    "shortUrl": "https://trello.com/c/RgsF6Y9B"
+    "shortUrl": "https://trello.com/c/RgsF6Y9B",
+    "dateLastActivity": "2025-10-18T14:25:26.946Z"
   },
   {
     "id": "68f2a0888345c8d78e83ed36",
     "name": "[DOCS] Exemplos `/query` / `/export`",
-    "shortUrl": "https://trello.com/c/9KRGK51k"
+    "shortUrl": "https://trello.com/c/9KRGK51k",
+    "dateLastActivity": "2025-10-18T14:25:28.242Z"
   },
   {
     "id": "68f2a08bdcecaa473d6b65f1",
     "name": "[FRONTEND] Ajustes visuais",
-    "shortUrl": "https://trello.com/c/Wmcr8kQ5"
+    "shortUrl": "https://trello.com/c/Wmcr8kQ5",
+    "dateLastActivity": "2025-10-17T20:44:46.222Z"
   },
   {
     "id": "68f2a08ad0817f743e964a60",
     "name": "[FRONTEND] Footer com contato",
-    "shortUrl": "https://trello.com/c/bu5lXGhY"
+    "shortUrl": "https://trello.com/c/bu5lXGhY",
+    "dateLastActivity": "2025-10-17T20:44:44.969Z"
   }
 ]

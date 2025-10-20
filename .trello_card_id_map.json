@@ -1,0 +1,18 @@
+{
+  "[DB] Validar DB e Git LFS": "68f2a07b9c4ffcbc889c96e1",
+  "[BACKEND] Monitorar e otimizar /filters": "68f2a07d9d9572bf51397727",
+  "[DB] Criar índices para colunas de filtro": "68f2a07e9f2e4bf992973536",
+  "[BACKEND] Paridade entre query e export": "68f2a080b564dcc2bb06594a",
+  "[BACKEND] Cache TTL para /filters": "68f2a081605e25764e18e8eb",
+  "[DB] Gerar Aggregates": "68f2a08366dfd7efc2181240",
+  "[BACKEND] Export streaming / background job": "68f2a08488681389c5191364",
+  "[FRONTEND] Ajustar `script.js` para formatos múltiplos": "68f2a08652f23e5d9798ca31",
+  "[TESTES] Smoke tests endpoints": "68f2a0879b7969aa6117d4e7",
+  "[DOCS] Exemplos `/query` / `/export`": "68f2a0888345c8d78e83ed36",
+  "[FRONTEND] Ajustes visuais": "68f2a08bdcecaa473d6b65f1",
+  "[FRONTEND] Footer com contato": "68f2a08ad0817f743e964a60",
+  "[BACKEND] Monitorar e otimizar `/filters`": "68f2a07d9d9572bf51397727",
+  "[BACKEND] Paridade entre `/query` e `/export`": "68f2a080b564dcc2bb06594a",
+  "[BACKEND] Cache TTL para `/filters`": "68f2a081605e25764e18e8eb",
+  "[DB] Gerar aggregates": "68f2a08366dfd7efc2181240"
+}
