@@ -1,3 +1,9 @@
-body{font-family: Arial, Helvetica, sans-serif; margin: 2rem}
-h1{color:#333}
-/* Copied from root styles.css - keep original in root until verification */
+:root{--bg:#f7f9fb;--card:#fff;--muted:#666}
+body{font-family: Arial, Helvetica, sans-serif; margin:0; background:var(--bg); color:#222}
+.container{max-width:960px;margin:0 auto;padding:1rem}
+.header{background:#2b6b92;color:#fff;padding:1.5rem 0}
+.header h1{margin:0;font-size:1.5rem}
+.header p{margin:0.25rem 0 0;color:var(--bg)}
+main.container{padding:2rem}
+section{background:var(--card);padding:1rem;border-radius:6px;margin-bottom:1rem;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.footer{padding:1rem 0;text-align:center;color:var(--muted);font-size:0.9rem}

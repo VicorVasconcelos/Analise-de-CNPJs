@@ -1,48 +1,45 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sistema CNPJ</title>
-    <link rel="stylesheet" href="styles.css">
-  </head>
-  <body>
-    <h1>API Sistema CNPJ</h1>
-    <p>Use a API para consultar e exportar dados</p>
-    <script src="script.js"></script>
-  </body>
-</html>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Análise de Dados Abertos do CNPJ</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Sistema de Análise CNPJ</title>
+        <link rel="stylesheet" href="styles.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <header class="header">
+            <div class="container">
+                <h1><i class="fas fa-chart-bar"></i> Sistema de Análise CNPJ</h1>
+                <p>Dados Abertos da Receita Federal - Filtros e Exportação</p>
+            </div>
+        </header>
 
-    <!-- Usando versão vanilla JS (script.js) -->
-</head>
-<body>
-    <header class="header">
-        <div class="container">
-            <h1><i class="fas fa-chart-bar"></i> Sistema de Análise CNPJ</h1>
-            <p>Dados Abertos da Receita Federal - Filtros e Exportação</p>
-        </div>
-    </header>
+        <main class="container">
+            <section class="intro">
+                <h2>Bem-vindo</h2>
+                <p>Esta é a interface mínima para o backend do Sistema de Análise CNPJ. Use as APIs para consultar e exportar dados.</p>
+            </section>
 
-    <main class="container">
-        <!-- content omitted for brevity; file copied from root index.html -->
-    </main>
+            <section class="status">
+                <h3>Saúde do servidor</h3>
+                <p id="health-status">Verificando...</p>
+                <button id="check-health">Checar saúde</button>
+            </section>
 
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 Sistema de Análise CNPJ - Dados da Receita Federal do Brasil</p>
-            <p><strong>Desenvolvido por Victor Vasconcelos - 61984385187</strong></p>
-        </div>
-    </footer>
+            <section class="about">
+                <h3>Sobre</h3>
+                <p>Para uso completo, abra a documentação em <code>docs/</code> no repositório. Exemplos de endpoints: <code>/health</code>, <code>/export</code>, <code>/filters</code>.</p>
+            </section>
+        </main>
 
-    <!-- Script principal (vanilla JS) -->
-    <script src="script.js"></script>
-</body>
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; 2024 Sistema de Análise CNPJ - Dados da Receita Federal do Brasil</p>
+                <p><strong>Desenvolvido por Victor Vasconcelos</strong></p>
+            </div>
+        </footer>
+
+        <script src="script.js"></script>
+    </body>
 </html>
