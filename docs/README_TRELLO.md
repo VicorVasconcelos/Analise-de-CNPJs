@@ -2,7 +2,7 @@
 Trello Tool
 ===========
 
-Ferramenta unificada para operações com Trello usadas neste projeto.
+Ferramenta unificada para operações com o Trello usadas neste projeto.
 
 Arquivo principal: `trello_tool.py`
 
@@ -12,12 +12,12 @@ Credenciais
 Defina as variáveis de ambiente no Windows (cmd.exe):
 
 ```bat
-set TRELLO_KEY=your_key
-set TRELLO_TOKEN=your_token
-set TRELLO_BOARD_ID=your_board_id
+set TRELLO_KEY=seu_key
+set TRELLO_TOKEN=seu_token
+set TRELLO_BOARD_ID=seu_board_id
 ```
 
-Ou crie um arquivo `.trello_credentials.json` na raiz do projeto com:
+Ou crie um arquivo `config/.trello_credentials.json` com o conteúdo:
 
 ```json
 {
@@ -36,7 +36,7 @@ Rodar menu interativo:
 python scripts\trello_tool.py --interactive
 ```
 
-Buscar todos os cards e gravar em `trello_created_cards.json`:
+Buscar todos os cards e salvar em `data/trello_created_cards.json`:
 
 ```bat
 python scripts\trello_tool.py --fetch
@@ -57,21 +57,21 @@ python scripts\trello_tool.py --bulk-create
 Notas
 -----
 
-- Os arquivos de credenciais **não devem** ser versionados (há `.gitignore` para `.trello_credentials.json`).
-- As operações de deleção só acontecem quando confirmadas pelo usuário no menu interativo ou usando o código que chama explicitamente a função de deleção.
-- Teste primeiro com credenciais de um board de staging, se possível.
+- Os arquivos de credenciais **não devem** ser versionados (verifique que `config/.trello_credentials.json` está ignorado por `.gitignore`).
+- Operações destrutivas (deleção) só ocorrem após confirmação explícita do usuário.
+- Teste primeiro em um board de staging quando possível.
 
 Instalar dependências
 ---------------------
 
-Este script usa a biblioteca `requests`. Se você recebeu um erro `ModuleNotFoundError: No module named 'requests'`, instale as dependências com:
+Este script usa a biblioteca `requests`. Se ocorrer `ModuleNotFoundError: No module named 'requests'`, instale as dependências com:
 
 ```bat
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-Se estiver usando o virtualenv fornecido no repositório (`.venv`), ative antes de instalar:
+Se estiver usando o virtualenv do projeto (`.venv`), ative antes de instalar:
 
 ```bat
 .venv\Scripts\activate
