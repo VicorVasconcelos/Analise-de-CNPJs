@@ -1,58 +1,20 @@
-import sqlite3
-import os
-from pathlib import Path
+from src.database import CNPJDatabase
 
-class CNPJDatabase:
-    """
-    Classe para gerenciar o banco de dados do Sistema CNPJ
-    Contém todas as tabelas necessárias para armazenar dados da Receita Federal
-    """
-    
-    def __init__(self, db_path="cnpj_database.db"):
-        self.db_path = db_path
-        self.connection = None
-        
-    def connect(self):
-        """Conecta ao banco de dados SQLite"""
-        try:
-            # Conectar com timeout e permitir uso de objetos em múltiplas threads
-            self.connection = sqlite3.connect(self.db_path, timeout=30, check_same_thread=False)
-            # Performance pragmas: journaling WAL, menor sync e cache em memória
-            try:
-                self.connection.execute("PRAGMA journal_mode = WAL")
-                self.connection.execute("PRAGMA synchronous = NORMAL")
-                self.connection.execute("PRAGMA temp_store = MEMORY")
-                # cache_size em páginas (p.ex. 100k) - ajuste conforme memória disponível
-                self.connection.execute("PRAGMA cache_size = 100000")
-            except Exception:
-                # Alguns pragmas podem não estar disponíveis em builds específicos; ignorar falhas
-                pass
-            # Desabilitar chaves estrangeiras temporariamente para importação
-            self.connection.execute("PRAGMA foreign_keys = OFF")
-            print(f"OK - Conectado ao banco: {self.db_path}")
-            return True
-        except Exception as e:
-            print(f"ERRO - Erro ao conectar: {e}")
-            return False
-    
-    def disconnect(self):
-        """Desconecta do banco de dados"""
-        if self.connection:
-            self.connection.close()
-            print("Desconectado do banco")
-    
+# Compatibility shim: re-export CNPJDatabase from src package
+__all__ = ['CNPJDatabase']
+
     def create_tables(self):
         """Cria todas as tabelas necessárias do sistema CNPJ"""
         print("CRIANDO ESTRUTURA DO BANCO DE DADOS")
         print("=" * 60)
-        
+
         if not self.connection:
             print("ERRO - Nao conectado ao banco")
             return False
-        
+
         try:
             cursor = self.connection.cursor()
-            
+
             # 1. TABELA EMPRESAS (1.7GB)
             print("Criando tabela: empresas")
             cursor.execute("""
@@ -67,7 +29,7 @@ class CNPJDatabase:
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             """)
-            
+
             # 2. TABELA ESTABELECIMENTOS (5.4GB - Principal)
             print("📊 Criando tabela: estabelecimentos")
             cursor.execute("""
@@ -107,7 +69,7 @@ class CNPJDatabase:
                     FOREIGN KEY (cnpj_basico) REFERENCES empresas(cnpj_basico)
                 )
             """)
-            
+
             # 3. TABELA SIMPLES (2.6GB)
             print("📊 Criando tabela: simples")
             cursor.execute("""
@@ -123,7 +85,7 @@ class CNPJDatabase:
                     FOREIGN KEY (cnpj_basico) REFERENCES empresas(cnpj_basico)
                 )
             """)
-            
+
             # 4. TABELA CNAES (88KB - Referência)
             print("📊 Criando tabela: cnaes")
             cursor.execute("""
@@ -132,7 +94,7 @@ class CNPJDatabase:
                     descricao_cnae TEXT NOT NULL
                 )
             """)
-            
+
             # 5. TABELA MUNICÍPIOS (120KB - Referência)
             print("📊 Criando tabela: municipios")
             cursor.execute("""
@@ -141,7 +103,7 @@ class CNPJDatabase:
                     nome_municipio TEXT NOT NULL
                 )
             """)
-            
+
             # 6. TABELA NATUREZAS JURÍDICAS (4KB - Referência)
             print("📊 Criando tabela: naturezas")
             cursor.execute("""
@@ -150,7 +112,7 @@ class CNPJDatabase:
                     descricao_natureza TEXT NOT NULL
                 )
             """)
-            
+
             # 7. TABELA MOTIVOS (3KB - Referência)
             print("📊 Criando tabela: motivos")
             cursor.execute("""
@@ -159,7 +121,7 @@ class CNPJDatabase:
                     descricao_motivo TEXT NOT NULL
                 )
             """)
-            
+
             # 8. TABELA PAÍSES (5KB - Referência)
             print("📊 Criando tabela: paises")
             cursor.execute("""
@@ -168,7 +130,7 @@ class CNPJDatabase:
                     nome_pais TEXT NOT NULL
                 )
             """)
-            
+
             # 9. TABELA QUALIFICAÇÕES (2KB - Referência)
             print("📊 Criando tabela: qualificacoes")
             cursor.execute("""
@@ -177,7 +139,7 @@ class CNPJDatabase:
                     descricao_qualificacao TEXT NOT NULL
                 )
             """)
-            
+
             # 10. TABELA SÓCIOS (Grande - Relacionamentos)
             print("📊 Criando tabela: socios")
             cursor.execute("""
@@ -198,10 +160,10 @@ class CNPJDatabase:
                     FOREIGN KEY (cnpj_basico) REFERENCES empresas(cnpj_basico)
                 )
             """)
-            
+
             # CRIAR ÍNDICES PARA PERFORMANCE
             print("\n🚀 Criando índices para otimização...")
-            
+
             # Índices principais para filtros
             indices = [
                 "CREATE INDEX IF NOT EXISTS idx_estabelecimentos_uf ON estabelecimentos(uf)",
@@ -217,31 +179,31 @@ class CNPJDatabase:
                 "CREATE INDEX IF NOT EXISTS idx_socios_cnpj_basico ON socios(cnpj_basico)",
                 "CREATE INDEX IF NOT EXISTS idx_socios_qualificacao ON socios(qualificacao_socio)"
             ]
-            
+
             for i, sql in enumerate(indices, 1):
                 cursor.execute(sql)
                 print(f"   ✅ Índice {i}/10 criado")
-            
+
             self.connection.commit()
             print(f"\n✅ SUCESSO! Banco de dados criado com 10 tabelas e 12 índices")
             return True
-            
+
         except Exception as e:
             print(f"❌ Erro ao criar tabelas: {e}")
             self.connection.rollback()
             return False
-    
+
     def get_table_info(self):
         """Retorna informações sobre as tabelas criadas"""
         if not self.connection:
             return None
-        
+
         cursor = self.connection.cursor()
-        
+
         # Listar todas as tabelas
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
         tabelas = cursor.fetchall()
-        
+
         print("\n📋 TABELAS CRIADAS:")
         for i, (tabela,) in enumerate(tabelas, 1):
             if tabela != 'sqlite_sequence':
@@ -249,28 +211,28 @@ class CNPJDatabase:
                 cursor.execute(f"SELECT COUNT(*) FROM {tabela}")
                 count = cursor.fetchone()[0]
                 print(f"   {i}. {tabela:<20} - {count:,} registros")
-        
+
         return tabelas
-    
+
     def clear_database(self):
         """Remove todas as tabelas (usar com cuidado!)"""
         if not self.connection:
             print("❌ Não conectado ao banco")
             return False
-        
+
         print("⚠️  REMOVENDO TODAS AS TABELAS...")
         cursor = self.connection.cursor()
-        
+
         # Listar tabelas
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
         tabelas = cursor.fetchall()
-        
+
         # Remover cada tabela
         for (tabela,) in tabelas:
             if tabela != 'sqlite_sequence':
                 cursor.execute(f"DROP TABLE IF EXISTS {tabela}")
                 print(f"   🗑️  Tabela {tabela} removida")
-        
+
         self.connection.commit()
         print("✅ Banco limpo!")
         return True
@@ -279,9 +241,9 @@ def main():
     """Função principal para criar o banco de dados"""
     print("🚀 INICIANDO CRIAÇÃO DO BANCO DE DADOS CNPJ")
     print("=" * 60)
-    
+
     # Verificar se já existe
-    db_path = "cnpj_database.db"
+    db_path = "data/cnpj_database.db"
     if os.path.exists(db_path):
         print(f"⚠️  Banco {db_path} já existe!")
         resposta = input("Deseja recriar? (s/n): ").lower()
@@ -291,10 +253,10 @@ def main():
         else:
             print("⏹️  Operação cancelada")
             return
-    
+
     # Criar banco
     db = CNPJDatabase(db_path)
-    
+
     if db.connect():
         if db.create_tables():
             db.get_table_info()

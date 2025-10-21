@@ -20,7 +20,7 @@ analyze_and_bench.py
 analyze_and_bench_safe.py
 analyze_db.py
 app.py
-cnpj_database.db
+data/cnpj_database.db
 cnpj_exportacao_20251010_100841.csv
 create_aggregates.py
 create_indexes.sql
@@ -69,7 +69,7 @@ pip install flask flask-cors pandas requests
 1) Backup do DB (sempre antes de alterações):
 
 ```powershell
-Copy-Item cnpj_database.db cnpj_database.db.backup_$(Get-Date -Format yyyyMMdd_HHmmss).db
+Copy-Item data/cnpj_database.db data/cnpj_database.db.backup_$(Get-Date -Format yyyyMMdd_HHmmss).db
 ```
 
 2) Executar importadores (quando necessário):
@@ -82,7 +82,7 @@ python import_estabelecimentos.py
 3) Criar índices (apenas uma vez ou após import):
 
 ```powershell
-sqlite3 cnpj_database.db ".read create_indexes.sql"
+sqlite3 data/cnpj_database.db ".read create_indexes.sql"
 ```
 
 4) Gerar aggregates para acelerar `/filters`:
@@ -125,7 +125,7 @@ Abra no navegador: http://localhost:5000
 
 ## ⚠️ Observações importantes
 
-- O arquivo `cnpj_database.db` pode ser muito grande. Considere usar Git LFS ou manter o arquivo em armazenamento externo.
+- O arquivo `data/cnpj_database.db` pode ser muito grande. Considere usar Git LFS ou manter o arquivo em armazenamento externo.
 - Exportações muito grandes podem demorar; o servidor gera CSVs em chunks, mas cargas grandes devem ser executadas como jobs de background para maior robustez.
 
 ---
@@ -189,6 +189,6 @@ Atualizado em: 2025-10-10
 
 Uma limpeza controlada de artefatos (exports, logs e relatórios) foi executada. Mantivemos apenas o backup mais recente em rchive/:
 
-- rchive/cnpj_database.db.bak_20251015_165130.db
+- rchive/data/cnpj_database.db.bak_20251015_165130.db
 
 Se precisar restaurar qualquer relatório removido, recupere-o do histórico do Git.

@@ -45,7 +45,7 @@ ROOT = Path(__file__).resolve().parent
 CREDS_FILE = ROOT / '.trello_credentials.json'
 OUT = ROOT / 'trello_created_cards.json'
 CARDS_JSON = ROOT / 'cards.json'
-TRELLO_MD = ROOT / 'TRELLO' / 'TRELLO-CARD-LIST-CNPJ.md'
+TRELLO_MD = ROOT / 'docs' / 'trello' / 'TRELLO-CARD-LIST-CNPJ.md'
 ARCHIVE = ROOT / 'archive'
 ARCHIVE.mkdir(exist_ok=True)
 

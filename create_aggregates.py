@@ -1,7 +1,7 @@
 import sqlite3
 import time
 
-DB = 'cnpj_database.db'
+DB = 'data/cnpj_database.db'
 
 queries = {
     'aggregates_ufs': '''

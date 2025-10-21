@@ -15,7 +15,7 @@ class CNPJImporter:
     Processa arquivos grandes em chunks para otimizar memória
     """
     
-    def __init__(self, db_path="cnpj_database.db", data_dir=r"c:\Users\victor.vasconcelos\Documents\Projeto CNPJ"):
+    def __init__(self, db_path="data/cnpj_database.db", data_dir=r"c:\Users\victor.vasconcelos\Documents\Projeto CNPJ"):
         self.db_path = db_path
         self.data_dir = Path(data_dir)
         self.db = CNPJDatabase(db_path)
@@ -831,7 +831,7 @@ def main():
     print("=" * 60)
     
     # Verificar se banco existe
-    if not os.path.exists("cnpj_database.db"):
+    if not os.path.exists("data/cnpj_database.db"):
         print("❌ Banco de dados não encontrado!")
         print("💡 Execute primeiro: python database.py")
         return
@@ -917,7 +917,7 @@ def main():
 
     # Relatório final: contagens reais por tabela
     try:
-        db = CNPJDatabase('cnpj_database.db')
+        db = CNPJDatabase('data/cnpj_database.db')
         if db.connect():
             cur = db.connection.cursor()
             tables = ['empresas','estabelecimentos','simples','cnaes','municipios','naturezas','motivos','paises','qualificacoes','socios']

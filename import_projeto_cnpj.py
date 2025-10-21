@@ -21,7 +21,7 @@ logging.basicConfig(
 )
 
 class CNPJProjectImporter:
-    def __init__(self, db_path="cnpj_database.db", data_path="C:/Users/victor.vasconcelos/Documents/PROJETO CNPJ"):
+    def __init__(self, db_path="data/cnpj_database.db", data_path="C:/Users/victor.vasconcelos/Documents/PROJETO CNPJ"):
         self.db_path = db_path
         self.data_path = Path(data_path)
         self.connection = None

@@ -1,0 +1,2 @@
+-- Copy of create_indexes.sql
+-- Keep original content in root for review

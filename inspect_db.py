@@ -1,5 +1,5 @@
 import sqlite3
-DB='cnpj_database.db'
+DB='data/cnpj_database.db'
 print('Connecting to',DB)
 conn=sqlite3.connect(DB)
 cur=conn.cursor()

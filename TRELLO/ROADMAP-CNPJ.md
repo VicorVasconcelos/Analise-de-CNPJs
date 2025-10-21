@@ -1,6 +1,6 @@
 # ROADMAP - Sistema de Análise de CNPJs (versão curta)
 
-Objetivo rápido: coletar, filtrar, analisar e exportar dados públicos de empresas. Backend em Python (Flask), DB local em SQLite (`cnpj_database.db`), frontend em JS simples.
+Objetivo rápido: coletar, filtrar, analisar e exportar dados públicos de empresas. Backend em Python (Flask), DB local em SQLite (`data/cnpj_database.db`), frontend em JS simples.
 
 Contato: Victor Vasconcelos — +55 61 98438-5187
 

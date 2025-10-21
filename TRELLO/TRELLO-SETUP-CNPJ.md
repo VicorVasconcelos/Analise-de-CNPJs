@@ -26,13 +26,13 @@ python import_data.py --input "caminho\para\arquivo.csv"
 python create_aggregates.py
 ```
 
-4) Git LFS (quando for necessário versionar `cnpj_database.db`)
+4) Git LFS (quando for necessário versionar `data/cnpj_database.db`)
 
 ```cmd
 git lfs install
-git lfs track "cnpj_database.db"
+git lfs track "data/cnpj_database.db"
 git add .gitattributes
-git add cnpj_database.db
+git add data/cnpj_database.db
 git commit -m "track db with lfs"
 git push origin master
 ```

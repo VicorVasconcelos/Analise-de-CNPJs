@@ -1,43 +1,8 @@
-from flask import Flask, request, jsonify, send_file
-from flask_cors import CORS
-import sqlite3
-import pandas as pd
-import io
-import time
-import os
-from datetime import datetime
-from database import CNPJDatabase
-import threading
-from functools import wraps
-import json
-import logging
-import traceback
+from src.app import CNPJApp
 
-class CNPJApp:
-    """
-    Backend Flask para o Sistema de Análise de Dados CNPJ
-    Provides APIs for filtering and exporting CNPJ data
-    """
-    
-    def __init__(self, db_path="cnpj_database.db"):
-        self.app = Flask(__name__)
-        CORS(self.app)  # Permitir requisições do frontend
-        # Configurar logging para gravar erros no arquivo server.err
-        log_handler = logging.FileHandler('server.err', encoding='utf-8')
-        log_handler.setLevel(logging.ERROR)
-        formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-        log_handler.setFormatter(formatter)
-        # Adiciona também ao logger do Flask
-        self.app.logger.addHandler(log_handler)
-        logging.getLogger().addHandler(log_handler)
-        self.db_path = db_path
-        self.db = CNPJDatabase(db_path)
-        
-        # Configurar rotas
-        self.setup_routes()
-    
-    def setup_routes(self):
-        """Configura todas as rotas da API"""
+# Compatibility shim: previous code imported CNPJApp from root app.py.
+# Re-export for older imports.
+__all__ = ['CNPJApp']
 
         # Simple in-memory TTL cache for heavy endpoints
         class SimpleTTLCache:
@@ -92,7 +57,7 @@ class CNPJApp:
             except Exception:
                 pass
             return jsonify({"error": str(e)}), 500
-        
+
         def build_where_and_params(filtros):
             """Constrói where_clauses e params a partir do payload de filtros.
             Mesmo comportamento usado por /query para manter consistência com /export.
@@ -180,7 +145,7 @@ class CNPJApp:
                     },
                     "timestamp": datetime.now().isoformat()
                 })
-        
+
         @self.app.route('/api')
         def api_info():
             """Informações da API em formato JSON"""
@@ -200,7 +165,7 @@ class CNPJApp:
             })
 
         # (rota de diagnóstico temporária removida - revertida para o estado anterior)
-        
+
         @self.app.route('/styles.css')
         def serve_css():
             """Servir o arquivo CSS"""
@@ -214,7 +179,7 @@ class CNPJApp:
                 return response
             except FileNotFoundError:
                 return "/* CSS file not found */", 404
-        
+
         @self.app.route('/script.js')
         def serve_js():
             """Servir o arquivo JavaScript"""
@@ -242,7 +207,7 @@ class CNPJApp:
                 return response
             except FileNotFoundError:
                 return "/* React JavaScript file not found */", 404
-        
+
         @self.app.route('/health')
         def health_check():
             """Verifica status do sistema"""
@@ -253,7 +218,7 @@ class CNPJApp:
                     cursor.execute("SELECT COUNT(*) FROM empresas_completas")
                     total_empresas = cursor.fetchone()[0]
                     self.db.disconnect()
-                    
+
                     return jsonify({
                         "status": "healthy",
                         "database": "connected",
@@ -266,14 +231,14 @@ class CNPJApp:
                         "database": "disconnected",
                         "error": "Cannot connect to database"
                     }), 500
-                    
+
             except Exception as e:
                 return jsonify({
                     "status": "unhealthy",
                     "database": "error",
                     "error": str(e)
                 }), 500
-        
+
         @self.app.route('/stats')
         @ttl_cache(ttl=120)
         def get_stats():
@@ -401,7 +366,7 @@ class CNPJApp:
                         SELECT uf, COUNT(*) as total_estabelecimentos
                         FROM estabelecimentos_completos
                         WHERE uf IS NOT NULL AND uf != ''
-                        GROUP BY uf 
+                        GROUP BY uf
                         ORDER BY uf ASC
                     """)
                     ufs = [{"value": uf, "label": (uf or ''), "count": total} for uf, total in cursor.fetchall()]
@@ -430,18 +395,18 @@ class CNPJApp:
                 cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='aggregates_naturezas'")
                 if cursor.fetchone():
                     cursor.execute("SELECT codigo_natureza, descricao_natureza, total FROM aggregates_naturezas ORDER BY total DESC LIMIT 50")
-                    naturezas_juridicas = [{"value": codigo, "label": (descricao or ''), "count": total} 
+                    naturezas_juridicas = [{"value": codigo, "label": (descricao or ''), "count": total}
                                for codigo, descricao, total in cursor.fetchall()]
                 else:
                     cursor.execute("""
-                        SELECT n.codigo_natureza, n.descricao_natureza, COUNT(*) as total 
+                        SELECT n.codigo_natureza, n.descricao_natureza, COUNT(*) as total
                         FROM empresas_completas e
                         INNER JOIN naturezas n ON e.natureza_juridica = n.codigo_natureza
                         GROUP BY n.codigo_natureza, n.descricao_natureza
                         ORDER BY total DESC
                         LIMIT 50
                     """)
-                    naturezas_juridicas = [{"value": codigo, "label": (descricao or ''), "count": total} 
+                    naturezas_juridicas = [{"value": codigo, "label": (descricao or ''), "count": total}
                                for codigo, descricao, total in cursor.fetchall()]
 
                 # Portes de Empresa disponíveis - use aggregates_portes if present
@@ -464,7 +429,7 @@ class CNPJApp:
                     portes_classificacao = []
                     cursor.execute("""
                         SELECT COUNT(*) as total
-                        FROM simples 
+                        FROM simples
                         WHERE opcao_mei = 'S'
                     """)
                     total_mei = cursor.fetchone()[0]
@@ -472,7 +437,7 @@ class CNPJApp:
                         portes_classificacao.append({"value": "MEI", "label": "Microempreendedor Individual (MEI)", "count": total_mei})
                     cursor.execute("""
                         SELECT COUNT(*) as total
-                        FROM empresas_completas 
+                        FROM empresas_completas
                         WHERE porte IN ('49', '50') AND porte IS NOT NULL AND porte != ''
                     """)
                     total_micro = cursor.fetchone()[0]
@@ -480,7 +445,7 @@ class CNPJApp:
                         portes_classificacao.append({"value": "MICRO", "label": "Microempresa (ME)", "count": total_micro})
                     cursor.execute("""
                         SELECT COUNT(*) as total
-                        FROM empresas_completas 
+                        FROM empresas_completas
                         WHERE porte IN ('05', '16', '17', '19') AND porte IS NOT NULL AND porte != ''
                     """)
                     total_pequeno = cursor.fetchone()[0]
@@ -488,7 +453,7 @@ class CNPJApp:
                         portes_classificacao.append({"value": "PEQUENO", "label": "Empresa de Pequeno Porte (EPP)", "count": total_pequeno})
                     cursor.execute("""
                         SELECT COUNT(*) as total
-                        FROM empresas_completas 
+                        FROM empresas_completas
                         WHERE porte IN ('43', '34', '65', '59') AND porte IS NOT NULL AND porte != ''
                     """)
                     total_medio = cursor.fetchone()[0]
@@ -496,8 +461,8 @@ class CNPJApp:
                         portes_classificacao.append({"value": "MEDIO", "label": "Empresa de Médio Porte", "count": total_medio})
                     cursor.execute("""
                         SELECT COUNT(*) as total
-                        FROM empresas_completas 
-                        WHERE porte NOT IN ('49', '50', '05', '16', '17', '19', '43', '34', '65', '59') 
+                        FROM empresas_completas
+                        WHERE porte NOT IN ('49', '50', '05', '16', '17', '19', '43', '34', '65', '59')
                         AND porte IS NOT NULL AND porte != ''
                     """)
                     total_grande = cursor.fetchone()[0]
@@ -515,7 +480,7 @@ class CNPJApp:
                         simples_opcoes.append({"value": opcao, "label": descricao, "count": total})
                 else:
                     cursor.execute("""
-                        SELECT 
+                        SELECT
                             opcao_simples,
                             CASE WHEN opcao_simples = 'S' THEN 'Optante pelo Simples'
                                  WHEN opcao_simples = 'N' THEN 'Não Optante'
@@ -525,7 +490,7 @@ class CNPJApp:
                         GROUP BY opcao_simples
                         ORDER BY total DESC
                     """)
-                    simples_opcoes = [{"value": opcao, "label": descricao, "count": total} 
+                    simples_opcoes = [{"value": opcao, "label": descricao, "count": total}
                                     for opcao, descricao, total in cursor.fetchall()]
 
                 # Situações Cadastrais disponíveis
@@ -565,7 +530,7 @@ class CNPJApp:
                 print("[ERRO] Exceção no handler /filters:")
                 traceback.print_exc()
                 return jsonify({"error": str(e)}), 500
-        
+
         @self.app.route('/query', methods=['POST'])
         def query_data():
             """Consulta dados com filtros aplicados"""
@@ -584,7 +549,7 @@ class CNPJApp:
                 # Contar total - baseado nos dados dos estabelecimentos
                 cursor = self.db.connection.cursor()
                 sql_count = f"""
-                    SELECT COUNT(*) 
+                    SELECT COUNT(*)
                     FROM estabelecimentos_completos est
                     LEFT JOIN empresas_completas e ON est.cnpj_basico = e.cnpj_basico
                     LEFT JOIN simples s ON est.cnpj_basico = s.cnpj_basico
@@ -599,7 +564,7 @@ class CNPJApp:
                 offset = (page - 1) * per_page
 
                 sql_data = f"""
-                    SELECT 
+                    SELECT
                         -- CNPJ formatado
                         SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 1, 2) || '.' ||
                         SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 3, 3) || '.' ||
@@ -619,7 +584,7 @@ class CNPJApp:
                              WHEN e.porte IN ('49', '50') THEN 'Microempresa (ME)'
                              WHEN e.porte IN ('05', '16', '17', '19') THEN 'Empresa de Pequeno Porte (EPP)'
                              WHEN e.porte IN ('43', '34', '65', '59') THEN 'Empresa de Médio Porte'
-                             WHEN e.porte NOT IN ('49', '50', '05', '16', '17', '19', '43', '34', '65', '59') 
+                             WHEN e.porte NOT IN ('49', '50', '05', '16', '17', '19', '43', '34', '65', '59')
                                   AND e.porte IS NOT NULL AND e.porte != '' THEN 'Grande Empresa'
                              ELSE 'Não Informado' END as porte,
                         COALESCE(n.descricao_natureza, 'N/A') as natureza_juridica
@@ -678,14 +643,14 @@ class CNPJApp:
             """Exporta dados filtrados em CSV"""
             try:
                 filtros = request.get_json() or {}
-                
+
                 if not self.db.connect():
                     return jsonify({"error": "Database connection failed"}), 500
-                
+
                 # Construir consulta dinâmica (igual ao query) usando helper centralizado
                 where_clauses, params = build_where_and_params(filtros)
                 where_sql = " AND ".join(where_clauses) if where_clauses else "1=1"
-                
+
                 # Se tabela de socios não existir, tentar importar arquivos CSV da pasta externa (Socio0)
                 cursor = self.db.connection.cursor()
                 cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='socios'")
@@ -817,39 +782,39 @@ class CNPJApp:
                         END as cnpj,
                         COALESCE(e.razao_social, '') as razao_social,
                         COALESCE(est.nome_fantasia, '') as nome_fantasia,
-                        
+
                         -- Situação empresa
-                        CASE 
+                        CASE
                             WHEN est.situacao_cadastral = '02' THEN 'ATIVA'
                             WHEN est.situacao_cadastral = '03' THEN 'SUSPENSA'
                             WHEN est.situacao_cadastral = '04' THEN 'INAPTA'
                             WHEN est.situacao_cadastral = '08' THEN 'BAIXADA'
                             ELSE 'NÃO INFORMADO'
                         END as situacao_empresa,
-                        
+
                         -- Data formatada
-                        CASE 
+                        CASE
                             WHEN LENGTH(est.data_situacao_cadastral) = 8 THEN
                                 SUBSTR(est.data_situacao_cadastral, 7, 2) || '/' ||
                                 SUBSTR(est.data_situacao_cadastral, 5, 2) || '/' ||
                                 SUBSTR(est.data_situacao_cadastral, 1, 4)
                             ELSE COALESCE(est.data_situacao_cadastral, '')
                         END as data_situacao,
-                        
+
                         -- motivo_situacao removido para manter compatibilidade com o layout de exportacao anterior
-                        
+
                     -- Endereço completo
                         TRIM(
                             COALESCE(est.tipo_logradouro || ' ', '') ||
                             COALESCE(est.logradouro, '') ||
-                            CASE WHEN est.numero IS NOT NULL AND est.numero != '' 
+                            CASE WHEN est.numero IS NOT NULL AND est.numero != ''
                                  THEN ', nº ' || est.numero ELSE '' END ||
-                            CASE WHEN est.complemento IS NOT NULL AND est.complemento != '' 
+                            CASE WHEN est.complemento IS NOT NULL AND est.complemento != ''
                                  THEN ' (' || est.complemento || ')' ELSE '' END
                         ) as endereco_completo,
 
                         -- CEP formatado
-                        CASE 
+                        CASE
                             WHEN LENGTH(est.cep) >= 8 THEN
                                 SUBSTR(est.cep, 1, 5) || '-' || SUBSTR(est.cep, 6, 3)
                             ELSE COALESCE(est.cep, '')
@@ -859,10 +824,10 @@ class CNPJApp:
                         COALESCE(m.nome_municipio, '') as nome_municipio,
 
                         -- Telefone formatado
-                        CASE 
+                        CASE
                             WHEN est.ddd_1 IS NOT NULL AND est.telefone_1 IS NOT NULL THEN
                                 '(' || est.ddd_1 || ') ' ||
-                                CASE 
+                                CASE
                                     WHEN LENGTH(est.telefone_1) = 9 THEN
                                         SUBSTR(est.telefone_1, 1, 5) || '-' || SUBSTR(est.telefone_1, 6, 4)
                                     WHEN LENGTH(est.telefone_1) = 8 THEN
@@ -881,12 +846,12 @@ class CNPJApp:
                         WHEN e.porte IN ('49', '50') THEN 'Microempresa (ME)'
                         WHEN e.porte IN ('05', '16', '17', '19') THEN 'Empresa de Pequeno Porte (EPP)'
                         WHEN e.porte IN ('43', '34', '65', '59') THEN 'Empresa de Médio Porte'
-                        WHEN e.porte NOT IN ('49', '50', '05', '16', '17', '19', '43', '34', '65', '59') 
+                        WHEN e.porte NOT IN ('49', '50', '05', '16', '17', '19', '43', '34', '65', '59')
                             AND e.porte IS NOT NULL AND e.porte != '' THEN 'Grande Empresa'
                              ELSE 'Não Informado' END as porte,
-                        
+
                         -- Capital social corrigido - garantir que apareça
-                        CASE 
+                        CASE
                             WHEN e.capital_social IS NOT NULL AND e.capital_social != '' AND e.capital_social != '0' THEN
                                 'R$ ' || REPLACE(
                                     printf("%.2f", CAST(e.capital_social AS REAL) / 100.0),
@@ -894,15 +859,15 @@ class CNPJApp:
                                 )
                             ELSE 'Não Informado'
                         END as capital_social,
-                        
+
                         CASE WHEN s.opcao_simples = 'S' THEN 'Sim'
                              WHEN s.opcao_simples = 'N' THEN 'Não'
                              ELSE 'N/A' END as opcao_simples,
-                             
+
                         CASE WHEN s.opcao_mei = 'S' THEN 'Sim'
                              WHEN s.opcao_mei = 'N' THEN 'Não'
                              ELSE 'N/A' END as opcao_mei,
-                             
+
                     CASE WHEN est.identificador_matriz_filial = '1' THEN 'Matriz'
                         WHEN est.identificador_matriz_filial = '2' THEN 'Filial'
                         ELSE 'N/A' END as matriz_filial,
@@ -917,7 +882,7 @@ class CNPJApp:
                     WHERE {where_sql}
                     ORDER BY e.razao_social, est.cnpj_ordem
                 """
-                
+
                 # Executar consulta
                 cursor = self.db.connection.cursor()
                 inicio = time.time()
@@ -931,11 +896,11 @@ class CNPJApp:
                     pass
 
                 cursor.execute(sql_export, params)
-                
+
                 # Buscar resultados em chunks para economizar memória
                 chunk_size = 10000
                 dados_csv = []
-                
+
                 # Headers - canonical 22-column layout (CNPJ first, CPF_SOCIO last)
                 headers = [
                     'CNPJ', 'RAZAO_SOCIAL', 'NOME_FANTASIA', 'SITUACAO_EMPRESA', 'DATA_SITUACAO',
@@ -944,32 +909,32 @@ class CNPJApp:
                     'CAPITAL_SOCIAL', 'OPCAO_SIMPLES', 'OPCAO_MEI', 'MATRIZ_FILIAL',
                     'NOME_SOCIO', 'QUALIFICACAO_SOCIO', 'CPF_SOCIO'
                 ]
-                
+
                 # Processar resultados
                 total_registros = 0
                 while True:
                     rows = cursor.fetchmany(chunk_size)
                     if not rows:
                         break
-                    
+
                     for row in rows:
                         dados_csv.append(row)
                         total_registros += 1
-                
+
                 tempo = time.time() - inicio
                 self.db.disconnect()
-                
+
                 # Criar DataFrame e CSV
                 df = pd.DataFrame(dados_csv, columns=headers)
-                
+
                 # Criar arquivo temporário
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                 filename = f"cnpj_exportacao_{timestamp}.csv"
-                
+
                 # Salvar arquivo CSV diretamente - evitando linhas em branco
-                df.to_csv(filename, sep=';', index=False, encoding='utf-8-sig', 
+                df.to_csv(filename, sep=';', index=False, encoding='utf-8-sig',
                          lineterminator='\n', quoting=1)
-                
+
                 # Retornar informações da exportação
                 return jsonify({
                     "success": True,
@@ -998,7 +963,7 @@ class CNPJApp:
                 except Exception:
                     pass
                 return jsonify({"error": str(e)}), 500
-        
+
         @self.app.route('/download/<filename>')
         def download_file(filename):
             """Download do arquivo CSV gerado"""
@@ -1019,16 +984,16 @@ def main():
     """Executa o servidor Flask"""
     print("INICIANDO SERVIDOR FLASK - SISTEMA CNPJ")
     print("=" * 60)
-    
+
     # Verificar se banco existe
-    if not os.path.exists("cnpj_database.db"):
+    if not os.path.exists("data/cnpj_database.db"):
         print("ERROR: Banco de dados não encontrado!")
         print("TIP: Execute primeiro: python import_data.py")
         return
-    
+
     # Criar aplicação
     app = create_app()
-    
+
     print("Servidor configurado com sucesso!")
     print("Endpoints disponíveis:")
     print("   http://localhost:5000/          - Página inicial")
@@ -1037,10 +1002,10 @@ def main():
     print("   http://localhost:5000/filters   - Opções de filtros")
     print("   http://localhost:5000/query     - Consultar dados (POST)")
     print("   http://localhost:5000/export    - Exportar CSV (POST)")
-    
+
     print(f"\nINICIANDO SERVIDOR NA PORTA 5000...")
     print("   Para parar: Ctrl+C")
-    
+
     # Executar servidor (debug desabilitado para evitar restarts durante operações longas)
     app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)
 

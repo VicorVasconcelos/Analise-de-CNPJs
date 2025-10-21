@@ -1,13 +1,13 @@
-📋 NOME: [DB] Validar `cnpj_database.db` e Git LFS
+📋 NOME: [DB] Validar `data/cnpj_database.db` e Git LFS
 📋 DESCRIÇÃO: Verificar se o arquivo do banco está versionado via Git LFS e documentar como clonar.
 📌 RESPONSÁVEL: Victor Vasconcelos
 🎯 PASSOS:
-1) Confirmar que `.gitattributes` contém `cnpj_database.db`.
-2) Rodar `git lfs ls-files` e confirmar que `cnpj_database.db` aparece.
+1) Confirmar que `.gitattributes` contém `data/cnpj_database.db`.
+2) Rodar `git lfs ls-files` e confirmar que `data/cnpj_database.db` aparece.
 3) Escrever 2–3 linhas no README com instrução de clone via LFS.
 📊 CRITÉRIOS:
-- [ ] `.gitattributes` tem `cnpj_database.db`.
-- [ ] `git lfs ls-files` mostra `cnpj_database.db`.
+- [ ] `.gitattributes` tem `data/cnpj_database.db`.
+- [ ] `git lfs ls-files` mostra `data/cnpj_database.db`.
 - [ ] README com instrução curta de clone.
 🕒 TEMPO: 15 min
 🏷️ LABELS: 🔴 Crítico · 🗄️ DB
@@ -149,31 +149,31 @@ MODELO RÁPIDO DE CARD (copiar/colar no Trello):
 - [ ] Item 2
 
 Fim do arquivo — o conteúdo acima contém apenas cartões no formato esperado pelo script.
-📋 NOME: [DB] Validar `cnpj_database.db` e Git LFS
+📋 NOME: [DB] Validar `data/cnpj_database.db` e Git LFS
 📋 DESCRIÇÃO: Verificar se o arquivo do banco está versionado via Git LFS e documentar como clonar.
 📌 RESPONSÁVEL: Victor Vasconcelos
 🎯 PASSOS:
-1) Confirmar que `.gitattributes` contém `cnpj_database.db`.
-2) Rodar `git lfs ls-files` e confirmar que `cnpj_database.db` aparece.
+1) Confirmar que `.gitattributes` contém `data/cnpj_database.db`.
+2) Rodar `git lfs ls-files` e confirmar que `data/cnpj_database.db` aparece.
 3) Escrever 2–3 linhas no README com instrução de clone via LFS.
 
-1. Verificar `.gitattributes` contém `cnpj_database.db`.
-2. Rodar `git lfs ls-files` e confirmar que `cnpj_database.db` aparece.
+1. Verificar `.gitattributes` contém `data/cnpj_database.db`.
+2. Rodar `git lfs ls-files` e confirmar que `data/cnpj_database.db` aparece.
 3. Escrever 3 linhas no README explicando como clonar com LFS (comando mínimo).
    Critérios de aceite:
 
-- [ ] `.gitattributes` tem `cnpj_database.db`.
-- [ ] `git lfs ls-files` mostra `cnpj_database.db`.
- NOME: [DB] Validar `cnpj_database.db` e Git LFS
+- [ ] `.gitattributes` tem `data/cnpj_database.db`.
+- [ ] `git lfs ls-files` mostra `data/cnpj_database.db`.
+ NOME: [DB] Validar `data/cnpj_database.db` e Git LFS
 📋 DESCRIÇÃO: Verificar se o arquivo do banco está versionado via Git LFS e documentar como clonar.
 📌 RESPONSÁVEL: Victor Vasconcelos
 🎯 PASSOS:
-1) Confirmar que `.gitattributes` contém `cnpj_database.db`.
-2) Rodar `git lfs ls-files` e confirmar que `cnpj_database.db` aparece.
+1) Confirmar que `.gitattributes` contém `data/cnpj_database.db`.
+2) Rodar `git lfs ls-files` e confirmar que `data/cnpj_database.db` aparece.
 3) Escrever 2–3 linhas no README com instrução de clone via LFS.
 📊 CRITÉRIOS:
-- [ ] `.gitattributes` tem `cnpj_database.db`.
-- [ ] `git lfs ls-files` mostra `cnpj_database.db`.
+- [ ] `.gitattributes` tem `data/cnpj_database.db`.
+- [ ] `git lfs ls-files` mostra `data/cnpj_database.db`.
 - [ ] README com instrução curta de clone.
 🕒 TEMPO: 15 min
 🏷️ LABELS: 🔴 Crítico · 🗄️ DB
@@ -253,16 +253,16 @@ Fim do arquivo — o conteúdo acima contém apenas cartões no formato esperado
 📌 RESPONSÁVEL: Victor Vasconcelos
 🎯 PASSOS:
 1) Implementar streaming ou job.
-📋 NOME: [DB] Validar `cnpj_database.db` e Git LFS
+📋 NOME: [DB] Validar `data/cnpj_database.db` e Git LFS
 � DESCRIÇÃO: Verificar se o arquivo do banco está versionado via Git LFS e documentar como clonar.
 📌 RESPONSÁVEL: Victor Vasconcelos
 🎯 PASSOS:
-1) Confirmar que `.gitattributes` contém `cnpj_database.db`.
-2) Rodar `git lfs ls-files` e confirmar que `cnpj_database.db` aparece.
+1) Confirmar que `.gitattributes` contém `data/cnpj_database.db`.
+2) Rodar `git lfs ls-files` e confirmar que `data/cnpj_database.db` aparece.
 3) Escrever 2–3 linhas no README com instrução de clone via LFS.
 📊 CRITÉRIOS:
-- [ ] `.gitattributes` tem `cnpj_database.db`.
-- [ ] `git lfs ls-files` mostra `cnpj_database.db`.
+- [ ] `.gitattributes` tem `data/cnpj_database.db`.
+- [ ] `git lfs ls-files` mostra `data/cnpj_database.db`.
 - [ ] README com instrução curta de clone.
 🕒 TEMPO: 15 min
 🏷️ LABELS: � Crítico · 🗄️ DB

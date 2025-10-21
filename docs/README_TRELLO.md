@@ -1,3 +1,4 @@
+```markdown
 Trello Tool
 ===========
 
@@ -47,7 +48,7 @@ Detectar duplicados e gerar relatório (arquivo em `archive/`):
 python scripts\trello_tool.py --detect-duplicates
 ```
 
-Criar cards em massa a partir de `cards.json` ou do markdown em `TRELLO/`:
+Criar cards em massa a partir de `cards.json` ou do markdown em `docs/trello/`:
 
 ```bat
 python scripts\trello_tool.py --bulk-create
@@ -75,4 +76,6 @@ Se estiver usando o virtualenv fornecido no repositório (`.venv`), ative antes 
 ```bat
 .venv\Scripts\activate
 python -m pip install -r requirements.txt
+```
+
 ```

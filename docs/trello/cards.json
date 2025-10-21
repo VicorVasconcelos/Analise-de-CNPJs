@@ -1,0 +1,13 @@
+[
+  {
+    "name": "[FRONTEND] Ajustar `script.js` para formatos múltiplos",
+    "desc": "Fazer o frontend aceitar diferentes formatos de filtros enviados pelo backend.",
+    "list_name": "To Do",
+    "labels": [
+      "Frontend"
+    ],
+    "members": [
+      "Samuel Carvalho"
+    ]
+  }
+]

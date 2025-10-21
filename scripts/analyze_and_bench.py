@@ -2,7 +2,7 @@ import sqlite3
 import time
 import requests
 
-DB = 'data/cnpj_database.db'
+DB = 'data/data/cnpj_database.db'
 API_BASE = 'http://localhost:5000'
 
 # Run ANALYZE on the DB

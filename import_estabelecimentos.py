@@ -20,7 +20,7 @@ logging.basicConfig(
 )
 
 class EstabelecimentosImporter:
-    def __init__(self, db_path='cnpj_database.db'):
+    def __init__(self, db_path='data/cnpj_database.db'):
         self.db_path = db_path
         self.conn = None
         

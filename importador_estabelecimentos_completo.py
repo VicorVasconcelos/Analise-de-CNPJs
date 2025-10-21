@@ -7,7 +7,7 @@ import time
 
 class ImportadorEstabelecimentosCompleto:
     def __init__(self):
-        self.db_path = 'cnpj_database.db'
+        self.db_path = 'data/cnpj_database.db'
         self.projeto_path = r"C:\Users\victor.vasconcelos\Documents\PROJETO CNPJ"
         self.zip_path = os.path.join(self.projeto_path, "Estabelecimentos0.zip")
         
