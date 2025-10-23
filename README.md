@@ -36,20 +36,17 @@ inspect_db.py
 last_filters_response.json
 README.md
 response.json
-response_filters.json
-script.js
-server.err
 server.log
-styles.css
-```
+## Estrutura mínima relevante
+- `src/` - código fonte do backend (Flask)
+- `web/` - frontend (arquivos estáticos)
+- `data/cnpj_database.db` - arquivo SQLite com os dados (não comitar arquivos grandes)
+- `create_aggregates.py` - script que gera tabelas `aggregates_*` para acelerar consultas
+- `create_indexes.sql` / `create_indexes_temp.sql` - scripts SQL para criar índices importantes
 
-> Nota: a pasta `exports/` é usada pelas rotinas de exportação (pode ser criada automaticamente pelo servidor).
 
 ---
 
-## ⚙️ Pré-requisitos
-
-- Python 3.10+ (3.13 recomendado)
 - Recomenda-se criar um ambiente virtual (venv)
 
 ## ▶️ Instalação (Windows - PowerShell)
@@ -60,7 +57,6 @@ python -m venv .venv
 .venv\Scripts\Activate.ps1
 pip install --upgrade pip
 pip install flask flask-cors pandas requests
-```
 
 ---
 
@@ -90,7 +86,6 @@ sqlite3 data/cnpj_database.db ".read create_indexes.sql"
 ```powershell
 python create_aggregates.py
 ```
-
 5) (Opcional) executar `ANALYZE;` no sqlite3 para atualizar estatísticas do otimizador.
 
 ---
@@ -99,29 +94,15 @@ python create_aggregates.py
 
 ```powershell
 python app.py
-```
 
 Abra no navegador: http://localhost:5000
-
----
-
-## 🚀 Endpoints principais
-
 - `/health` — checagem rápida
-- `/stats` — estatísticas do banco
 - `/filters` — lista de filtros pré-computados (ufs, cnaes, naturezas, etc.)
 - `/query` — executa consulta com filtros e paginação
-- `/export` — gera CSVs na pasta `exports/`
 
----
-
-## 🎯 Destaques e mudanças recentes
 
 - O backend foi otimizado com tabelas de agregados (`aggregates_*`) para acelerar `/filters` e `/stats`.
-- O endpoint `/export` passou a respeitar os mesmos filtros aplicados em `/query`, garantindo consistência entre a UI e o CSV gerado.
-- O dropdown de UFs agora é apresentado em ordem alfabética (backend + frontend).
 
----
 
 ## ⚠️ Observações importantes
 
@@ -131,44 +112,27 @@ Abra no navegador: http://localhost:5000
 ---
 
 ## 📌 Exportação canônica (referência)
-
-O arquivo de exportação que deve ser tomado como referência para formato, ordem de colunas e conteúdo está em:
-
 `c:\Users\victor.vasconcelos\Documents\Dashboard\cnpj_exportacao_20251016_173832.csv`
 
 A partir deste ponto vamos manter este layout como *contrato* de saída. Todas as alterações na aplicação (backend ou frontend) devem preservar esse formato de exportação.
-
 Diretivas imediatas:
 - Não alterar a ordem das colunas nem os nomes de cabeçalho usados no CSV de referência.
-- Focar otimização na interface e no tempo de geração de export (performance do `/export`), sem mudar a estrutura definitiva do CSV.
-- Remover scripts auxiliares que geram exports de teste que não são usados em produção.
-
 Se quiser alterar o layout no futuro, o processo deve ser: definir nova versão do CSV, registrar mudança no README e atualizar o contrato de compatibilidade.
-
 ---
 
 ## 🧰 Dicas de manutenção
 
-- Sempre faça backup antes de rodar importadores.
-- Após criar índices, rode `ANALYZE;` no Sqlite.
-- Para re-gerar agregados: `python create_aggregates.py`.
 
 ---
 
 ## 🛠️ VS Code - configurações recomendadas para este projeto
 
-Se o VS Code estiver lento ao abrir ou indexar o repositório, crie/ative o arquivo de workspace em `.vscode/settings.json` (já incluído) que aplica as seguintes otimizações:
 
-- Exclui a pasta `archive/`, binários e grandes CSVs do file watcher e das buscas.
 - Define a análise do Python (Pylance) para modo `basic` e limita a análise a arquivos abertos.
 - Desativa recomendações de extensão e telemetria para reduzir o ruído.
-
 Essas alterações melhoram significativamente a responsividade em máquinas com I/O limitado ou quando há muitos artefatos grandes no repositório.
 
-
 ## 🧪 Testes
-
-- Atualmente não há testes automatizados no repositório. Posso adicionar testes de smoke para `/health`, `/filters` e `/query` se desejar.
 
 ---
 
