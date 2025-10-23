@@ -308,7 +308,7 @@ def parse_cards_from_md(md_path: Path) -> List[Dict]:
                 'desc': desc.strip() or '',
                 'list_name': 'To Do',
                 'labels': ['Frontend'],
-                'members': [responsible] if responsible else []
+                'members': [responsible if responsible else default_responsible_for_title(name)]
             }
             cards.append(card)
             i = j
@@ -325,6 +325,19 @@ def load_cards_from_file() -> List[Dict]:
             print('Falha ao analisar cards.json:', e)
             return []
     return parse_cards_from_md(TRELLO_MD)
+
+
+def default_responsible_for_title(title: str) -> str:
+    """Retorna o nome do responsável padrão com base no título do card.
+    Regras:
+      - se o título contém '[FRONTEND]' (case-insensitive) -> 'Samuel Carvalho'
+      - caso contrário -> 'Victor Vasconcelos'
+    """
+    if not title:
+        return 'Victor Vasconcelos'
+    if '[FRONTEND]' in title.upper():
+        return 'Samuel Carvalho'
+    return 'Victor Vasconcelos'
 
 
 def extract_blocks(md_text: str) -> Dict[str, str]:
@@ -429,7 +442,7 @@ def generate_cards_json(md_path: Path = TRELLO_MD, out_path: Path = CARDS_JSON) 
                 'desc': desc.strip(),
                 'list_name': 'To Do',
                 'labels': ['Frontend'],
-                'members': [responsible] if responsible else []
+                'members': [responsible if responsible else default_responsible_for_title(name)]
             }
             cards.append(card)
             i = j
@@ -765,6 +778,8 @@ def apply_md_to_board(board_id: str, key: str, token: str, dry_run: bool = True)
         if not card_id:
             # create card from parsed block minimal fields
             parsed_responsible, parsed_labels, parsed_list = extract_metadata_from_block(block)
+            if not parsed_responsible:
+                parsed_responsible = default_responsible_for_title(title)
             list_id = None
             if parsed_list and parsed_list in lists_map:
                 list_id = lists_map[parsed_list]
@@ -842,16 +857,24 @@ def apply_md_to_board(board_id: str, key: str, token: str, dry_run: bool = True)
                     session.put(f'{base}/cards/{card_id}', params={'idList': target_list_id, **session.params})
 
         # members
-        if responsible:
-            target = responsible.strip().lower()
+        if not responsible:
+            responsible = default_responsible_for_title(title)
+        target = responsible.strip().lower() if responsible else None
+        mid = None
+        if target:
             mid = members_map.get(target)
-            if mid:
-                if dry_run:
-                    print(f'[simulação] Irá atribuir membro {target} a "{title}"')
-                else:
-                    resp = session.post(f'{base}/cards/{card_id}/idMembers', params={'value': mid, **session.params})
-                    if resp.ok:
-                        print(f'Assigned member {responsible} to {title}')
+            if not mid:
+                for k, v in members_map.items():
+                    if target in k or k in target:
+                        mid = v
+                        break
+        if mid:
+            if dry_run:
+                print(f'[simulação] Irá atribuir membro {target} a "{title}"')
+            else:
+                resp = session.post(f'{base}/cards/{card_id}/idMembers', params={'value': mid, **session.params})
+                if resp.ok:
+                    print(f'Assigned member {responsible} to {title}')
 
         updated += 1
 

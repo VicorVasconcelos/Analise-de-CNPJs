@@ -19,6 +19,14 @@ except Exception:
         # Último recurso: ajustar sys.path para permitir import a partir da raiz do repositório
         sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
         from src.database import CNPJDatabase
+# Optional export blueprint - import if available, but don't fail if not present
+try:
+    from .export_api import bp as export_bp
+except Exception:
+    try:
+        from src.export_api import bp as export_bp
+    except Exception:
+        export_bp = None
 import threading
 from functools import wraps
 import json
@@ -38,6 +46,13 @@ class CNPJApp:
         self.web_dir = web_dir
         self.app = Flask(__name__, static_folder=web_dir, static_url_path='')
         CORS(self.app)  # Permitir requisições do frontend
+        # Registrar blueprint de export assíncrono se disponível
+        try:
+            if export_bp is not None:
+                self.app.register_blueprint(export_bp)
+        except Exception:
+            # não bloquear a inicialização caso o blueprint falhe
+            pass
         # Configurar logging para gravar erros no arquivo server.err
         log_handler = logging.FileHandler('server.err', encoding='utf-8')
         log_handler.setLevel(logging.ERROR)
@@ -862,10 +877,11 @@ class CNPJApp:
                                 if fname.lower().endswith('.csv'):
                                     fpath = os.path.join(socio_dir, fname)
                                     try:
-                                        df_soc = pd.read_csv(fpath, dtype=str, encoding='utf-8', error_bad_lines=False)
+                                        # Use on_bad_lines for modern pandas to skip malformed rows
+                                        df_soc = pd.read_csv(fpath, dtype=str, encoding='utf-8', on_bad_lines='skip')
                                     except Exception:
-                                        # tentar leitura com latin-1 como fallback
-                                        df_soc = pd.read_csv(fpath, dtype=str, encoding='latin-1', engine='python')
+                                        # tentar leitura com latin-1 como fallback (engine python)
+                                        df_soc = pd.read_csv(fpath, dtype=str, encoding='latin-1', engine='python', on_bad_lines='skip')
 
                                     # Normalizar nomes de colunas esperados
                                     cols = {c.lower(): c for c in df_soc.columns}
