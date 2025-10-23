@@ -56,3 +56,19 @@ cnpj_exportacao_*.csv
 
 # Local Trello credentials (do not commit)
 .trello_credentials.json
+
+# Project-specific artifacts to ignore
+archive/
+server.err
+server.out
+last_filters_response.json
+*.bak
+*.backup
+*.tmp
+*.old
+*.csv
+*.json
+
+# Node/npm artifacts (if any future use)
+node_modules/
+npm-debug.log
