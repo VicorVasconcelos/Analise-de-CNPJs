@@ -1,0 +1,7146 @@
+{
+  "ufs": [
+    {
+      "value": "AC",
+      "label": "AC",
+      "count": 56930
+    },
+    {
+      "value": "AL",
+      "label": "AL",
+      "count": 237372
+    },
+    {
+      "value": "AM",
+      "label": "AM",
+      "count": 265800
+    },
+    {
+      "value": "AP",
+      "label": "AP",
+      "count": 54753
+    },
+    {
+      "value": "BA",
+      "label": "BA",
+      "count": 1238190
+    },
+    {
+      "value": "CE",
+      "label": "CE",
+      "count": 705195
+    },
+    {
+      "value": "DF",
+      "label": "DF",
+      "count": 431828
+    },
+    {
+      "value": "ES",
+      "label": "ES",
+      "count": 529400
+    },
+    {
+      "value": "EX",
+      "label": "EX",
+      "count": 58285
+    },
+    {
+      "value": "GO",
+      "label": "GO",
+      "count": 900815
+    },
+    {
+      "value": "MA",
+      "label": "MA",
+      "count": 369914
+    },
+    {
+      "value": "MG",
+      "label": "MG",
+      "count": 2701708
+    },
+    {
+      "value": "MS",
+      "label": "MS",
+      "count": 333898
+    },
+    {
+      "value": "MT",
+      "label": "MT",
+      "count": 479456
+    },
+    {
+      "value": "PA",
+      "label": "PA",
+      "count": 511214
+    },
+    {
+      "value": "PB",
+      "label": "PB",
+      "count": 321048
+    },
+    {
+      "value": "PE",
+      "label": "PE",
+      "count": 745351
+    },
+    {
+      "value": "PI",
+      "label": "PI",
+      "count": 215392
+    },
+    {
+      "value": "PR",
+      "label": "PR",
+      "count": 1684414
+    },
+    {
+      "value": "RJ",
+      "label": "RJ",
+      "count": 2127823
+    },
+    {
+      "value": "RN",
+      "label": "RN",
+      "count": 286998
+    },
+    {
+      "value": "RO",
+      "label": "RO",
+      "count": 171834
+    },
+    {
+      "value": "RR",
+      "label": "RR",
+      "count": 48192
+    },
+    {
+      "value": "RS",
+      "label": "RS",
+      "count": 1674515
+    },
+    {
+      "value": "SC",
+      "label": "SC",
+      "count": 1199959
+    },
+    {
+      "value": "SE",
+      "label": "SE",
+      "count": 166599
+    },
+    {
+      "value": "SP",
+      "label": "SP",
+      "count": 7174079
+    },
+    {
+      "value": "TO",
+      "label": "TO",
+      "count": 168886
+    }
+  ],
+  "cnaes": [
+    {
+      "value": "4781400",
+      "label": "4781400 - Comércio varejista de artigos do vestuário e acess...",
+      "count": 1305955
+    },
+    {
+      "value": "9492800",
+      "label": "9492800 - Atividades de organizações políticas...",
+      "count": 1224809
+    },
+    {
+      "value": "9602501",
+      "label": "9602501 - Cabeleireiros, manicure e pedicure...",
+      "count": 727185
+    },
+    {
+      "value": "5611203",
+      "label": "5611203 - Lanchonetes, casas de chá, de sucos e similares...",
+      "count": 679342
+    },
+    {
+      "value": "7319002",
+      "label": "7319002 - Promoção de vendas...",
+      "count": 630222
+    },
+    {
+      "value": "4712100",
+      "label": "4712100 - Comércio varejista de mercadorias em geral, com pr...",
+      "count": 579693
+    },
+    {
+      "value": "8888888",
+      "label": "8888888 - Atividade Econônica não informada...",
+      "count": 541917
+    },
+    {
+      "value": "4399103",
+      "label": "4399103 - Obras de alvenaria...",
+      "count": 504471
+    },
+    {
+      "value": "5611201",
+      "label": "5611201 - Restaurantes e similares...",
+      "count": 441397
+    },
+    {
+      "value": "8219999",
+      "label": "8219999 - Preparação de documentos e serviços especializados...",
+      "count": 409019
+    },
+    {
+      "value": "4930201",
+      "label": "4930201 - Transporte rodoviário de carga, exceto produtos pe...",
+      "count": 380101
+    },
+    {
+      "value": "5620104",
+      "label": "5620104 - Fornecimento de alimentos preparados preponderante...",
+      "count": 355561
+    },
+    {
+      "value": "4723700",
+      "label": "4723700 - Comércio varejista de bebidas...",
+      "count": 321730
+    },
+    {
+      "value": "4930202",
+      "label": "4930202 - Transporte rodoviário de carga, exceto produtos pe...",
+      "count": 281947
+    },
+    {
+      "value": "9602502",
+      "label": "9602502 - Atividades de estética e outros serviços de cuidad...",
+      "count": 266956
+    },
+    {
+      "value": "4321500",
+      "label": "4321500 - Instalação e manutenção elétrica...",
+      "count": 253835
+    },
+    {
+      "value": "8599699",
+      "label": "8599699 - Outras atividades de ensino não especificadas ante...",
+      "count": 252398
+    },
+    {
+      "value": "4772500",
+      "label": "4772500 - Comércio varejista de cosméticos, produtos de perf...",
+      "count": 232155
+    },
+    {
+      "value": "8599604",
+      "label": "8599604 - Treinamento em desenvolvimento profissional e gere...",
+      "count": 221846
+    },
+    {
+      "value": "5320202",
+      "label": "5320202 - Serviços de entrega rápida...",
+      "count": 219819
+    },
+    {
+      "value": "5229099",
+      "label": "5229099 - Outras atividades auxiliares dos transportes terre...",
+      "count": 219325
+    },
+    {
+      "value": "5612100",
+      "label": "5612100 - Serviços ambulantes de alimentação...",
+      "count": 212120
+    },
+    {
+      "value": "9430800",
+      "label": "9430800 - Atividades de associações de defesa de direitos so...",
+      "count": 203314
+    },
+    {
+      "value": "4729699",
+      "label": "4729699 - Comércio varejista de produtos alimentícios em ger...",
+      "count": 199876
+    },
+    {
+      "value": "8230001",
+      "label": "8230001 - Serviços de organização de feiras, congressos, exp...",
+      "count": 197979
+    },
+    {
+      "value": "9700500",
+      "label": "9700500 - Serviços domésticos...",
+      "count": 195161
+    },
+    {
+      "value": "4520001",
+      "label": "4520001 - Serviços de manutenção e reparação mecânica de veí...",
+      "count": 194043
+    },
+    {
+      "value": "4789099",
+      "label": "4789099 - Comércio varejista de outros produtos não especifi...",
+      "count": 192011
+    },
+    {
+      "value": "1412601",
+      "label": "1412601 - Confecção de peças de vestuário, exceto roupas ínt...",
+      "count": 187139
+    },
+    {
+      "value": "8211300",
+      "label": "8211300 - Serviços combinados de escritório e apoio administ...",
+      "count": 182006
+    },
+    {
+      "value": "4530703",
+      "label": "4530703 - Comércio a varejo de peças e acessórios novos para...",
+      "count": 168968
+    },
+    {
+      "value": "5611204",
+      "label": "5611204 - Bares e outros estabelecimentos especializados em ...",
+      "count": 168718
+    },
+    {
+      "value": "9511800",
+      "label": "9511800 - Reparação e manutenção de computadores e de equipa...",
+      "count": 165900
+    },
+    {
+      "value": "5320201",
+      "label": "5320201 - Serviços de malote não realizados pelo Correio Nac...",
+      "count": 164985
+    },
+    {
+      "value": "4330404",
+      "label": "4330404 - Serviços de pintura de edifícios em geral...",
+      "count": 163670
+    },
+    {
+      "value": "4774100",
+      "label": "4774100 - Comércio varejista de artigos de óptica...",
+      "count": 161928
+    },
+    {
+      "value": "1091102",
+      "label": "1091102 - Fabricação de produtos de padaria e confeitaria co...",
+      "count": 153462
+    },
+    {
+      "value": "4744099",
+      "label": "4744099 - Comércio varejista de materiais de construção em g...",
+      "count": 150903
+    },
+    {
+      "value": "4120400",
+      "label": "4120400 - Construção de edifícios...",
+      "count": 147873
+    },
+    {
+      "value": "8712300",
+      "label": "8712300 - Atividades de fornecimento de infra-estrutura de a...",
+      "count": 144683
+    },
+    {
+      "value": "4751201",
+      "label": "4751201 - Comércio varejista especializado de equipamentos e...",
+      "count": 136443
+    },
+    {
+      "value": "4771701",
+      "label": "4771701 - Comércio varejista de produtos farmacêuticos, sem ...",
+      "count": 119656
+    },
+    {
+      "value": "4722901",
+      "label": "4722901 - Comércio varejista de carnes - açougues...",
+      "count": 118212
+    },
+    {
+      "value": "4754701",
+      "label": "4754701 - Comércio varejista de móveis...",
+      "count": 117011
+    },
+    {
+      "value": "4755502",
+      "label": "4755502 - Comercio varejista de artigos de armarinho...",
+      "count": 115035
+    },
+    {
+      "value": "8112500",
+      "label": "8112500 - Condomínios prediais...",
+      "count": 112483
+    },
+    {
+      "value": "4724500",
+      "label": "4724500 - Comércio varejista de hortifrutigranjeiros...",
+      "count": 107598
+    },
+    {
+      "value": "9491000",
+      "label": "9491000 - Atividades de organizações religiosas ou filosófic...",
+      "count": 107216
+    },
+    {
+      "value": "3101200",
+      "label": "3101200 - Fabricação de móveis com predominância de madeira...",
+      "count": 106912
+    },
+    {
+      "value": "4782201",
+      "label": "4782201 - Comércio varejista de calçados...",
+      "count": 105766
+    },
+    {
+      "value": "4711301",
+      "label": "4711301 - Comércio varejista de mercadorias em geral, com pr...",
+      "count": 105538
+    },
+    {
+      "value": "4520005",
+      "label": "4520005 - Serviços de lavagem, lubrificação e polimento de v...",
+      "count": 105295
+    },
+    {
+      "value": "8630503",
+      "label": "8630503 - Atividade médica ambulatorial restrita a consultas...",
+      "count": 102548
+    },
+    {
+      "value": "4789004",
+      "label": "4789004 - Comércio varejista de animais vivos e de artigos e...",
+      "count": 102429
+    },
+    {
+      "value": "4744001",
+      "label": "4744001 - Comércio varejista de ferragens e ferramentas...",
+      "count": 100666
+    },
+    {
+      "value": "4721102",
+      "label": "4721102 - Padaria e confeitaria com predominância de revenda...",
+      "count": 100323
+    },
+    {
+      "value": "7020400",
+      "label": "7020400 - Atividades de consultoria em gestão empresarial, e...",
+      "count": 99709
+    },
+    {
+      "value": "6462000",
+      "label": "6462000 - Holdings de instituições não-financeiras...",
+      "count": 99039
+    },
+    {
+      "value": "4110700",
+      "label": "4110700 - Incorporação de empreendimentos imobiliários...",
+      "count": 96687
+    },
+    {
+      "value": "8299799",
+      "label": "8299799 - Outras atividades de serviços prestados principalm...",
+      "count": 96236
+    },
+    {
+      "value": "4752100",
+      "label": "4752100 - Comércio varejista especializado de equipamentos d...",
+      "count": 95471
+    },
+    {
+      "value": "8130300",
+      "label": "8130300 - Atividades paisagísticas...",
+      "count": 88617
+    },
+    {
+      "value": "6911701",
+      "label": "6911701 - Serviços advocatícios...",
+      "count": 87783
+    },
+    {
+      "value": "1412602",
+      "label": "1412602 - Confecção, sob medida, de peças do vestuário, exce...",
+      "count": 87509
+    },
+    {
+      "value": "4789001",
+      "label": "4789001 - Comércio varejista de suvenires, bijuterias e arte...",
+      "count": 87431
+    },
+    {
+      "value": "7112000",
+      "label": "7112000 - Serviços de engenharia...",
+      "count": 85263
+    },
+    {
+      "value": "4753900",
+      "label": "4753900 - Comércio varejista especializado de eletrodoméstic...",
+      "count": 85050
+    },
+    {
+      "value": "5819100",
+      "label": "5819100 - Edição de cadastros, listas e de outros produtos g...",
+      "count": 82897
+    },
+    {
+      "value": "0151201",
+      "label": "0151201 - Criação de bovinos para corte...",
+      "count": 82041
+    },
+    {
+      "value": "4619200",
+      "label": "4619200 - Representantes comerciais e agentes do comércio de...",
+      "count": 79033
+    },
+    {
+      "value": "7911200",
+      "label": "7911200 - Agências de viagens...",
+      "count": 78514
+    },
+    {
+      "value": "2542000",
+      "label": "2542000 - Fabricação de artigos de serralheria, exceto esqua...",
+      "count": 77451
+    },
+    {
+      "value": "5912099",
+      "label": "5912099 - Atividades de pós-produção cinematográfica, de víd...",
+      "count": 77069
+    },
+    {
+      "value": "7420001",
+      "label": "7420001 - Atividades de produção de fotografias, exceto aére...",
+      "count": 76866
+    },
+    {
+      "value": "3299099",
+      "label": "3299099 - Fabricação de produtos diversos não especificados ...",
+      "count": 71906
+    },
+    {
+      "value": "4755503",
+      "label": "4755503 - Comercio varejista de artigos de cama, mesa e banh...",
+      "count": 71211
+    },
+    {
+      "value": "4322302",
+      "label": "4322302 - Instalação e manutenção de sistemas centrais de ar...",
+      "count": 71142
+    },
+    {
+      "value": "0113000",
+      "label": "0113000 - Cultivo de cana-de-açúcar...",
+      "count": 70278
+    },
+    {
+      "value": "4923001",
+      "label": "4923001 - Serviço de táxi...",
+      "count": 69309
+    },
+    {
+      "value": "6920601",
+      "label": "6920601 - Atividades de contabilidade...",
+      "count": 69292
+    },
+    {
+      "value": "8291100",
+      "label": "8291100 - Atividades de cobranças e informações cadastrais...",
+      "count": 67553
+    },
+    {
+      "value": "4520002",
+      "label": "4520002 - Serviços de lanternagem ou funilaria e pintura de ...",
+      "count": 64133
+    },
+    {
+      "value": "4729601",
+      "label": "4729601 - Tabacaria...",
+      "count": 63506
+    },
+    {
+      "value": "4929901",
+      "label": "4929901 - Transporte rodoviário coletivo de passageiros, sob...",
+      "count": 62516
+    },
+    {
+      "value": "8630504",
+      "label": "8630504 - Atividade odontológica...",
+      "count": 62260
+    },
+    {
+      "value": "4541206",
+      "label": "4541206 - Comércio a varejo de peças e acessórios novos para...",
+      "count": 60877
+    },
+    {
+      "value": "9001902",
+      "label": "9001902 - Produção musical...",
+      "count": 60655
+    },
+    {
+      "value": "9313100",
+      "label": "9313100 - Atividades de condicionamento físico...",
+      "count": 59103
+    },
+    {
+      "value": "7319003",
+      "label": "7319003 - Marketing direto...",
+      "count": 57034
+    },
+    {
+      "value": "5611205",
+      "label": "5611205 - Bares e outros estabelecimentos especializados em ...",
+      "count": 56931
+    },
+    {
+      "value": "4713002",
+      "label": "4713002 - Lojas de variedades, exceto lojas de departamentos...",
+      "count": 56662
+    },
+    {
+      "value": "4761003",
+      "label": "4761003 - Comércio varejista de artigos de papelaria...",
+      "count": 56241
+    },
+    {
+      "value": "6209100",
+      "label": "6209100 - Suporte técnico, manutenção e outros serviços em t...",
+      "count": 55928
+    },
+    {
+      "value": "5620101",
+      "label": "5620101 - Fornecimento de alimentos preparados preponderante...",
+      "count": 54407
+    },
+    {
+      "value": "4759899",
+      "label": "4759899 - Comércio varejista de outros artigos de uso pessoa...",
+      "count": 54331
+    },
+    {
+      "value": "4784900",
+      "label": "4784900 - Comércio varejista de gás liqüefeito de petróleo (...",
+      "count": 53930
+    },
+    {
+      "value": "2539001",
+      "label": "2539001 - Serviços de usinagem, tornearia e solda...",
+      "count": 53233
+    },
+    {
+      "value": "8592999",
+      "label": "8592999 - Ensino de arte e cultura não especificado anterior...",
+      "count": 53106
+    },
+    {
+      "value": "9512600",
+      "label": "9512600 - Reparação e manutenção de equipamentos de comunica...",
+      "count": 52798
+    },
+    {
+      "value": "4530701",
+      "label": "4530701 - Comércio por atacado de peças e acessórios novos p...",
+      "count": 52708
+    },
+    {
+      "value": "9521500",
+      "label": "9521500 - Reparação e manutenção de equipamentos eletroeletr...",
+      "count": 52508
+    },
+    {
+      "value": "4924800",
+      "label": "4924800 - Transporte escolar...",
+      "count": 51841
+    },
+    {
+      "value": "6821801",
+      "label": "6821801 - Corretagem na compra e venda e avaliação de imóvei...",
+      "count": 51180
+    },
+    {
+      "value": "8599603",
+      "label": "8599603 - Treinamento em informática...",
+      "count": 50785
+    },
+    {
+      "value": "4755501",
+      "label": "4755501 - Comércio varejista de tecidos...",
+      "count": 50105
+    },
+    {
+      "value": "1091101",
+      "label": "1091101 - Fabricação de produtos de panificação industrial...",
+      "count": 49857
+    },
+    {
+      "value": "9499500",
+      "label": "9499500 - Atividades associativas não especificadas anterior...",
+      "count": 49698
+    },
+    {
+      "value": "5620102",
+      "label": "5620102 - Serviços de alimentação para eventos e recepções -...",
+      "count": 49409
+    },
+    {
+      "value": "4744005",
+      "label": "4744005 - Comércio varejista de materiais de construção não ...",
+      "count": 48609
+    },
+    {
+      "value": "4783101",
+      "label": "4783101 - Comércio varejista de artigos de joalheria...",
+      "count": 47398
+    },
+    {
+      "value": "4731800",
+      "label": "4731800 - Comércio varejista de combustíveis para veículos a...",
+      "count": 46834
+    },
+    {
+      "value": "0161003",
+      "label": "0161003 - Serviço de preparação de terreno, cultivo e colhei...",
+      "count": 46337
+    },
+    {
+      "value": "9609208",
+      "label": "9609208 - Higiene e embelezamento de animais domésticos...",
+      "count": 45749
+    },
+    {
+      "value": "8650003",
+      "label": "8650003 - Atividades de psicologia e psicanálise...",
+      "count": 44464
+    },
+    {
+      "value": "4789005",
+      "label": "4789005 - Comércio varejista de produtos saneantes domissani...",
+      "count": 44007
+    },
+    {
+      "value": "4721104",
+      "label": "4721104 - Comércio varejista de doces, balas, bombons e seme...",
+      "count": 43433
+    },
+    {
+      "value": "7490104",
+      "label": "7490104 - Atividades de intermediação e agenciamento de serv...",
+      "count": 43400
+    },
+    {
+      "value": "4711302",
+      "label": "4711302 - Comércio varejista de mercadorias em geral, com pr...",
+      "count": 43360
+    },
+    {
+      "value": "6622300",
+      "label": "6622300 - Corretores e agentes de seguros, de planos de prev...",
+      "count": 41689
+    },
+    {
+      "value": "3329501",
+      "label": "3329501 - Serviços de montagem de móveis de qualquer materia...",
+      "count": 40799
+    },
+    {
+      "value": "6204000",
+      "label": "6204000 - Consultoria em tecnologia da informação...",
+      "count": 39931
+    },
+    {
+      "value": "4761001",
+      "label": "4761001 - Comércio varejista de livros...",
+      "count": 39867
+    },
+    {
+      "value": "6201501",
+      "label": "6201501 - Desenvolvimento de programas de computador sob enc...",
+      "count": 39300
+    },
+    {
+      "value": "9609299",
+      "label": "9609299 - Outras atividades de serviços pessoais não especif...",
+      "count": 38976
+    },
+    {
+      "value": "6810202",
+      "label": "6810202 - Aluguel de imóveis próprios...",
+      "count": 38811
+    },
+    {
+      "value": "3321000",
+      "label": "3321000 - Instalação de máquinas e equipamentos industriais...",
+      "count": 38641
+    },
+    {
+      "value": "4757100",
+      "label": "4757100 - Comércio varejista especializado de peças e acessó...",
+      "count": 38304
+    },
+    {
+      "value": "4511102",
+      "label": "4511102 - Comércio a varejo de automóveis, camionetas e util...",
+      "count": 38161
+    },
+    {
+      "value": "1412603",
+      "label": "1412603 - Facção de peças do vestuário, exceto roupas íntima...",
+      "count": 37943
+    },
+    {
+      "value": "4330499",
+      "label": "4330499 - Outras obras de acabamento da construção...",
+      "count": 37493
+    },
+    {
+      "value": "4520007",
+      "label": "4520007 - Serviços de instalação, manutenção e reparação de ...",
+      "count": 37392
+    },
+    {
+      "value": "5212500",
+      "label": "5212500 - Carga e descarga...",
+      "count": 37271
+    },
+    {
+      "value": "4543900",
+      "label": "4543900 - Manutenção e reparação de motocicletas e motonetas...",
+      "count": 36145
+    },
+    {
+      "value": "4721103",
+      "label": "4721103 - Comércio varejista de laticínios e frios...",
+      "count": 36047
+    },
+    {
+      "value": "4330403",
+      "label": "4330403 - Obras de acabamento em gesso e estuque...",
+      "count": 35671
+    },
+    {
+      "value": "4763601",
+      "label": "4763601 - Comércio varejista de brinquedos e artigos recreat...",
+      "count": 35628
+    },
+    {
+      "value": "4742300",
+      "label": "4742300 - Comércio varejista de material elétrico...",
+      "count": 35403
+    },
+    {
+      "value": "6810201",
+      "label": "6810201 - Compra e venda de imóveis próprios...",
+      "count": 35266
+    },
+    {
+      "value": "4520006",
+      "label": "4520006 - Serviços de borracharia para veículos automotores...",
+      "count": 34864
+    },
+    {
+      "value": "4929902",
+      "label": "4929902 - Transporte rodoviário coletivo de passageiros, sob...",
+      "count": 33899
+    },
+    {
+      "value": "7490101",
+      "label": "7490101 - Serviços de tradução, interpretação e similares...",
+      "count": 33728
+    },
+    {
+      "value": "4763602",
+      "label": "4763602 - Comércio varejista de artigos esportivos...",
+      "count": 33482
+    },
+    {
+      "value": "4789002",
+      "label": "4789002 - Comércio varejista de plantas e flores naturais...",
+      "count": 33150
+    },
+    {
+      "value": "5223100",
+      "label": "5223100 - Estacionamento de veículos...",
+      "count": 33095
+    },
+    {
+      "value": "8593700",
+      "label": "8593700 - Ensino de idiomas...",
+      "count": 32099
+    },
+    {
+      "value": "6190699",
+      "label": "6190699 - Outras atividades de telecomunicações não especifi...",
+      "count": 32090
+    },
+    {
+      "value": "8650004",
+      "label": "8650004 - Atividades de fisioterapia...",
+      "count": 31843
+    },
+    {
+      "value": "5510801",
+      "label": "5510801 - Hotéis...",
+      "count": 31776
+    },
+    {
+      "value": "9529102",
+      "label": "9529102 - Chaveiros...",
+      "count": 31671
+    },
+    {
+      "value": "4754702",
+      "label": "4754702 - Comércio varejista de artigos de colchoaria...",
+      "count": 29882
+    },
+    {
+      "value": "4330405",
+      "label": "4330405 - Aplicação de revestimentos e de resinas em interio...",
+      "count": 29648
+    },
+    {
+      "value": "4322301",
+      "label": "4322301 - Instalações hidráulicas, sanitárias e de gás...",
+      "count": 29456
+    },
+    {
+      "value": "2512800",
+      "label": "2512800 - Fabricação de esquadrias de metal...",
+      "count": 29404
+    },
+    {
+      "value": "6470101",
+      "label": "6470101 - Fundos de investimento, exceto previdenciários e i...",
+      "count": 29308
+    },
+    {
+      "value": "4617600",
+      "label": "4617600 - Representantes comerciais e agentes do comércio de...",
+      "count": 29060
+    },
+    {
+      "value": "7311400",
+      "label": "7311400 - Agências de publicidade...",
+      "count": 29040
+    },
+    {
+      "value": "9312300",
+      "label": "9312300 - Clubes sociais, esportivos e similares...",
+      "count": 28831
+    },
+    {
+      "value": "4743100",
+      "label": "4743100 - Comércio varejista de vidros...",
+      "count": 28497
+    },
+    {
+      "value": "1359600",
+      "label": "1359600 - Fabricação de outros produtos têxteis não especifi...",
+      "count": 28356
+    },
+    {
+      "value": "8599605",
+      "label": "8599605 - Cursos preparatórios para concursos...",
+      "count": 27873
+    },
+    {
+      "value": "7111100",
+      "label": "7111100 - Serviços de arquitetura...",
+      "count": 26828
+    },
+    {
+      "value": "1096100",
+      "label": "1096100 - Fabricação de alimentos e pratos prontos...",
+      "count": 26763
+    },
+    {
+      "value": "0151202",
+      "label": "0151202 - Criação de bovinos para leite...",
+      "count": 26068
+    },
+    {
+      "value": "4713004",
+      "label": "4713004 - Lojas de departamentos ou magazines, exceto lojas ...",
+      "count": 25478
+    },
+    {
+      "value": "9609206",
+      "label": "9609206 - Serviços de tatuagem e colocação de piercing...",
+      "count": 25437
+    },
+    {
+      "value": "4520003",
+      "label": "4520003 - Serviços de manutenção e reparação elétrica de veí...",
+      "count": 25338
+    },
+    {
+      "value": "4930204",
+      "label": "4930204 - Transporte rodoviário de mudanças...",
+      "count": 25190
+    },
+    {
+      "value": "4763603",
+      "label": "4763603 - Comércio varejista de bicicletas e triciclos; peça...",
+      "count": 25093
+    },
+    {
+      "value": "4744002",
+      "label": "4744002 - Comércio varejista de madeira e artefatos...",
+      "count": 25024
+    },
+    {
+      "value": "9001906",
+      "label": "9001906 - Atividades de sonorização e de iluminação...",
+      "count": 24629
+    },
+    {
+      "value": "3212400",
+      "label": "3212400 - Fabricação de bijuterias e artefatos semelhantes...",
+      "count": 24531
+    },
+    {
+      "value": "4618499",
+      "label": "4618499 - Outros representantes comerciais e agentes do comé...",
+      "count": 24361
+    },
+    {
+      "value": "8230002",
+      "label": "8230002 - Casas de festas e eventos...",
+      "count": 24297
+    },
+    {
+      "value": "7711000",
+      "label": "7711000 - Locação de automóveis sem condutor...",
+      "count": 23976
+    },
+    {
+      "value": "4789007",
+      "label": "4789007 - Comércio varejista de equipamentos para escritório...",
+      "count": 23900
+    },
+    {
+      "value": "4330402",
+      "label": "4330402 - Instalação de portas, janelas, tetos, divisórias e...",
+      "count": 23806
+    },
+    {
+      "value": "1821100",
+      "label": "1821100 - Serviços de pré-impressão...",
+      "count": 23631
+    },
+    {
+      "value": "4399199",
+      "label": "4399199 - Serviços especializados para construção não especi...",
+      "count": 23405
+    },
+    {
+      "value": "9329899",
+      "label": "9329899 - Outras atividades de recreação e lazer não especif...",
+      "count": 23249
+    },
+    {
+      "value": "1629301",
+      "label": "1629301 - Fabricação de artefatos diversos de madeira, excet...",
+      "count": 23239
+    },
+    {
+      "value": "1813099",
+      "label": "1813099 - Impressão de material para outros usos...",
+      "count": 23054
+    },
+    {
+      "value": "5811500",
+      "label": "5811500 - Edição de livros...",
+      "count": 22983
+    },
+    {
+      "value": "7810800",
+      "label": "7810800 - Seleção e agenciamento de mão-de-obra...",
+      "count": 22844
+    },
+    {
+      "value": "7739099",
+      "label": "7739099 - Aluguel de outras máquinas e equipamentos comercia...",
+      "count": 22712
+    },
+    {
+      "value": "6822600",
+      "label": "6822600 - Gestão e administração da propriedade imobiliária...",
+      "count": 22708
+    },
+    {
+      "value": "6311900",
+      "label": "6311900 - Tratamento de dados, provedores de serviços de apl...",
+      "count": 22651
+    },
+    {
+      "value": "0121101",
+      "label": "0121101 - Horticultura, exceto morango...",
+      "count": 22637
+    },
+    {
+      "value": "8512100",
+      "label": "8512100 - Educação infantil - pré-escola...",
+      "count": 22588
+    },
+    {
+      "value": "4639701",
+      "label": "4639701 - Comércio atacadista de produtos alimentícios em ge...",
+      "count": 22538
+    },
+    {
+      "value": "6463800",
+      "label": "6463800 - Outras sociedades de participação, exceto holdings...",
+      "count": 22178
+    },
+    {
+      "value": "6630400",
+      "label": "6630400 - Atividades de administração de fundos por contrato...",
+      "count": 22149
+    },
+    {
+      "value": "9601701",
+      "label": "9601701 - Lavanderias...",
+      "count": 22060
+    },
+    {
+      "value": "4785799",
+      "label": "4785799 - Comércio varejista de outros artigos usados...",
+      "count": 21928
+    },
+    {
+      "value": "8610102",
+      "label": "8610102 - Atividades de atendimento em pronto-socorro e unid...",
+      "count": 21519
+    },
+    {
+      "value": "7319099",
+      "label": "7319099 - Outras atividades de publicidade não especificadas...",
+      "count": 21429
+    },
+    {
+      "value": "1813001",
+      "label": "1813001 - Impressão de material para uso publicitário...",
+      "count": 21084
+    },
+    {
+      "value": "5590699",
+      "label": "5590699 - Outros alojamentos não especificados anteriormente...",
+      "count": 21000
+    },
+    {
+      "value": "4773300",
+      "label": "4773300 - Comércio varejista de artigos médicos e ortopédico...",
+      "count": 20787
+    },
+    {
+      "value": "4649401",
+      "label": "4649401 - Comércio atacadista de equipamentos elétricos de u...",
+      "count": 20655
+    },
+    {
+      "value": "7500100",
+      "label": "7500100 - Atividades veterinárias...",
+      "count": 20632
+    },
+    {
+      "value": "1094500",
+      "label": "1094500 - Fabricação de massas alimentícias...",
+      "count": 20622
+    },
+    {
+      "value": "8129000",
+      "label": "8129000 - Atividades de limpeza não especificadas anteriorme...",
+      "count": 20384
+    },
+    {
+      "value": "0115600",
+      "label": "0115600 - Cultivo de soja...",
+      "count": 20357
+    },
+    {
+      "value": "8411600",
+      "label": "8411600 - Administração pública em geral...",
+      "count": 19851
+    },
+    {
+      "value": "3811400",
+      "label": "3811400 - Coleta de resíduos não-perigosos...",
+      "count": 19532
+    },
+    {
+      "value": "6319400",
+      "label": "6319400 - Portais, provedores de conteúdo e outros serviços ...",
+      "count": 19457
+    },
+    {
+      "value": "7732201",
+      "label": "7732201 - Aluguel de máquinas e equipamentos para construção...",
+      "count": 19452
+    },
+    {
+      "value": "3314707",
+      "label": "3314707 - Manutenção e reparação de máquinas e aparelhos de ...",
+      "count": 19340
+    },
+    {
+      "value": "4530704",
+      "label": "4530704 - Comércio a varejo de peças e acessórios usados par...",
+      "count": 19270
+    },
+    {
+      "value": "5812301",
+      "label": "5812301 - Edição de jornais diários...",
+      "count": 18979
+    },
+    {
+      "value": "0111302",
+      "label": "0111302 - Cultivo de milho...",
+      "count": 18769
+    },
+    {
+      "value": "8630502",
+      "label": "8630502 - Atividade médica ambulatorial com recursos para re...",
+      "count": 18578
+    },
+    {
+      "value": "4722902",
+      "label": "4722902 - Peixaria...",
+      "count": 18491
+    },
+    {
+      "value": "4642701",
+      "label": "4642701 - Comércio atacadista de artigos do vestuário e aces...",
+      "count": 18250
+    },
+    {
+      "value": "4693100",
+      "label": "4693100 - Comércio atacadista de mercadorias em geral, sem p...",
+      "count": 18248
+    },
+    {
+      "value": "8630599",
+      "label": "8630599 - Atividades de atenção ambulatorial não especificad...",
+      "count": 18102
+    },
+    {
+      "value": "8121400",
+      "label": "8121400 - Limpeza em prédios e em domicílios...",
+      "count": 18032
+    },
+    {
+      "value": "9529105",
+      "label": "9529105 - Reparação de artigos do mobiliário...",
+      "count": 17813
+    },
+    {
+      "value": "8513900",
+      "label": "8513900 - Ensino fundamental...",
+      "count": 17786
+    },
+    {
+      "value": "4633801",
+      "label": "4633801 - Comércio atacadista de frutas, verduras, raízes, t...",
+      "count": 17718
+    },
+    {
+      "value": "7420004",
+      "label": "7420004 - Filmagem de festas e eventos...",
+      "count": 17688
+    },
+    {
+      "value": "1622699",
+      "label": "1622699 - Fabricação de outros artigos de carpintaria para c...",
+      "count": 17506
+    },
+    {
+      "value": "0139306",
+      "label": "0139306 - Cultivo de seringueira...",
+      "count": 17338
+    },
+    {
+      "value": "7729202",
+      "label": "7729202 - Aluguel de móveis, utensílios e aparelhos de uso d...",
+      "count": 17242
+    },
+    {
+      "value": "1340599",
+      "label": "1340599 - Outros serviços de acabamento em fios, tecidos, ar...",
+      "count": 16904
+    },
+    {
+      "value": "4741500",
+      "label": "4741500 - Comércio varejista de tintas e materiais para pint...",
+      "count": 16752
+    },
+    {
+      "value": "6202300",
+      "label": "6202300 - Desenvolvimento e licenciamento de programas de co...",
+      "count": 16749
+    },
+    {
+      "value": "8640202",
+      "label": "8640202 - Laboratórios clínicos...",
+      "count": 16731
+    },
+    {
+      "value": "2391503",
+      "label": "2391503 - Aparelhamento de placas e execução de trabalhos em...",
+      "count": 16157
+    },
+    {
+      "value": "5229002",
+      "label": "5229002 - Serviços de reboque de veículos...",
+      "count": 16083
+    },
+    {
+      "value": "5813100",
+      "label": "5813100 - Edição de revistas...",
+      "count": 15951
+    },
+    {
+      "value": "1749400",
+      "label": "1749400 - Fabricação de produtos de pastas celulósicas, pape...",
+      "count": 15926
+    },
+    {
+      "value": "4530705",
+      "label": "4530705 - Comércio a varejo de pneumáticos e câmaras-de-ar...",
+      "count": 15879
+    },
+    {
+      "value": "1411801",
+      "label": "1411801 - Confecção de roupas íntimas...",
+      "count": 15857
+    },
+    {
+      "value": "8610101",
+      "label": "8610101 - Atividades de atendimento hospitalar, exceto pront...",
+      "count": 15818
+    },
+    {
+      "value": "9420100",
+      "label": "9420100 - Atividades de organizações sindicais...",
+      "count": 15613
+    },
+    {
+      "value": "4613300",
+      "label": "4613300 - Representantes comerciais e agentes do comércio de...",
+      "count": 15585
+    },
+    {
+      "value": "8592903",
+      "label": "8592903 - Ensino de música...",
+      "count": 15562
+    },
+    {
+      "value": "6821802",
+      "label": "6821802 - Corretagem no aluguel de imóveis...",
+      "count": 15091
+    },
+    {
+      "value": "8299707",
+      "label": "8299707 - Salas de acesso à internet...",
+      "count": 15050
+    },
+    {
+      "value": "1610203",
+      "label": "1610203 - Serrarias com desdobramento de madeira em bruto...",
+      "count": 14904
+    },
+    {
+      "value": "4759801",
+      "label": "4759801 - Comércio varejista de artigos de tapeçaria, cortin...",
+      "count": 14804
+    },
+    {
+      "value": "4313400",
+      "label": "4313400 - Obras de terraplenagem...",
+      "count": 14792
+    },
+    {
+      "value": "1531901",
+      "label": "1531901 - Fabricação de calçados de couro...",
+      "count": 14787
+    },
+    {
+      "value": "4689399",
+      "label": "4689399 - Comércio atacadista especializado em outros produt...",
+      "count": 14706
+    },
+    {
+      "value": "4616800",
+      "label": "4616800 - Representantes comerciais e agentes do comércio de...",
+      "count": 14523
+    },
+    {
+      "value": "7723300",
+      "label": "7723300 - Aluguel de objetos do vestuário, jóias e acessório...",
+      "count": 14473
+    },
+    {
+      "value": "8219901",
+      "label": "8219901 - Fotocópias...",
+      "count": 14473
+    },
+    {
+      "value": "8711502",
+      "label": "8711502 - Instituições de longa permanência para idosos...",
+      "count": 14420
+    },
+    {
+      "value": "6422100",
+      "label": "6422100 - Bancos múltiplos, com carteira comercial...",
+      "count": 14385
+    },
+    {
+      "value": "9529199",
+      "label": "9529199 - Reparação e manutenção de outros objetos e equipam...",
+      "count": 14241
+    },
+    {
+      "value": "0134200",
+      "label": "0134200 - Cultivo de café...",
+      "count": 14230
+    },
+    {
+      "value": "6399200",
+      "label": "6399200 - Outras atividades de prestação de serviços de info...",
+      "count": 14213
+    },
+    {
+      "value": "7490103",
+      "label": "7490103 - Serviços de agronomia e de consultoria às atividad...",
+      "count": 14122
+    },
+    {
+      "value": "8511200",
+      "label": "8511200 - Educação infantil - creche...",
+      "count": 14106
+    },
+    {
+      "value": "7721700",
+      "label": "7721700 - Aluguel de equipamentos recreativos e esportivos...",
+      "count": 13938
+    },
+    {
+      "value": "8630501",
+      "label": "8630501 - Atividade médica ambulatorial com recursos para re...",
+      "count": 13704
+    },
+    {
+      "value": "4511101",
+      "label": "4511101 - Comércio a varejo de automóveis, camionetas e util...",
+      "count": 13679
+    },
+    {
+      "value": "4771704",
+      "label": "4771704 - Comércio varejista de medicamentos veterinários...",
+      "count": 13616
+    },
+    {
+      "value": "1340501",
+      "label": "1340501 - Estamparia e texturização em fios, tecidos, artefa...",
+      "count": 13515
+    },
+    {
+      "value": "5911199",
+      "label": "5911199 - Atividades de produção cinematográfica, de vídeos ...",
+      "count": 13437
+    },
+    {
+      "value": "7490199",
+      "label": "7490199 - Outras atividades profissionais, científicas e téc...",
+      "count": 13161
+    },
+    {
+      "value": "2330399",
+      "label": "2330399 - Fabricação de outros artefatos e produtos de concr...",
+      "count": 13122
+    },
+    {
+      "value": "6203100",
+      "label": "6203100 - Desenvolvimento e licenciamento de programas de co...",
+      "count": 12966
+    },
+    {
+      "value": "5620103",
+      "label": "5620103 - Cantinas - serviços de alimentação privativos...",
+      "count": 12866
+    },
+    {
+      "value": "4789008",
+      "label": "4789008 - Comércio varejista de artigos fotográficos e para ...",
+      "count": 12812
+    },
+    {
+      "value": "2599301",
+      "label": "2599301 - Serviços de confecção de armações metálicas para a...",
+      "count": 12756
+    },
+    {
+      "value": "8111700",
+      "label": "8111700 - Serviços combinados para apoio a edifícios, exceto...",
+      "count": 12499
+    },
+    {
+      "value": "5812302",
+      "label": "5812302 - Edição de jornais não diários...",
+      "count": 12103
+    },
+    {
+      "value": "4763604",
+      "label": "4763604 - Comércio varejista de artigos de caça, pesca e cam...",
+      "count": 11809
+    },
+    {
+      "value": "6110803",
+      "label": "6110803 - Serviços de comunicação multimídia - SCM...",
+      "count": 11794
+    },
+    {
+      "value": "9493600",
+      "label": "9493600 - Atividades de organizações associativas ligadas à ...",
+      "count": 11618
+    },
+    {
+      "value": "4921301",
+      "label": "4921301 - Transporte rodoviário coletivo de passageiros, com...",
+      "count": 11462
+    },
+    {
+      "value": "1422300",
+      "label": "1422300 - Fabricação de artigos do vestuário, produzidos em ...",
+      "count": 11309
+    },
+    {
+      "value": "8011101",
+      "label": "8011101 - Atividades de vigilância e segurança privada...",
+      "count": 11263
+    },
+    {
+      "value": "9001901",
+      "label": "9001901 - Produção teatral...",
+      "count": 11184
+    },
+    {
+      "value": "7912100",
+      "label": "7912100 - Operadores turísticos...",
+      "count": 11010
+    },
+    {
+      "value": "1351100",
+      "label": "1351100 - Fabricação de artefatos têxteis para uso doméstico...",
+      "count": 10981
+    },
+    {
+      "value": "4782202",
+      "label": "4782202 - Comércio varejista de artigos de viagem...",
+      "count": 10919
+    },
+    {
+      "value": "4618401",
+      "label": "4618401 - Representantes comerciais e agentes do comércio de...",
+      "count": 10884
+    },
+    {
+      "value": "4930203",
+      "label": "4930203 - Transporte rodoviário de produtos perigosos...",
+      "count": 10817
+    },
+    {
+      "value": "9001999",
+      "label": "9001999 - Artes cênicas, espetáculos e atividades complement...",
+      "count": 10644
+    },
+    {
+      "value": "6619399",
+      "label": "6619399 - Outras atividades auxiliares dos serviços financei...",
+      "count": 10595
+    },
+    {
+      "value": "3314711",
+      "label": "3314711 - Manutenção e reparação de máquinas e equipamentos ...",
+      "count": 10576
+    },
+    {
+      "value": "4729602",
+      "label": "4729602 - Comércio varejista de mercadorias em lojas de conv...",
+      "count": 10435
+    },
+    {
+      "value": "2342702",
+      "label": "2342702 - Fabricação de artefatos de cerâmica e barro cozido...",
+      "count": 10396
+    },
+    {
+      "value": "0131800",
+      "label": "0131800 - Cultivo de laranja...",
+      "count": 10362
+    },
+    {
+      "value": "8599601",
+      "label": "8599601 - Formação de condutores...",
+      "count": 10228
+    },
+    {
+      "value": "1093701",
+      "label": "1093701 - Fabricação de produtos derivados do cacau e de cho...",
+      "count": 10166
+    },
+    {
+      "value": "4632001",
+      "label": "4632001 - Comércio atacadista de cereais e leguminosas benef...",
+      "count": 10161
+    },
+    {
+      "value": "4744004",
+      "label": "4744004 - Comércio varejista de cal, areia, pedra britada, t...",
+      "count": 10041
+    },
+    {
+      "value": "4671100",
+      "label": "4671100 - Comércio atacadista de madeira e produtos derivado...",
+      "count": 9982
+    },
+    {
+      "value": "3299003",
+      "label": "3299003 - Fabricação de letras, letreiros e placas de qualqu...",
+      "count": 9925
+    },
+    {
+      "value": "8650099",
+      "label": "8650099 - Atividades de profissionais da área de saúde não e...",
+      "count": 9899
+    },
+    {
+      "value": "2599399",
+      "label": "2599399 - Fabricação de outros produtos de metal não especif...",
+      "count": 9890
+    },
+    {
+      "value": "4511103",
+      "label": "4511103 - Comércio por atacado de automóveis, camionetas e u...",
+      "count": 9796
+    },
+    {
+      "value": "1531902",
+      "label": "1531902 - Acabamento de calçados de couro sob contrato...",
+      "count": 9718
+    },
+    {
+      "value": "1052000",
+      "label": "1052000 - Fabricação de laticínios...",
+      "count": 9691
+    },
+    {
+      "value": "4761002",
+      "label": "4761002 - Comércio varejista de jornais e revistas...",
+      "count": 9627
+    },
+    {
+      "value": "8650006",
+      "label": "8650006 - Atividades de fonoaudiologia...",
+      "count": 9621
+    },
+    {
+      "value": "2330301",
+      "label": "2330301 - Fabricação de estruturas pré-moldadas de concreto ...",
+      "count": 9613
+    },
+    {
+      "value": "4663000",
+      "label": "4663000 - Comércio atacadista de Máquinas e equipamentos par...",
+      "count": 9581
+    },
+    {
+      "value": "8650001",
+      "label": "8650001 - Atividades de enfermagem...",
+      "count": 9554
+    },
+    {
+      "value": "6619302",
+      "label": "6619302 - Correspondentes de instituições financeiras...",
+      "count": 9525
+    },
+    {
+      "value": "7722500",
+      "label": "7722500 - Aluguel de fitas de vídeo, DVDs e similares...",
+      "count": 9425
+    },
+    {
+      "value": "4635401",
+      "label": "4635401 - Comércio atacadista de água mineral...",
+      "count": 9316
+    },
+    {
+      "value": "4646001",
+      "label": "4646001 - Comércio atacadista de cosméticos e produtos de pe...",
+      "count": 9246
+    },
+    {
+      "value": "7990200",
+      "label": "7990200 - Serviços de reservas e outros serviços de turismo ...",
+      "count": 9107
+    },
+    {
+      "value": "2229399",
+      "label": "2229399 - Fabricação de artefatos de material plástico para ...",
+      "count": 8973
+    },
+    {
+      "value": "8020001",
+      "label": "8020001 - Atividades de monitoramento de sistemas de seguran...",
+      "count": 8897
+    },
+    {
+      "value": "9319101",
+      "label": "9319101 - Produção e promoção de eventos esportivos...",
+      "count": 8859
+    },
+    {
+      "value": "8690901",
+      "label": "8690901 - Atividades de práticas integrativas e complementar...",
+      "count": 8769
+    },
+    {
+      "value": "8122200",
+      "label": "8122200 - Imunização e controle de pragas urbanas...",
+      "count": 8758
+    },
+    {
+      "value": "4637101",
+      "label": "4637101 - Comércio atacadista de café torrado, moído e solúv...",
+      "count": 8743
+    },
+    {
+      "value": "8800600",
+      "label": "8800600 - Serviços de assistência social sem alojamento...",
+      "count": 8707
+    },
+    {
+      "value": "8650002",
+      "label": "8650002 - Atividades de profissionais da nutrição...",
+      "count": 8695
+    },
+    {
+      "value": "9412099",
+      "label": "9412099 - Outras atividades associativas profissionais...",
+      "count": 8694
+    },
+    {
+      "value": "9603304",
+      "label": "9603304 - Serviços de funerárias...",
+      "count": 8680
+    },
+    {
+      "value": "8550301",
+      "label": "8550301 - Administração de caixas escolares...",
+      "count": 8666
+    },
+    {
+      "value": "4683400",
+      "label": "4683400 - Comércio atacadista de defensivos agrícolas, adubo...",
+      "count": 8649
+    },
+    {
+      "value": "3314710",
+      "label": "3314710 - Manutenção e reparação de máquinas e equipamentos ...",
+      "count": 8626
+    },
+    {
+      "value": "8591100",
+      "label": "8591100 - Ensino de esportes...",
+      "count": 8612
+    },
+    {
+      "value": "4789003",
+      "label": "4789003 - Comércio varejista de objetos de arte...",
+      "count": 8589
+    },
+    {
+      "value": "7119703",
+      "label": "7119703 - Serviços de desenho técnico relacionados à arquite...",
+      "count": 8584
+    },
+    {
+      "value": "1539400",
+      "label": "1539400 - Fabricação de calçados de materiais não especifica...",
+      "count": 8546
+    },
+    {
+      "value": "4329101",
+      "label": "4329101 - Instalação de painéis publicitários...",
+      "count": 8394
+    },
+    {
+      "value": "8550302",
+      "label": "8550302 - Atividades de apoio à educação, exceto caixas esco...",
+      "count": 8369
+    },
+    {
+      "value": "4783102",
+      "label": "4783102 - Comércio varejista de artigos de relojoaria...",
+      "count": 8338
+    },
+    {
+      "value": "4762800",
+      "label": "4762800 - Comércio varejista de discos, CDs, DVDs e fitas...",
+      "count": 8322
+    },
+    {
+      "value": "1529700",
+      "label": "1529700 - Fabricação de artefatos de couro não especificados...",
+      "count": 8308
+    },
+    {
+      "value": "5590603",
+      "label": "5590603 - Pensões (alojamento)...",
+      "count": 8249
+    },
+    {
+      "value": "1031700",
+      "label": "1031700 - Fabricação de conservas de frutas...",
+      "count": 8229
+    },
+    {
+      "value": "3313901",
+      "label": "3313901 - Manutenção e reparação de geradores, transformador...",
+      "count": 8175
+    },
+    {
+      "value": "4649499",
+      "label": "4649499 - Comércio atacadista de outros equipamentos e artig...",
+      "count": 8030
+    },
+    {
+      "value": "5211701",
+      "label": "5211701 - Armazéns gerais - emissão de warrant...",
+      "count": 8014
+    },
+    {
+      "value": "4623109",
+      "label": "4623109 - Comércio atacadista de alimentos para animais...",
+      "count": 7989
+    },
+    {
+      "value": "1521100",
+      "label": "1521100 - Fabricação de artigos para viagem, bolsas e semelh...",
+      "count": 7864
+    },
+    {
+      "value": "1013901",
+      "label": "1013901 - Fabricação de produtos de carne...",
+      "count": 7786
+    },
+    {
+      "value": "3511501",
+      "label": "3511501 - Geração de energia elétrica...",
+      "count": 7717
+    },
+    {
+      "value": "3314702",
+      "label": "3314702 - Manutenção e reparação de equipamentos hidráulicos...",
+      "count": 7712
+    },
+    {
+      "value": "4744003",
+      "label": "4744003 - Comércio varejista de materiais hidráulicos...",
+      "count": 7704
+    },
+    {
+      "value": "3832700",
+      "label": "3832700 - Recuperação de materiais plásticos...",
+      "count": 7660
+    },
+    {
+      "value": "4754703",
+      "label": "4754703 - Comércio varejista de artigos de iluminação...",
+      "count": 7615
+    },
+    {
+      "value": "1092900",
+      "label": "1092900 - Fabricação de biscoitos e bolachas...",
+      "count": 7570
+    },
+    {
+      "value": "4686902",
+      "label": "4686902 - Comércio atacadista de embalagens...",
+      "count": 7554
+    },
+    {
+      "value": "4299599",
+      "label": "4299599 - Outras obras de engenharia civil não especificadas...",
+      "count": 7542
+    },
+    {
+      "value": "0161099",
+      "label": "0161099 - Atividades de apoio à agricultura não especificada...",
+      "count": 7422
+    },
+    {
+      "value": "4644301",
+      "label": "4644301 - Comércio atacadista de medicamentos e drogas de us...",
+      "count": 7310
+    },
+    {
+      "value": "2399101",
+      "label": "2399101 - Decoração, lapidação, gravação, vitrificação e out...",
+      "count": 7247
+    },
+    {
+      "value": "4612500",
+      "label": "4612500 - Representantes comerciais e agentes do comércio de...",
+      "count": 7235
+    },
+    {
+      "value": "9609207",
+      "label": "9609207 - Alojamento de animais domésticos...",
+      "count": 7235
+    },
+    {
+      "value": "6810203",
+      "label": "6810203 - Loteamento de imóveis próprios...",
+      "count": 7231
+    },
+    {
+      "value": "4923002",
+      "label": "4923002 - Serviço de transporte de passageiros - locação de ...",
+      "count": 7212
+    },
+    {
+      "value": "4756300",
+      "label": "4756300 - Comércio varejista especializado de instrumentos m...",
+      "count": 7205
+    },
+    {
+      "value": "2511000",
+      "label": "2511000 - Fabricação de estruturas metálicas...",
+      "count": 7191
+    },
+    {
+      "value": "9609202",
+      "label": "9609202 - Agências matrimoniais...",
+      "count": 7143
+    },
+    {
+      "value": "1053800",
+      "label": "1053800 - Fabricação de sorvetes e outros gelados comestívei...",
+      "count": 7142
+    },
+    {
+      "value": "2532201",
+      "label": "2532201 - Produção de artefatos estampados de metal...",
+      "count": 7086
+    },
+    {
+      "value": "9319199",
+      "label": "9319199 - Outras atividades esportivas não especificadas ant...",
+      "count": 7086
+    },
+    {
+      "value": "4679699",
+      "label": "4679699 - Comércio atacadista de materiais de construção em ...",
+      "count": 7069
+    },
+    {
+      "value": "4732600",
+      "label": "4732600 - Comércio varejista de lubrificantes...",
+      "count": 7027
+    },
+    {
+      "value": "2543800",
+      "label": "2543800 - Fabricação de ferramentas...",
+      "count": 7023
+    },
+    {
+      "value": "3314799",
+      "label": "3314799 - Manutenção e reparação de outras máquinas e equipa...",
+      "count": 7014
+    },
+    {
+      "value": "4399101",
+      "label": "4399101 - Administração de obras...",
+      "count": 6987
+    },
+    {
+      "value": "4687703",
+      "label": "4687703 - Comércio atacadista de resíduos e sucatas metálico...",
+      "count": 6954
+    },
+    {
+      "value": "1352900",
+      "label": "1352900 - Fabricação de artefatos de tapeçaria...",
+      "count": 6952
+    },
+    {
+      "value": "8640205",
+      "label": "8640205 - Serviços de diagnóstico por imagem com uso de radi...",
+      "count": 6946
+    },
+    {
+      "value": "4645101",
+      "label": "4645101 - Comércio atacadista de instrumentos e materiais pa...",
+      "count": 6915
+    },
+    {
+      "value": "3319800",
+      "label": "3319800 - Manutenção e reparação de equipamentos e produtos ...",
+      "count": 6877
+    },
+    {
+      "value": "4649408",
+      "label": "4649408 - Comércio atacadista de produtos de higiene, limpez...",
+      "count": 6861
+    },
+    {
+      "value": "3313999",
+      "label": "3313999 - Manutenção e reparação de máquinas, aparelhos e ma...",
+      "count": 6808
+    },
+    {
+      "value": "4611700",
+      "label": "4611700 - Representantes comerciais e agentes do comércio de...",
+      "count": 6803
+    },
+    {
+      "value": "0210101",
+      "label": "0210101 - Cultivo de eucalipto...",
+      "count": 6780
+    },
+    {
+      "value": "4691500",
+      "label": "4691500 - Comércio atacadista de mercadorias em geral, com p...",
+      "count": 6779
+    },
+    {
+      "value": "7820500",
+      "label": "7820500 - Locação de mão-de-obra temporária...",
+      "count": 6766
+    },
+    {
+      "value": "3831901",
+      "label": "3831901 - Recuperação de sucatas de alumínio...",
+      "count": 6708
+    },
+    {
+      "value": "4292801",
+      "label": "4292801 - Montagem de estruturas metálicas...",
+      "count": 6657
+    },
+    {
+      "value": "4541203",
+      "label": "4541203 - Comércio a varejo de motocicletas e motonetas nova...",
+      "count": 6604
+    },
+    {
+      "value": "6912500",
+      "label": "6912500 - Cartórios...",
+      "count": 6580
+    },
+    {
+      "value": "7719599",
+      "label": "7719599 - Locação de outros meios de transporte não especifi...",
+      "count": 6568
+    },
+    {
+      "value": "7319004",
+      "label": "7319004 - Consultoria em publicidade...",
+      "count": 6502
+    },
+    {
+      "value": "8299706",
+      "label": "8299706 - Casas lotéricas...",
+      "count": 6498
+    },
+    {
+      "value": "0322101",
+      "label": "0322101 - Criação de peixes em água doce...",
+      "count": 6473
+    },
+    {
+      "value": "2349499",
+      "label": "2349499 - Fabricação de produtos cerâmicos não-refratários n...",
+      "count": 6447
+    },
+    {
+      "value": "9529104",
+      "label": "9529104 - Reparação de bicicletas, triciclos e outros veícul...",
+      "count": 6419
+    },
+    {
+      "value": "6010100",
+      "label": "6010100 - Atividades de rádio...",
+      "count": 6376
+    },
+    {
+      "value": "7731400",
+      "label": "7731400 - Aluguel de máquinas e equipamentos agrícolas sem o...",
+      "count": 6370
+    },
+    {
+      "value": "2330302",
+      "label": "2330302 - Fabricação de artefatos de cimento para uso na con...",
+      "count": 6348
+    },
+    {
+      "value": "8660700",
+      "label": "8660700 - Atividades de apoio à gestão de saúde...",
+      "count": 6195
+    },
+    {
+      "value": "4614100",
+      "label": "4614100 - Representantes comerciais e agentes do comércio de...",
+      "count": 6176
+    },
+    {
+      "value": "8541400",
+      "label": "8541400 - Educação profissional de nível técnico...",
+      "count": 6164
+    },
+    {
+      "value": "0119999",
+      "label": "0119999 - Cultivo de outras plantas de lavoura temporária nã...",
+      "count": 6151
+    },
+    {
+      "value": "4634601",
+      "label": "4634601 - Comércio atacadista de carnes bovinas e suínas e d...",
+      "count": 6105
+    },
+    {
+      "value": "4213800",
+      "label": "4213800 - Obras de urbanização - ruas, praças e calçadas...",
+      "count": 6103
+    },
+    {
+      "value": "7739003",
+      "label": "7739003 - Aluguel de palcos, coberturas e outras estruturas ...",
+      "count": 6094
+    },
+    {
+      "value": "4322303",
+      "label": "4322303 - Instalações de sistema de prevenção contra incêndi...",
+      "count": 6011
+    },
+    {
+      "value": "9329804",
+      "label": "9329804 - Exploração de jogos eletrônicos recreativos...",
+      "count": 5981
+    },
+    {
+      "value": "3839499",
+      "label": "3839499 - Recuperação de materiais não especificados anterio...",
+      "count": 5935
+    },
+    {
+      "value": "4669999",
+      "label": "4669999 - Comércio atacadista de outras máquinas e equipamen...",
+      "count": 5925
+    },
+    {
+      "value": "5829800",
+      "label": "5829800 - Edição integrada à impressão de cadastros, listas ...",
+      "count": 5922
+    },
+    {
+      "value": "1413403",
+      "label": "1413403 - Facção de roupas profissionais...",
+      "count": 5915
+    },
+    {
+      "value": "6190601",
+      "label": "6190601 - Provedores de acesso às redes de comunicações...",
+      "count": 5863
+    },
+    {
+      "value": "7740300",
+      "label": "7740300 - Gestão de ativos intangíveis não-financeiros...",
+      "count": 5837
+    },
+    {
+      "value": "2222600",
+      "label": "2222600 - Fabricação de embalagens de material plástico...",
+      "count": 5834
+    },
+    {
+      "value": "4647801",
+      "label": "4647801 - Comércio atacadista de artigos de escritório e de ...",
+      "count": 5709
+    },
+    {
+      "value": "6491300",
+      "label": "6491300 - Sociedades de fomento mercantil - factoring...",
+      "count": 5691
+    },
+    {
+      "value": "8020002",
+      "label": "8020002 - Outras atividades de serviços de segurança...",
+      "count": 5620
+    },
+    {
+      "value": "9411100",
+      "label": "9411100 - Atividades de organizações associativas patronais ...",
+      "count": 5572
+    },
+    {
+      "value": "4615000",
+      "label": "4615000 - Representantes comerciais e agentes do comércio de...",
+      "count": 5554
+    },
+    {
+      "value": "4661300",
+      "label": "4661300 - Comércio atacadista de máquinas, aparelhos e equip...",
+      "count": 5535
+    },
+    {
+      "value": "4211101",
+      "label": "4211101 - Construção de rodovias e ferrovias...",
+      "count": 5501
+    },
+    {
+      "value": "4635499",
+      "label": "4635499 - Comércio atacadista de bebidas não especificadas a...",
+      "count": 5492
+    },
+    {
+      "value": "0810006",
+      "label": "0810006 - Extração de areia, cascalho ou pedregulho e benefi...",
+      "count": 5457
+    },
+    {
+      "value": "8292000",
+      "label": "8292000 - Envasamento e empacotamento sob contrato...",
+      "count": 5411
+    },
+    {
+      "value": "1099699",
+      "label": "1099699 - Fabricação de outros produtos alimentícios não esp...",
+      "count": 5409
+    },
+    {
+      "value": "8220200",
+      "label": "8220200 - Atividades de teleatendimento...",
+      "count": 5392
+    },
+    {
+      "value": "0161002",
+      "label": "0161002 - Serviço de poda de árvores para lavouras...",
+      "count": 5350
+    },
+    {
+      "value": "4635402",
+      "label": "4635402 - Comércio atacadista de cerveja, chope e refrigeran...",
+      "count": 5319
+    },
+    {
+      "value": "1095300",
+      "label": "1095300 - Fabricação de especiarias, molhos, temperos e cond...",
+      "count": 5238
+    },
+    {
+      "value": "3103900",
+      "label": "3103900 - Fabricação de móveis de outros materiais, exceto m...",
+      "count": 5228
+    },
+    {
+      "value": "4637199",
+      "label": "4637199 - Comércio atacadista especializado em outros produt...",
+      "count": 5225
+    },
+    {
+      "value": "4785701",
+      "label": "4785701 - Comércio varejista de antigüidades...",
+      "count": 5212
+    },
+    {
+      "value": "9200301",
+      "label": "9200301 - Casas de bingo...",
+      "count": 5072
+    },
+    {
+      "value": "8690999",
+      "label": "8690999 - Outras atividades de atenção à saúde humana não es...",
+      "count": 5039
+    },
+    {
+      "value": "7410202",
+      "label": "7410202 - Design de interiores...",
+      "count": 5015
+    },
+    {
+      "value": "0159802",
+      "label": "0159802 - Criação de animais de estimação...",
+      "count": 5014
+    },
+    {
+      "value": "8520100",
+      "label": "8520100 - Ensino médio...",
+      "count": 5009
+    },
+    {
+      "value": "7119701",
+      "label": "7119701 - Serviços de cartografia, topografia e geodésia...",
+      "count": 4983
+    },
+    {
+      "value": "4329103",
+      "label": "4329103 - Instalação, manutenção e reparação de elevadores, ...",
+      "count": 4961
+    },
+    {
+      "value": "4771702",
+      "label": "4771702 - Comércio varejista de produtos farmacêuticos, com ...",
+      "count": 4924
+    },
+    {
+      "value": "9529101",
+      "label": "9529101 - Reparação de calçados, bolsas e artigos de viagem...",
+      "count": 4868
+    },
+    {
+      "value": "0210107",
+      "label": "0210107 - Extração de madeira em florestas plantadas...",
+      "count": 4831
+    },
+    {
+      "value": "3831999",
+      "label": "3831999 - Recuperação de materiais metálicos, exceto alumíni...",
+      "count": 4810
+    },
+    {
+      "value": "5211799",
+      "label": "5211799 - Depósitos de mercadorias para terceiros, exceto ar...",
+      "count": 4810
+    },
+    {
+      "value": "0155501",
+      "label": "0155501 - Criação de frangos para corte...",
+      "count": 4776
+    },
+    {
+      "value": "4672900",
+      "label": "4672900 - Comércio atacadista de ferragens e ferramentas...",
+      "count": 4752
+    },
+    {
+      "value": "2219600",
+      "label": "2219600 - Fabricação de artefatos de borracha não especifica...",
+      "count": 4699
+    },
+    {
+      "value": "2950600",
+      "label": "2950600 - Recondicionamento e recuperação de motores para ve...",
+      "count": 4619
+    },
+    {
+      "value": "0230600",
+      "label": "0230600 - Atividades de apoio à produção florestal...",
+      "count": 4594
+    },
+    {
+      "value": "3311200",
+      "label": "3311200 - Manutenção e reparação de tanques, reservatórios m...",
+      "count": 4584
+    },
+    {
+      "value": "4530706",
+      "label": "4530706 - Representantes comerciais e agentes do comércio de...",
+      "count": 4556
+    },
+    {
+      "value": "8592902",
+      "label": "8592902 - Ensino de artes cênicas, exceto dança...",
+      "count": 4520
+    },
+    {
+      "value": "7119799",
+      "label": "7119799 - Atividades técnicas relacionadas à engenharia e ar...",
+      "count": 4480
+    },
+    {
+      "value": "6920602",
+      "label": "6920602 - Atividades de consultoria e auditoria contábil e t...",
+      "count": 4475
+    },
+    {
+      "value": "8650005",
+      "label": "8650005 - Atividades de terapia ocupacional...",
+      "count": 4461
+    },
+    {
+      "value": "2062200",
+      "label": "2062200 - Fabricação de produtos de limpeza e polimento...",
+      "count": 4445
+    },
+    {
+      "value": "4921302",
+      "label": "4921302 - Transporte rodoviário coletivo de passageiros, com...",
+      "count": 4438
+    },
+    {
+      "value": "7312200",
+      "label": "7312200 - Agenciamento de espaços para publicidade, exceto e...",
+      "count": 4363
+    },
+    {
+      "value": "2063100",
+      "label": "2063100 - Fabricação de cosméticos, produtos de perfumaria e...",
+      "count": 4315
+    },
+    {
+      "value": "3250706",
+      "label": "3250706 - Serviços de prótese dentária...",
+      "count": 4289
+    },
+    {
+      "value": "6424703",
+      "label": "6424703 - Cooperativas de crédito mútuo...",
+      "count": 4202
+    },
+    {
+      "value": "4631100",
+      "label": "4631100 - Comércio atacadista de leite e laticínios...",
+      "count": 4190
+    },
+    {
+      "value": "7733100",
+      "label": "7733100 - Aluguel de máquinas e equipamentos para escritório...",
+      "count": 4121
+    },
+    {
+      "value": "0116401",
+      "label": "0116401 - Cultivo de amendoim...",
+      "count": 4111
+    },
+    {
+      "value": "4651601",
+      "label": "4651601 - Comércio atacadista de equipamentos de informática...",
+      "count": 4093
+    },
+    {
+      "value": "9529106",
+      "label": "9529106 - Reparação de jóias...",
+      "count": 4064
+    },
+    {
+      "value": "8640201",
+      "label": "8640201 - Laboratórios de anatomia patológica e citológica...",
+      "count": 4057
+    },
+    {
+      "value": "6110801",
+      "label": "6110801 - Serviços de telefonia fixa comutada - STFC...",
+      "count": 4043
+    },
+    {
+      "value": "0133404",
+      "label": "0133404 - Cultivo de cítricos, exceto laranja...",
+      "count": 4042
+    },
+    {
+      "value": "1414200",
+      "label": "1414200 - Fabricação de acessórios do vestuário, exceto para...",
+      "count": 4014
+    },
+    {
+      "value": "7490105",
+      "label": "7490105 - Agenciamento de profissionais para atividades espo...",
+      "count": 4003
+    },
+    {
+      "value": "3102100",
+      "label": "3102100 - Fabricação de móveis com predominância de metal...",
+      "count": 3993
+    },
+    {
+      "value": "1822999",
+      "label": "1822999 - Serviços de acabamentos gráficos, exceto encaderna...",
+      "count": 3982
+    },
+    {
+      "value": "7729201",
+      "label": "7729201 - Aluguel de aparelhos de jogos eletrônicos...",
+      "count": 3972
+    },
+    {
+      "value": "1411802",
+      "label": "1411802 - Facção de roupas íntimas...",
+      "count": 3934
+    },
+    {
+      "value": "1413401",
+      "label": "1413401 - Confecção de roupas profissionais, exceto sob medi...",
+      "count": 3876
+    },
+    {
+      "value": "0159801",
+      "label": "0159801 - Apicultura...",
+      "count": 3868
+    },
+    {
+      "value": "3314719",
+      "label": "3314719 - Manutenção e reparação de máquinas e equipamentos ...",
+      "count": 3850
+    },
+    {
+      "value": "7120100",
+      "label": "7120100 - Testes e análises técnicas...",
+      "count": 3843
+    },
+    {
+      "value": "2829199",
+      "label": "2829199 - Fabricação de outras máquinas e equipamentos de us...",
+      "count": 3794
+    },
+    {
+      "value": "8412400",
+      "label": "8412400 - Regulação das atividades de saúde, educação, servi...",
+      "count": 3779
+    },
+    {
+      "value": "4922101",
+      "label": "4922101 - Transporte rodoviário coletivo de passageiros, com...",
+      "count": 3748
+    },
+    {
+      "value": "0133402",
+      "label": "0133402 - Cultivo de banana...",
+      "count": 3745
+    },
+    {
+      "value": "4399105",
+      "label": "4399105 - Perfuração e construção de poços de água...",
+      "count": 3740
+    },
+    {
+      "value": "5920100",
+      "label": "5920100 - Atividades de gravação de som e de edição de músic...",
+      "count": 3734
+    },
+    {
+      "value": "3240099",
+      "label": "3240099 - Fabricação de outros brinquedos e jogos recreativo...",
+      "count": 3726
+    },
+    {
+      "value": "3299004",
+      "label": "3299004 - Fabricação de painéis e letreiros luminosos...",
+      "count": 3724
+    },
+    {
+      "value": "7119704",
+      "label": "7119704 - Serviços de perícia técnica relacionados à seguran...",
+      "count": 3713
+    },
+    {
+      "value": "3702900",
+      "label": "3702900 - Atividades relacionadas a esgoto, exceto a gestão ...",
+      "count": 3707
+    },
+    {
+      "value": "0162899",
+      "label": "0162899 - Atividades de apoio à pecuária não especificadas a...",
+      "count": 3705
+    },
+    {
+      "value": "1066000",
+      "label": "1066000 - Fabricação de alimentos para animais...",
+      "count": 3704
+    },
+    {
+      "value": "4520004",
+      "label": "4520004 - Serviços de alinhamento e balanceamento de veículo...",
+      "count": 3692
+    },
+    {
+      "value": "4641901",
+      "label": "4641901 - Comércio atacadista de tecidos...",
+      "count": 3675
+    },
+    {
+      "value": "0151203",
+      "label": "0151203 - Criação de bovinos, exceto para corte e leite...",
+      "count": 3658
+    },
+    {
+      "value": "8532500",
+      "label": "8532500 - Educação superior - graduação e pós-graduação...",
+      "count": 3636
+    },
+    {
+      "value": "9329801",
+      "label": "9329801 - Discotecas, danceterias, salões de dança e similar...",
+      "count": 3596
+    },
+    {
+      "value": "0161001",
+      "label": "0161001 - Serviço de pulverização e controle de pragas agríc...",
+      "count": 3584
+    },
+    {
+      "value": "1540800",
+      "label": "1540800 - Fabricação de partes para calçados, de qualquer ma...",
+      "count": 3584
+    },
+    {
+      "value": "4634603",
+      "label": "4634603 - Comércio atacadista de pescados e frutos do mar...",
+      "count": 3563
+    },
+    {
+      "value": "2229301",
+      "label": "2229301 - Fabricação de artefatos de material plástico para ...",
+      "count": 3562
+    },
+    {
+      "value": "0810001",
+      "label": "0810001 - Extração de ardósia e beneficiamento associado...",
+      "count": 3551
+    },
+    {
+      "value": "3299006",
+      "label": "3299006 - Fabricação de velas, inclusive decorativas...",
+      "count": 3537
+    },
+    {
+      "value": "1099604",
+      "label": "1099604 - Fabricação de gelo comum...",
+      "count": 3511
+    },
+    {
+      "value": "4329104",
+      "label": "4329104 - Montagem e instalação de sistemas e equipamentos d...",
+      "count": 3478
+    },
+    {
+      "value": "4649402",
+      "label": "4649402 - Comércio atacadista de aparelhos eletrônicos de us...",
+      "count": 3449
+    },
+    {
+      "value": "7210000",
+      "label": "7210000 - Pesquisa e desenvolvimento experimental em ciência...",
+      "count": 3414
+    },
+    {
+      "value": "7420002",
+      "label": "7420002 - Atividades de produção de fotografias aéreas e sub...",
+      "count": 3402
+    },
+    {
+      "value": "4689301",
+      "label": "4689301 - Comércio atacadista de produtos da extração minera...",
+      "count": 3398
+    },
+    {
+      "value": "1822901",
+      "label": "1822901 - Serviços de encadernação e plastificação...",
+      "count": 3393
+    },
+    {
+      "value": "4689302",
+      "label": "4689302 - Comércio atacadista de fios e fibras beneficiados...",
+      "count": 3358
+    },
+    {
+      "value": "2061400",
+      "label": "2061400 - Fabricação de sabões e detergentes sintéticos...",
+      "count": 3351
+    },
+    {
+      "value": "0132600",
+      "label": "0132600 - Cultivo de uva...",
+      "count": 3331
+    },
+    {
+      "value": "4512902",
+      "label": "4512902 - Comércio sob consignação de veículos automotores...",
+      "count": 3296
+    },
+    {
+      "value": "8640299",
+      "label": "8640299 - Atividades de serviços de complementação diagnósti...",
+      "count": 3294
+    },
+    {
+      "value": "3291400",
+      "label": "3291400 - Fabricação de escovas, pincéis e vassouras...",
+      "count": 3254
+    },
+    {
+      "value": "4643501",
+      "label": "4643501 - Comércio atacadista de calçados...",
+      "count": 3249
+    },
+    {
+      "value": "0119906",
+      "label": "0119906 - Cultivo de mandioca...",
+      "count": 3247
+    },
+    {
+      "value": "5911102",
+      "label": "5911102 - Produção de filmes para publicidade...",
+      "count": 3228
+    },
+    {
+      "value": "8531700",
+      "label": "8531700 - Educação superior - graduação...",
+      "count": 3214
+    },
+    {
+      "value": "1731100",
+      "label": "1731100 - Fabricação de embalagens de papel...",
+      "count": 3209
+    },
+    {
+      "value": "5310502",
+      "label": "5310502 - Atividades de franqueadas do Correio Nacional...",
+      "count": 3193
+    },
+    {
+      "value": "1012101",
+      "label": "1012101 - Abate de aves...",
+      "count": 3180
+    },
+    {
+      "value": "6499901",
+      "label": "6499901 - Clubes de investimento...",
+      "count": 3120
+    },
+    {
+      "value": "4681801",
+      "label": "4681801 - Comércio atacadista de álcool carburante, biodiese...",
+      "count": 3108
+    },
+    {
+      "value": "5310501",
+      "label": "5310501 - Atividades do Correio Nacional...",
+      "count": 3101
+    },
+    {
+      "value": "6499999",
+      "label": "6499999 - Outras atividades de serviços financeiros não espe...",
+      "count": 3085
+    },
+    {
+      "value": "8720499",
+      "label": "8720499 - Atividades de assistência psicossocial e à saúde a...",
+      "count": 3082
+    },
+    {
+      "value": "0122900",
+      "label": "0122900 - Cultivo de flores e plantas ornamentais...",
+      "count": 3071
+    },
+    {
+      "value": "4673700",
+      "label": "4673700 - Comércio atacadista de material elétrico...",
+      "count": 3050
+    },
+    {
+      "value": "5822101",
+      "label": "5822101 - Edição integrada à impressão de jornais diários...",
+      "count": 3048
+    },
+    {
+      "value": "1011201",
+      "label": "1011201 - Frigorífico - abate de bovinos...",
+      "count": 3014
+    },
+    {
+      "value": "3314720",
+      "label": "3314720 - Manutenção e reparação de máquinas e equipamentos ...",
+      "count": 3000
+    },
+    {
+      "value": "4329199",
+      "label": "4329199 - Outras obras de instalações em construções não esp...",
+      "count": 2998
+    },
+    {
+      "value": "0133499",
+      "label": "0133499 - Cultivo de frutas de lavoura permanente não especi...",
+      "count": 2991
+    },
+    {
+      "value": "4520008",
+      "label": "4520008 - Serviços de capotaria...",
+      "count": 2984
+    },
+    {
+      "value": "4692300",
+      "label": "4692300 - Comércio atacadista de mercadorias em geral, com p...",
+      "count": 2984
+    },
+    {
+      "value": "6550200",
+      "label": "6550200 - Planos de saúde...",
+      "count": 2976
+    },
+    {
+      "value": "6391700",
+      "label": "6391700 - Agências de notícias...",
+      "count": 2952
+    },
+    {
+      "value": "1629302",
+      "label": "1629302 - Fabricação de artefatos diversos de cortiça, bambu...",
+      "count": 2947
+    },
+    {
+      "value": "4623199",
+      "label": "4623199 - Comércio atacadista de matérias-primas agrícolas n...",
+      "count": 2913
+    },
+    {
+      "value": "7410299",
+      "label": "7410299 - atividades de design não especificadas anteriormen...",
+      "count": 2905
+    },
+    {
+      "value": "9311500",
+      "label": "9311500 - Gestão de instalações de esportes...",
+      "count": 2885
+    },
+    {
+      "value": "4744006",
+      "label": "4744006 - Comércio varejista de pedras para revestimento...",
+      "count": 2883
+    },
+    {
+      "value": "3314712",
+      "label": "3314712 - Manutenção e reparação de tratores agrícolas...",
+      "count": 2881
+    },
+    {
+      "value": "5211702",
+      "label": "5211702 - Guarda-móveis...",
+      "count": 2878
+    },
+    {
+      "value": "4391600",
+      "label": "4391600 - Obras de fundações...",
+      "count": 2873
+    },
+    {
+      "value": "6612605",
+      "label": "6612605 - Agentes de investimentos em aplicações financeiras...",
+      "count": 2847
+    },
+    {
+      "value": "3600602",
+      "label": "3600602 - Distribuição de água por caminhões...",
+      "count": 2844
+    },
+    {
+      "value": "5250804",
+      "label": "5250804 - Organização logística do transporte de carga...",
+      "count": 2844
+    },
+    {
+      "value": "5510803",
+      "label": "5510803 - Motéis...",
+      "count": 2843
+    },
+    {
+      "value": "2869100",
+      "label": "2869100 - Fabricação de máquinas e equipamentos para uso ind...",
+      "count": 2820
+    },
+    {
+      "value": "4512901",
+      "label": "4512901 - Representantes comerciais e agentes do comércio de...",
+      "count": 2809
+    },
+    {
+      "value": "4751202",
+      "label": "4751202 - Recarga de cartuchos para equipamentos de informát...",
+      "count": 2795
+    },
+    {
+      "value": "4652400",
+      "label": "4652400 - Comércio atacadista de componentes eletrônicos e e...",
+      "count": 2792
+    },
+    {
+      "value": "3211602",
+      "label": "3211602 - Fabricação de artefatos de joalheria e ourivesaria...",
+      "count": 2789
+    },
+    {
+      "value": "4329105",
+      "label": "4329105 - Tratamentos térmicos, acústicos ou de vibração...",
+      "count": 2777
+    },
+    {
+      "value": "1033302",
+      "label": "1033302 - Fabricação de sucos de frutas, hortaliças e legume...",
+      "count": 2769
+    },
+    {
+      "value": "1622602",
+      "label": "1622602 - Fabricação de esquadrias de madeira e de peças de ...",
+      "count": 2746
+    },
+    {
+      "value": "1033301",
+      "label": "1033301 - Fabricação de sucos concentrados de frutas, hortal...",
+      "count": 2719
+    },
+    {
+      "value": "3317102",
+      "label": "3317102 - Manutenção e reparação de embarcações para esporte...",
+      "count": 2708
+    },
+    {
+      "value": "1623400",
+      "label": "1623400 - Fabricação de artefatos de tanoaria e de embalagen...",
+      "count": 2693
+    },
+    {
+      "value": "6201502",
+      "label": "6201502 - Web design...",
+      "count": 2688
+    },
+    {
+      "value": "4541207",
+      "label": "4541207 - Comércio a varejo de peças e acessórios usados par...",
+      "count": 2675
+    },
+    {
+      "value": "4684299",
+      "label": "4684299 - Comércio atacadista de outros produtos químicos e ...",
+      "count": 2672
+    },
+    {
+      "value": "0210108",
+      "label": "0210108 - Produção de carvão vegetal - florestas plantadas...",
+      "count": 2662
+    },
+    {
+      "value": "4292802",
+      "label": "4292802 - Obras de montagem industrial...",
+      "count": 2637
+    },
+    {
+      "value": "5099801",
+      "label": "5099801 - Transporte aquaviário para passeios turísticos...",
+      "count": 2637
+    },
+    {
+      "value": "4642702",
+      "label": "4642702 - Comércio atacadista de roupas e acessórios para us...",
+      "count": 2636
+    },
+    {
+      "value": "2539002",
+      "label": "2539002 - Serviços de tratamento e revestimento em metais...",
+      "count": 2630
+    },
+    {
+      "value": "5250803",
+      "label": "5250803 - Agenciamento de cargas, exceto para o transporte m...",
+      "count": 2614
+    },
+    {
+      "value": "2099199",
+      "label": "2099199 - Fabricação de outros produtos químicos não especif...",
+      "count": 2603
+    },
+    {
+      "value": "4687701",
+      "label": "4687701 - Comércio atacadista de resíduos de papel e papelão...",
+      "count": 2597
+    },
+    {
+      "value": "7420003",
+      "label": "7420003 - Laboratórios fotográficos...",
+      "count": 2597
+    },
+    {
+      "value": "4623106",
+      "label": "4623106 - Comércio atacadista de sementes, flores, plantas e...",
+      "count": 2572
+    },
+    {
+      "value": "4618402",
+      "label": "4618402 - Representantes comerciais e agentes do comércio de...",
+      "count": 2556
+    },
+    {
+      "value": "1081302",
+      "label": "1081302 - Torrefação e moagem de café...",
+      "count": 2552
+    },
+    {
+      "value": "8730199",
+      "label": "8730199 - Atividades de assistência social prestadas em resi...",
+      "count": 2545
+    },
+    {
+      "value": "5240199",
+      "label": "5240199 - Atividades auxiliares dos transportes aéreos, exce...",
+      "count": 2537
+    },
+    {
+      "value": "4687702",
+      "label": "4687702 - Comércio atacadista de resíduos e sucatas não-metá...",
+      "count": 2527
+    },
+    {
+      "value": "1330800",
+      "label": "1330800 - Fabricação de tecidos de malha...",
+      "count": 2518
+    },
+    {
+      "value": "1061901",
+      "label": "1061901 - Beneficiamento de arroz...",
+      "count": 2497
+    },
+    {
+      "value": "1032599",
+      "label": "1032599 - Fabricação de conservas de legumes e outros vegeta...",
+      "count": 2442
+    },
+    {
+      "value": "1063500",
+      "label": "1063500 - Fabricação de farinha de mandioca e derivados...",
+      "count": 2439
+    },
+    {
+      "value": "7320300",
+      "label": "7320300 - Pesquisas de mercado e de opinião pública...",
+      "count": 2430
+    },
+    {
+      "value": "8640207",
+      "label": "8640207 - Serviços de diagnóstico por imagem sem uso de radi...",
+      "count": 2422
+    },
+    {
+      "value": "2319200",
+      "label": "2319200 - Fabricação de artigos de vidro...",
+      "count": 2412
+    },
+    {
+      "value": "1099601",
+      "label": "1099601 - Fabricação de vinagres...",
+      "count": 2408
+    },
+    {
+      "value": "2593400",
+      "label": "2593400 - Fabricação de artigos de metal para uso doméstico ...",
+      "count": 2398
+    },
+    {
+      "value": "4665600",
+      "label": "4665600 - Comércio atacadista de máquinas e equipamentos par...",
+      "count": 2361
+    },
+    {
+      "value": "4649410",
+      "label": "4649410 - Comércio atacadista de jóias, relógios e bijuteria...",
+      "count": 2348
+    },
+    {
+      "value": "4922102",
+      "label": "4922102 - Transporte rodoviário coletivo de passageiros, com...",
+      "count": 2332
+    },
+    {
+      "value": "6511101",
+      "label": "6511101 - Sociedade seguradora de seguros vida...",
+      "count": 2332
+    },
+    {
+      "value": "2833000",
+      "label": "2833000 - Fabricação de máquinas e equipamentos para a agric...",
+      "count": 2314
+    },
+    {
+      "value": "4771703",
+      "label": "4771703 - Comércio varejista de produtos farmacêuticos homeo...",
+      "count": 2294
+    },
+    {
+      "value": "2949299",
+      "label": "2949299 - Fabricação de outras peças e acessórios para veícu...",
+      "count": 2263
+    },
+    {
+      "value": "4685100",
+      "label": "4685100 - Comércio atacadista de produtos siderúrgicos e met...",
+      "count": 2253
+    },
+    {
+      "value": "2391501",
+      "label": "2391501 - Britamento de pedras, exceto associado à extração...",
+      "count": 2246
+    },
+    {
+      "value": "7739002",
+      "label": "7739002 - Aluguel de equipamentos científicos, médicos e hos...",
+      "count": 2244
+    },
+    {
+      "value": "1111901",
+      "label": "1111901 - Fabricação de aguardente de cana-de-açúcar...",
+      "count": 2235
+    },
+    {
+      "value": "3600601",
+      "label": "3600601 - Captação, tratamento e distribuição de água...",
+      "count": 2234
+    },
+    {
+      "value": "1069400",
+      "label": "1069400 - Moagem e fabricação de produtos de origem vegetal ...",
+      "count": 2233
+    },
+    {
+      "value": "4330401",
+      "label": "4330401 - Impermeabilização em obras de engenharia civil...",
+      "count": 2228
+    },
+    {
+      "value": "3211601",
+      "label": "3211601 - Lapidação de gemas...",
+      "count": 2214
+    },
+    {
+      "value": "6423900",
+      "label": "6423900 - Caixas econômicas...",
+      "count": 2195
+    },
+    {
+      "value": "6629100",
+      "label": "6629100 - Atividades auxiliares dos seguros, da previdência ...",
+      "count": 2195
+    },
+    {
+      "value": "4641903",
+      "label": "4641903 - Comércio atacadista de artigos de armarinho...",
+      "count": 2190
+    },
+    {
+      "value": "4222701",
+      "label": "4222701 - Construção de redes de abastecimento de água, cole...",
+      "count": 2183
+    },
+    {
+      "value": "4221902",
+      "label": "4221902 - Construção de estações e redes de distribuição de ...",
+      "count": 2168
+    },
+    {
+      "value": "9529103",
+      "label": "9529103 - Reparação de relógios...",
+      "count": 2163
+    },
+    {
+      "value": "3314706",
+      "label": "3314706 - Manutenção e reparação de máquinas, aparelhos e eq...",
+      "count": 2159
+    },
+    {
+      "value": "8299702",
+      "label": "8299702 - Emissão de vales-alimentação, vales-transporte e s...",
+      "count": 2154
+    },
+    {
+      "value": "9609204",
+      "label": "9609204 - Exploração de máquinas de serviços pessoais aciona...",
+      "count": 2147
+    },
+    {
+      "value": "4621400",
+      "label": "4621400 - Comércio atacadista de café em grão...",
+      "count": 2143
+    },
+    {
+      "value": "7732202",
+      "label": "7732202 - Aluguel de andaimes...",
+      "count": 2141
+    },
+    {
+      "value": "0312401",
+      "label": "0312401 - Pesca de peixes em água doce...",
+      "count": 2140
+    },
+    {
+      "value": "0810099",
+      "label": "0810099 - Extração e britamento de pedras e outros materiais...",
+      "count": 2104
+    },
+    {
+      "value": "4541204",
+      "label": "4541204 - Comércio a varejo de motocicletas e motonetas usad...",
+      "count": 2097
+    },
+    {
+      "value": "8030700",
+      "label": "8030700 - Atividades de investigação particular...",
+      "count": 2082
+    },
+    {
+      "value": "4679602",
+      "label": "4679602 - Comércio atacadista de mármores e granitos...",
+      "count": 2068
+    },
+    {
+      "value": "9001904",
+      "label": "9001904 - Produção de espetáculos circenses, de marionetes e...",
+      "count": 2062
+    },
+    {
+      "value": "9002702",
+      "label": "9002702 - Restauração de obras-de-arte...",
+      "count": 2053
+    },
+    {
+      "value": "4632003",
+      "label": "4632003 - Comércio atacadista de cereais e leguminosas benef...",
+      "count": 2047
+    },
+    {
+      "value": "5099899",
+      "label": "5099899 - Outros transportes aquaviários não especificados a...",
+      "count": 2041
+    },
+    {
+      "value": "0119909",
+      "label": "0119909 - Cultivo de tomate rasteiro...",
+      "count": 2035
+    },
+    {
+      "value": "4530702",
+      "label": "4530702 - Comércio por atacado de pneumáticos e câmaras-de-a...",
+      "count": 2018
+    },
+    {
+      "value": "9601703",
+      "label": "9601703 - Toalheiros...",
+      "count": 2015
+    },
+    {
+      "value": "5913800",
+      "label": "5913800 - Distribuição cinematográfica, de vídeo e de progra...",
+      "count": 2011
+    },
+    {
+      "value": "2330305",
+      "label": "2330305 - Preparação de massa de concreto e argamassa para c...",
+      "count": 2005
+    },
+    {
+      "value": "3312102",
+      "label": "3312102 - Manutenção e reparação de aparelhos e instrumentos...",
+      "count": 2005
+    },
+    {
+      "value": "0152102",
+      "label": "0152102 - Criação de eqüinos...",
+      "count": 2002
+    },
+    {
+      "value": "6470102",
+      "label": "6470102 - Fundos de investimento previdenciários...",
+      "count": 1994
+    },
+    {
+      "value": "2229302",
+      "label": "2229302 - Fabricação de artefatos de material plástico para ...",
+      "count": 1966
+    },
+    {
+      "value": "1093702",
+      "label": "1093702 - Fabricação de frutas cristalizadas, balas e semelh...",
+      "count": 1962
+    },
+    {
+      "value": "2212900",
+      "label": "2212900 - Reforma de pneumáticos usados...",
+      "count": 1957
+    },
+    {
+      "value": "3314701",
+      "label": "3314701 - Manutenção e reparação de máquinas motrizes não-el...",
+      "count": 1944
+    },
+    {
+      "value": "8430200",
+      "label": "8430200 - Seguridade social obrigatória...",
+      "count": 1927
+    },
+    {
+      "value": "3514000",
+      "label": "3514000 - Distribuição de energia elétrica...",
+      "count": 1921
+    },
+    {
+      "value": "4649404",
+      "label": "4649404 - Comércio atacadista de móveis e artigos de colchoa...",
+      "count": 1904
+    },
+    {
+      "value": "6120501",
+      "label": "6120501 - Telefonia móvel celular...",
+      "count": 1903
+    },
+    {
+      "value": "9002701",
+      "label": "9002701 - Atividades de artistas plásticos, jornalistas inde...",
+      "count": 1901
+    },
+    {
+      "value": "4622200",
+      "label": "4622200 - Comércio atacadista de soja...",
+      "count": 1893
+    },
+    {
+      "value": "7119702",
+      "label": "7119702 - Atividades de estudos geológicos...",
+      "count": 1893
+    },
+    {
+      "value": "3292202",
+      "label": "3292202 - Fabricação de equipamentos e acessórios para segur...",
+      "count": 1879
+    },
+    {
+      "value": "2592601",
+      "label": "2592601 - Fabricação de produtos de trefilados de metal padr...",
+      "count": 1874
+    },
+    {
+      "value": "8011102",
+      "label": "8011102 - Serviços de adestramento de cães de guarda...",
+      "count": 1853
+    },
+    {
+      "value": "0893200",
+      "label": "0893200 - Extração de gemas (pedras preciosas e semipreciosa...",
+      "count": 1836
+    },
+    {
+      "value": "4679604",
+      "label": "4679604 - Comércio atacadista especializado de materiais de ...",
+      "count": 1834
+    },
+    {
+      "value": "4623101",
+      "label": "4623101 - Comércio atacadista de animais vivos...",
+      "count": 1805
+    },
+    {
+      "value": "0810002",
+      "label": "0810002 - Extração de granito e beneficiamento associado...",
+      "count": 1799
+    },
+    {
+      "value": "5232000",
+      "label": "5232000 - Atividades de agenciamento marítimo...",
+      "count": 1786
+    },
+    {
+      "value": "1811302",
+      "label": "1811302 - Impressão de livros, revistas e outras publicações...",
+      "count": 1781
+    },
+    {
+      "value": "2071100",
+      "label": "2071100 - Fabricação de tintas, vernizes, esmaltes e lacas...",
+      "count": 1779
+    },
+    {
+      "value": "4637107",
+      "label": "4637107 - Comércio atacadista de chocolates, confeitos, bala...",
+      "count": 1776
+    },
+    {
+      "value": "5250802",
+      "label": "5250802 - Atividades de despachantes aduaneiros...",
+      "count": 1765
+    },
+    {
+      "value": "4664800",
+      "label": "4664800 - Comércio atacadista de máquinas, aparelhos e equip...",
+      "count": 1754
+    },
+    {
+      "value": "4639702",
+      "label": "4639702 - Comércio atacadista de produtos alimentícios em ge...",
+      "count": 1751
+    },
+    {
+      "value": "4221905",
+      "label": "4221905 - Manutenção de estações e redes de telecomunicações...",
+      "count": 1739
+    },
+    {
+      "value": "5590601",
+      "label": "5590601 - Albergues, exceto assistenciais...",
+      "count": 1731
+    },
+    {
+      "value": "4399104",
+      "label": "4399104 - Serviços de operação e fornecimento de equipamento...",
+      "count": 1725
+    },
+    {
+      "value": "5821200",
+      "label": "5821200 - Edição integrada à impressão de livros...",
+      "count": 1716
+    },
+    {
+      "value": "0155505",
+      "label": "0155505 - Produção de ovos...",
+      "count": 1707
+    },
+    {
+      "value": "6493000",
+      "label": "6493000 - Administração de consórcios para aquisição de bens...",
+      "count": 1702
+    },
+    {
+      "value": "6021700",
+      "label": "6021700 - Atividades de televisão aberta...",
+      "count": 1692
+    },
+    {
+      "value": "4637106",
+      "label": "4637106 - Comércio atacadista de sorvetes...",
+      "count": 1690
+    },
+    {
+      "value": "3230200",
+      "label": "3230200 - Fabricação de artefatos para pesca e esporte...",
+      "count": 1670
+    },
+    {
+      "value": "5911101",
+      "label": "5911101 - Estúdios cinematográficos...",
+      "count": 1655
+    },
+    {
+      "value": "0116499",
+      "label": "0116499 - Cultivo de outras oleaginosas de lavoura temporári...",
+      "count": 1641
+    },
+    {
+      "value": "4647802",
+      "label": "4647802 - Comércio atacadista de livros, jornais e outras pu...",
+      "count": 1639
+    },
+    {
+      "value": "3312103",
+      "label": "3312103 - Manutenção e reparação de aparelhos eletromédicos ...",
+      "count": 1633
+    },
+    {
+      "value": "0322104",
+      "label": "0322104 - Criação de peixes ornamentais em água doce...",
+      "count": 1630
+    },
+    {
+      "value": "5912001",
+      "label": "5912001 - Serviços de dublagem...",
+      "count": 1613
+    },
+    {
+      "value": "4929903",
+      "label": "4929903 - Organização de excursões em veículos rodoviários p...",
+      "count": 1612
+    },
+    {
+      "value": "1621800",
+      "label": "1621800 - Fabricação de madeira laminada e de chapas de made...",
+      "count": 1604
+    },
+    {
+      "value": "8592901",
+      "label": "8592901 - Ensino de dança...",
+      "count": 1583
+    },
+    {
+      "value": "1622601",
+      "label": "1622601 - Fabricação de casas de madeira pré-fabricadas...",
+      "count": 1577
+    },
+    {
+      "value": "2610800",
+      "label": "2610800 - Fabricação de componentes eletrônicos...",
+      "count": 1565
+    },
+    {
+      "value": "3314713",
+      "label": "3314713 - Manutenção e reparação de máquinas-ferramenta...",
+      "count": 1559
+    },
+    {
+      "value": "2930101",
+      "label": "2930101 - Fabricação de cabines, carrocerias e reboques para...",
+      "count": 1555
+    },
+    {
+      "value": "7830200",
+      "label": "7830200 - Fornecimento e gestão de recursos humanos para ter...",
+      "count": 1551
+    },
+    {
+      "value": "1113502",
+      "label": "1113502 - Fabricação de cervejas e chopes...",
+      "count": 1545
+    },
+    {
+      "value": "4645103",
+      "label": "4645103 - Comércio atacadista de produtos odontológicos...",
+      "count": 1544
+    },
+    {
+      "value": "2740602",
+      "label": "2740602 - Fabricação de luminárias e outros equipamentos de ...",
+      "count": 1540
+    },
+    {
+      "value": "1510600",
+      "label": "1510600 - Curtimento e outras preparações de couro...",
+      "count": 1535
+    },
+    {
+      "value": "3104700",
+      "label": "3104700 - Fabricação de colchões...",
+      "count": 1532
+    },
+    {
+      "value": "4291000",
+      "label": "4291000 - Obras portuárias, marítimas e fluviais...",
+      "count": 1508
+    },
+    {
+      "value": "0724301",
+      "label": "0724301 - Extração de minério de metais preciosos...",
+      "count": 1507
+    },
+    {
+      "value": "4221904",
+      "label": "4221904 - Construção de estações e redes de telecomunicações...",
+      "count": 1490
+    },
+    {
+      "value": "0119903",
+      "label": "0119903 - Cultivo de batata-inglesa...",
+      "count": 1488
+    },
+    {
+      "value": "5914600",
+      "label": "5914600 - Atividades de exibição cinematográfica...",
+      "count": 1469
+    },
+    {
+      "value": "5021101",
+      "label": "5021101 - Transporte por navegação interior de carga, munici...",
+      "count": 1442
+    },
+    {
+      "value": "4929904",
+      "label": "4929904 - Organização de excursões em veículos rodoviários p...",
+      "count": 1438
+    },
+    {
+      "value": "2451200",
+      "label": "2451200 - Fundição de ferro e aço...",
+      "count": 1435
+    },
+    {
+      "value": "4623102",
+      "label": "4623102 - Comércio atacadista de couros, lãs, peles e outros...",
+      "count": 1431
+    },
+    {
+      "value": "0111301",
+      "label": "0111301 - Cultivo de arroz...",
+      "count": 1418
+    },
+    {
+      "value": "6512000",
+      "label": "6512000 - Sociedade seguradora de seguros não vida...",
+      "count": 1401
+    },
+    {
+      "value": "1064300",
+      "label": "1064300 - Fabricação de farinha de milho e derivados, exceto...",
+      "count": 1390
+    },
+    {
+      "value": "6492100",
+      "label": "6492100 - Securitização de créditos...",
+      "count": 1386
+    },
+    {
+      "value": "4637104",
+      "label": "4637104 - Comércio atacadista de pães, bolos, biscoitos e si...",
+      "count": 1372
+    },
+    {
+      "value": "4646002",
+      "label": "4646002 - Comércio atacadista de produtos de higiene pessoal...",
+      "count": 1372
+    },
+    {
+      "value": "2790299",
+      "label": "2790299 - Fabricação de outros equipamentos e aparelhos elét...",
+      "count": 1362
+    },
+    {
+      "value": "2013402",
+      "label": "2013402 - Fabricação de adubos e fertilizantes, exceto organ...",
+      "count": 1357
+    },
+    {
+      "value": "0154700",
+      "label": "0154700 - Criação de suínos...",
+      "count": 1352
+    },
+    {
+      "value": "2399199",
+      "label": "2399199 - Fabricação de outros produtos de minerais não-metá...",
+      "count": 1346
+    },
+    {
+      "value": "7220700",
+      "label": "7220700 - Pesquisa e desenvolvimento experimental em ciência...",
+      "count": 1339
+    },
+    {
+      "value": "1413402",
+      "label": "1413402 - Confecção, sob medida, de roupas profissionais...",
+      "count": 1338
+    },
+    {
+      "value": "4681803",
+      "label": "4681803 - Comércio atacadista de combustíveis de origem vege...",
+      "count": 1332
+    },
+    {
+      "value": "6911702",
+      "label": "6911702 - Atividades auxiliares da justiça...",
+      "count": 1329
+    },
+    {
+      "value": "4541202",
+      "label": "4541202 - Comércio por atacado de peças e acessórios para mo...",
+      "count": 1320
+    },
+    {
+      "value": "2391502",
+      "label": "2391502 - Aparelhamento de pedras para construção, exceto as...",
+      "count": 1318
+    },
+    {
+      "value": "4542101",
+      "label": "4542101 - Representantes comerciais e agentes do comércio de...",
+      "count": 1317
+    },
+    {
+      "value": "5250801",
+      "label": "5250801 - Comissaria de despachos...",
+      "count": 1316
+    },
+    {
+      "value": "9103100",
+      "label": "9103100 - Atividades de jardins botânicos, zoológicos, parqu...",
+      "count": 1310
+    },
+    {
+      "value": "4763605",
+      "label": "4763605 - Comércio varejista de embarcações e outros veículo...",
+      "count": 1304
+    },
+    {
+      "value": "4681805",
+      "label": "4681805 - Comércio atacadista de lubrificantes...",
+      "count": 1302
+    },
+    {
+      "value": "2823200",
+      "label": "2823200 - Fabricação de máquinas e aparelhos de refrigeração...",
+      "count": 1292
+    },
+    {
+      "value": "6421200",
+      "label": "6421200 - Bancos comerciais...",
+      "count": 1287
+    },
+    {
+      "value": "5222200",
+      "label": "5222200 - Terminais rodoviários e ferroviários...",
+      "count": 1284
+    },
+    {
+      "value": "4632002",
+      "label": "4632002 - Comércio atacadista de farinhas, amidos e féculas...",
+      "count": 1274
+    },
+    {
+      "value": "2029100",
+      "label": "2029100 - Fabricação de produtos químicos orgânicos não espe...",
+      "count": 1269
+    },
+    {
+      "value": "8533300",
+      "label": "8533300 - Educação superior - pós-graduação e extensão...",
+      "count": 1268
+    },
+    {
+      "value": "0163600",
+      "label": "0163600 - Atividades de pós-colheita...",
+      "count": 1266
+    },
+    {
+      "value": "4635403",
+      "label": "4635403 - Comércio atacadista de bebidas com atividade de fr...",
+      "count": 1265
+    },
+    {
+      "value": "1742701",
+      "label": "1742701 - Fabricação de fraldas descartáveis...",
+      "count": 1264
+    },
+    {
+      "value": "3299002",
+      "label": "3299002 - Fabricação de canetas, lápis e outros artigos para...",
+      "count": 1238
+    },
+    {
+      "value": "0311601",
+      "label": "0311601 - Pesca de peixes em água salgada...",
+      "count": 1233
+    },
+    {
+      "value": "4541201",
+      "label": "4541201 - Comércio por atacado de motocicletas e motonetas...",
+      "count": 1232
+    },
+    {
+      "value": "4674500",
+      "label": "4674500 - Comércio atacadista de cimento...",
+      "count": 1226
+    },
+    {
+      "value": "0210103",
+      "label": "0210103 - Cultivo de pinus...",
+      "count": 1222
+    },
+    {
+      "value": "2840200",
+      "label": "2840200 - Fabricação de máquinas-ferramenta, peças e acessór...",
+      "count": 1213
+    },
+    {
+      "value": "5590602",
+      "label": "5590602 - Campings...",
+      "count": 1209
+    },
+    {
+      "value": "2949201",
+      "label": "2949201 - Fabricação de bancos e estofados para veículos aut...",
+      "count": 1207
+    },
+    {
+      "value": "1121600",
+      "label": "1121600 - Fabricação de águas envasadas...",
+      "count": 1198
+    },
+    {
+      "value": "1732000",
+      "label": "1732000 - Fabricação de embalagens de cartolina e papel-cart...",
+      "count": 1193
+    },
+    {
+      "value": "0139399",
+      "label": "0139399 - Cultivo de outras plantas de lavoura permanente nã...",
+      "count": 1185
+    },
+    {
+      "value": "4641902",
+      "label": "4641902 - Comércio atacadista de artigos de cama, mesa e ban...",
+      "count": 1169
+    },
+    {
+      "value": "4212000",
+      "label": "4212000 - Construção de obras de arte especiais...",
+      "count": 1167
+    },
+    {
+      "value": "6461100",
+      "label": "6461100 - Holdings de instituições financeiras...",
+      "count": 1167
+    },
+    {
+      "value": "7410203",
+      "label": "7410203 - Design de produto...",
+      "count": 1163
+    },
+    {
+      "value": "4679601",
+      "label": "4679601 - Comércio atacadista de tintas, vernizes e similare...",
+      "count": 1141
+    },
+    {
+      "value": "2651500",
+      "label": "2651500 - Fabricação de aparelhos e equipamentos de medida, ...",
+      "count": 1137
+    },
+    {
+      "value": "0899199",
+      "label": "0899199 - Extração de outros minerais não-metálicos não espe...",
+      "count": 1135
+    },
+    {
+      "value": "4311801",
+      "label": "4311801 - Demolição de edifícios e outras estruturas...",
+      "count": 1135
+    },
+    {
+      "value": "4662100",
+      "label": "4662100 - Comércio atacadista de máquinas, equipamentos para...",
+      "count": 1134
+    },
+    {
+      "value": "2541100",
+      "label": "2541100 - Fabricação de artigos de cutelaria...",
+      "count": 1120
+    },
+    {
+      "value": "4221903",
+      "label": "4221903 - Manutenção de redes de distribuição de energia elé...",
+      "count": 1119
+    },
+    {
+      "value": "6436100",
+      "label": "6436100 - Sociedades de crédito, financiamento e investiment...",
+      "count": 1117
+    },
+    {
+      "value": "1533500",
+      "label": "1533500 - Fabricação de calçados de material sintético...",
+      "count": 1113
+    },
+    {
+      "value": "5823900",
+      "label": "5823900 - Edição integrada à impressão de revistas...",
+      "count": 1105
+    },
+    {
+      "value": "2731700",
+      "label": "2731700 - Fabricação de aparelhos e equipamentos para distri...",
+      "count": 1101
+    },
+    {
+      "value": "0119905",
+      "label": "0119905 - Cultivo de feijão...",
+      "count": 1100
+    },
+    {
+      "value": "2862300",
+      "label": "2862300 - Fabricação de máquinas e equipamentos para as indú...",
+      "count": 1087
+    },
+    {
+      "value": "9321200",
+      "label": "9321200 - Parques de diversão e parques temáticos...",
+      "count": 1087
+    },
+    {
+      "value": "9603301",
+      "label": "9603301 - Gestão e manutenção de cemitérios...",
+      "count": 1083
+    },
+    {
+      "value": "3299005",
+      "label": "3299005 - Fabricação de aviamentos para costura...",
+      "count": 1082
+    },
+    {
+      "value": "3314708",
+      "label": "3314708 - Manutenção e reparação de máquinas, equipamentos e...",
+      "count": 1081
+    },
+    {
+      "value": "1051100",
+      "label": "1051100 - Preparação do leite...",
+      "count": 1078
+    },
+    {
+      "value": "3512300",
+      "label": "3512300 - Transmissão de energia elétrica...",
+      "count": 1074
+    },
+    {
+      "value": "2229303",
+      "label": "2229303 - Fabricação de artefatos de material plástico para ...",
+      "count": 1064
+    },
+    {
+      "value": "0141502",
+      "label": "0141502 - Produção de sementes certificadas de forrageiras p...",
+      "count": 1060
+    },
+    {
+      "value": "4636202",
+      "label": "4636202 - Comércio atacadista de cigarros, cigarrilhas e cha...",
+      "count": 1058
+    },
+    {
+      "value": "4643502",
+      "label": "4643502 - Comércio atacadista de bolsas, malas e artigos de ...",
+      "count": 1058
+    },
+    {
+      "value": "5111100",
+      "label": "5111100 - Transporte aéreo de passageiros regular...",
+      "count": 1050
+    },
+    {
+      "value": "1741902",
+      "label": "1741902 - Fabricação de produtos de papel, cartolina, papel ...",
+      "count": 1042
+    },
+    {
+      "value": "2599302",
+      "label": "2599302 - Serviço de corte e dobra de metais...",
+      "count": 1042
+    },
+    {
+      "value": "4399102",
+      "label": "4399102 - Montagem e desmontagem de andaimes e outras estrut...",
+      "count": 1039
+    },
+    {
+      "value": "1071600",
+      "label": "1071600 - Fabricação de açúcar em bruto...",
+      "count": 1036
+    },
+    {
+      "value": "5011401",
+      "label": "5011401 - Transporte marítimo de cabotagem - Carga...",
+      "count": 1032
+    },
+    {
+      "value": "3220500",
+      "label": "3220500 - Fabricação de instrumentos musicais, peças e acess...",
+      "count": 1018
+    },
+    {
+      "value": "1733800",
+      "label": "1733800 - Fabricação de chapas e de embalagens de papelão on...",
+      "count": 1016
+    },
+    {
+      "value": "2592602",
+      "label": "2592602 - Fabricação de produtos de trefilados de metal, exc...",
+      "count": 1005
+    },
+    {
+      "value": "8424800",
+      "label": "8424800 - Segurança e ordem pública...",
+      "count": 1005
+    },
+    {
+      "value": "5510802",
+      "label": "5510802 - Apart-hotéis...",
+      "count": 998
+    },
+    {
+      "value": "4682600",
+      "label": "4682600 - Comércio atacadista de gás liqüefeito de petróleo ...",
+      "count": 997
+    },
+    {
+      "value": "7729299",
+      "label": "7729299 - Aluguel de outros objetos pessoais e domésticos nã...",
+      "count": 991
+    },
+    {
+      "value": "8640204",
+      "label": "8640204 - Serviços de tomografia...",
+      "count": 991
+    },
+    {
+      "value": "8630506",
+      "label": "8630506 - Serviços de vacinação e imunização humana...",
+      "count": 986
+    },
+    {
+      "value": "9102302",
+      "label": "9102302 - Restauração e conservação de lugares e prédios his...",
+      "count": 982
+    },
+    {
+      "value": "4633802",
+      "label": "4633802 - Comércio atacadista de aves vivas e ovos...",
+      "count": 975
+    },
+    {
+      "value": "7490102",
+      "label": "7490102 - Escafandria e mergulho...",
+      "count": 972
+    },
+    {
+      "value": "0111399",
+      "label": "0111399 - Cultivo de outros cereais não especificados anteri...",
+      "count": 969
+    },
+    {
+      "value": "4929999",
+      "label": "4929999 - Outros transportes rodoviários de passageiros não ...",
+      "count": 962
+    },
+    {
+      "value": "5091202",
+      "label": "5091202 - Transporte por navegação de travessia intermunicip...",
+      "count": 958
+    },
+    {
+      "value": "1099605",
+      "label": "1099605 - Fabricação de produtos para infusão (chá, mate, et...",
+      "count": 956
+    },
+    {
+      "value": "9603399",
+      "label": "9603399 - Atividades funerárias e serviços relacionados não ...",
+      "count": 951
+    },
+    {
+      "value": "2930103",
+      "label": "2930103 - Fabricação de cabines, carrocerias e reboques para...",
+      "count": 947
+    },
+    {
+      "value": "2452100",
+      "label": "2452100 - Fundição de metais não-ferrosos e suas ligas...",
+      "count": 946
+    },
+    {
+      "value": "0133410",
+      "label": "0133410 - Cultivo de manga...",
+      "count": 940
+    },
+    {
+      "value": "4644302",
+      "label": "4644302 - Comércio atacadista de medicamentos e drogas de us...",
+      "count": 939
+    },
+    {
+      "value": "6621501",
+      "label": "6621501 - Peritos e avaliadores de seguros...",
+      "count": 939
+    },
+    {
+      "value": "9329803",
+      "label": "9329803 - Exploração de jogos de sinuca, bilhar e similares...",
+      "count": 933
+    },
+    {
+      "value": "3329599",
+      "label": "3329599 - Instalação de outros equipamentos não especificado...",
+      "count": 932
+    },
+    {
+      "value": "4789009",
+      "label": "4789009 - Comércio varejista de armas e munições...",
+      "count": 929
+    },
+    {
+      "value": "3314718",
+      "label": "3314718 - Manutenção e reparação de máquinas para a indústri...",
+      "count": 917
+    },
+    {
+      "value": "1610204",
+      "label": "1610204 - Serrarias sem desdobramento de madeira em bruto  -...",
+      "count": 914
+    },
+    {
+      "value": "5091201",
+      "label": "5091201 - Transporte por navegação de travessia, municipal...",
+      "count": 908
+    },
+    {
+      "value": "0119904",
+      "label": "0119904 - Cultivo de cebola...",
+      "count": 905
+    },
+    {
+      "value": "1354500",
+      "label": "1354500 - Fabricação de tecidos especiais, inclusive artefat...",
+      "count": 898
+    },
+    {
+      "value": "4312600",
+      "label": "4312600 - Perfurações e sondagens...",
+      "count": 896
+    },
+    {
+      "value": "3317101",
+      "label": "3317101 - Manutenção e reparação de embarcações e estruturas...",
+      "count": 871
+    },
+    {
+      "value": "6470103",
+      "label": "6470103 - Fundos de investimento imobiliários...",
+      "count": 868
+    },
+    {
+      "value": "2392300",
+      "label": "2392300 - Fabricação de cal e gesso...",
+      "count": 864
+    },
+    {
+      "value": "3511502",
+      "label": "3511502 - Atividades de coordenação e controle da operação d...",
+      "count": 862
+    },
+    {
+      "value": "1311100",
+      "label": "1311100 - Preparação e fiação de fibras de algodão...",
+      "count": 858
+    },
+    {
+      "value": "0142300",
+      "label": "0142300 - Produção de mudas e outras formas de propagação ve...",
+      "count": 856
+    },
+    {
+      "value": "3314709",
+      "label": "3314709 - Manutenção e reparação de máquinas de escrever, ca...",
+      "count": 849
+    },
+    {
+      "value": "1065101",
+      "label": "1065101 - Fabricação de amidos e féculas de vegetais...",
+      "count": 844
+    },
+    {
+      "value": "6613400",
+      "label": "6613400 - Administração de cartões de crédito...",
+      "count": 844
+    },
+    {
+      "value": "0710301",
+      "label": "0710301 - Extração de minério de ferro...",
+      "count": 840
+    },
+    {
+      "value": "1322700",
+      "label": "1322700 - Tecelagem de fios de fibras têxteis naturais, exce...",
+      "count": 837
+    },
+    {
+      "value": "4623108",
+      "label": "4623108 - Comércio atacadista de matérias-primas agrícolas c...",
+      "count": 826
+    },
+    {
+      "value": "1721400",
+      "label": "1721400 - Fabricação de papel...",
+      "count": 822
+    },
+    {
+      "value": "8690904",
+      "label": "8690904 - Atividades de podologia...",
+      "count": 819
+    },
+    {
+      "value": "0810007",
+      "label": "0810007 - Extração de argila e beneficiamento associado...",
+      "count": 817
+    },
+    {
+      "value": "2513600",
+      "label": "2513600 - Fabricação de obras de caldeiraria pesada...",
+      "count": 816
+    },
+    {
+      "value": "3812200",
+      "label": "3812200 - Coleta de resíduos perigosos...",
+      "count": 813
+    },
+    {
+      "value": "6541300",
+      "label": "6541300 - Previdência complementar fechada...",
+      "count": 809
+    },
+    {
+      "value": "4684201",
+      "label": "4684201 - Comércio atacadista de resinas e elastômeros...",
+      "count": 792
+    },
+    {
+      "value": "1122401",
+      "label": "1122401 - Fabricação de refrigerantes...",
+      "count": 790
+    },
+    {
+      "value": "1112700",
+      "label": "1112700 - Fabricação de vinho...",
+      "count": 781
+    },
+    {
+      "value": "2521700",
+      "label": "2521700 - Fabricação de tanques, reservatórios metálicos e c...",
+      "count": 778
+    },
+    {
+      "value": "9900800",
+      "label": "9900800 - Organismos internacionais e outras instituições ex...",
+      "count": 776
+    },
+    {
+      "value": "8711501",
+      "label": "8711501 - Clínicas e residências geriátricas...",
+      "count": 772
+    },
+    {
+      "value": "0220904",
+      "label": "0220904 - Coleta de látex em florestas nativas...",
+      "count": 770
+    },
+    {
+      "value": "8299701",
+      "label": "8299701 - Medição de consumo de energia elétrica, gás e água...",
+      "count": 765
+    },
+    {
+      "value": "4681802",
+      "label": "4681802 - Comércio atacadista de combustíveis realizado por ...",
+      "count": 763
+    },
+    {
+      "value": "8422100",
+      "label": "8422100 - Defesa...",
+      "count": 755
+    },
+    {
+      "value": "3250705",
+      "label": "3250705 - Fabricação de materiais para medicina e odontologi...",
+      "count": 750
+    },
+    {
+      "value": "6424704",
+      "label": "6424704 - Cooperativas de crédito rural...",
+      "count": 748
+    },
+    {
+      "value": "0141501",
+      "label": "0141501 - Produção de sementes certificadas, exceto de forra...",
+      "count": 739
+    },
+    {
+      "value": "4511104",
+      "label": "4511104 - Comércio por atacado de caminhões novos e usados...",
+      "count": 737
+    },
+    {
+      "value": "2733300",
+      "label": "2733300 - Fabricação de fios, cabos e condutores elétricos i...",
+      "count": 736
+    },
+    {
+      "value": "0910600",
+      "label": "0910600 - Atividades de apoio à extração de petróleo e gás n...",
+      "count": 735
+    },
+    {
+      "value": "0600001",
+      "label": "0600001 - Extração de petróleo e gás natural...",
+      "count": 734
+    },
+    {
+      "value": "2121101",
+      "label": "2121101 - Fabricação de medicamentos alopáticos para uso hum...",
+      "count": 731
+    },
+    {
+      "value": "4686901",
+      "label": "4686901 - Comércio atacadista de papel e papelão em bruto...",
+      "count": 729
+    },
+    {
+      "value": "0119908",
+      "label": "0119908 - Cultivo de melancia...",
+      "count": 728
+    },
+    {
+      "value": "8720401",
+      "label": "8720401 - Atividades de centros de assistência psicossocial...",
+      "count": 727
+    },
+    {
+      "value": "1321900",
+      "label": "1321900 - Tecelagem de fios de algodão...",
+      "count": 722
+    },
+    {
+      "value": "4679603",
+      "label": "4679603 - Comércio atacadista de vidros, espelhos, vitrais e...",
+      "count": 719
+    },
+    {
+      "value": "2052500",
+      "label": "2052500 - Fabricação de desinfestantes domissanitários...",
+      "count": 718
+    },
+    {
+      "value": "2093200",
+      "label": "2093200 - Fabricação de aditivos de uso industrial...",
+      "count": 714
+    },
+    {
+      "value": "5231102",
+      "label": "5231102 - Atividades do Operador Portuário...",
+      "count": 714
+    },
+    {
+      "value": "6612601",
+      "label": "6612601 - Corretoras de títulos e valores mobiliários...",
+      "count": 713
+    },
+    {
+      "value": "0321302",
+      "label": "0321302 - Criação de camarões em água salgada e salobra...",
+      "count": 708
+    },
+    {
+      "value": "4311802",
+      "label": "4311802 - Preparação de canteiro e limpeza de terreno...",
+      "count": 704
+    },
+    {
+      "value": "2221800",
+      "label": "2221800 - Fabricação de laminados planos e tubulares de mate...",
+      "count": 702
+    },
+    {
+      "value": "1020102",
+      "label": "1020102 - Fabricação de conservas de peixes, crustáceos e mo...",
+      "count": 689
+    },
+    {
+      "value": "9003500",
+      "label": "9003500 - Gestão de espaços para artes cênicas, espetáculos ...",
+      "count": 686
+    },
+    {
+      "value": "1111902",
+      "label": "1111902 - Fabricação de outras aguardentes e bebidas destila...",
+      "count": 668
+    },
+    {
+      "value": "1353700",
+      "label": "1353700 - Fabricação de artefatos de cordoaria...",
+      "count": 668
+    },
+    {
+      "value": "2621300",
+      "label": "2621300 - Fabricação de equipamentos de informática...",
+      "count": 668
+    },
+    {
+      "value": "2861500",
+      "label": "2861500 - Fabricação de máquinas para a indústria metalúrgic...",
+      "count": 668
+    },
+    {
+      "value": "4637105",
+      "label": "4637105 - Comércio atacadista de massas alimentícias...",
+      "count": 667
+    },
+    {
+      "value": "6911703",
+      "label": "6911703 - Agente de propriedade industrial...",
+      "count": 660
+    },
+    {
+      "value": "8622400",
+      "label": "8622400 - Serviços de remoção de pacientes, exceto os serviç...",
+      "count": 660
+    },
+    {
+      "value": "4636201",
+      "label": "4636201 - Comércio atacadista de fumo beneficiado...",
+      "count": 657
+    },
+    {
+      "value": "2822402",
+      "label": "2822402 - Fabricação de máquinas, equipamentos e aparelhos p...",
+      "count": 655
+    },
+    {
+      "value": "8425600",
+      "label": "8425600 - Defesa Civil...",
+      "count": 652
+    },
+    {
+      "value": "8640203",
+      "label": "8640203 - Serviços de diálise e nefrologia...",
+      "count": 649
+    },
+    {
+      "value": "1062700",
+      "label": "1062700 - Moagem de trigo e fabricação de derivados...",
+      "count": 647
+    },
+    {
+      "value": "7729203",
+      "label": "7729203 - Aluguel de material médico...",
+      "count": 647
+    },
+    {
+      "value": "3513100",
+      "label": "3513100 - Comércio atacadista de energia elétrica...",
+      "count": 639
+    },
+    {
+      "value": "4651602",
+      "label": "4651602 - Comércio atacadista de suprimentos para informátic...",
+      "count": 637
+    },
+    {
+      "value": "4637103",
+      "label": "4637103 - Comércio atacadista de óleos e gorduras...",
+      "count": 631
+    },
+    {
+      "value": "0162803",
+      "label": "0162803 - Serviço de manejo de animais...",
+      "count": 622
+    },
+    {
+      "value": "8640208",
+      "label": "8640208 - Serviços de diagnóstico por registro gráfico - ECG...",
+      "count": 621
+    },
+    {
+      "value": "5112901",
+      "label": "5112901 - Serviço de táxi aéreo e locação de aeronaves com t...",
+      "count": 619
+    },
+    {
+      "value": "3821100",
+      "label": "3821100 - Tratamento e disposição de resíduos não-perigosos...",
+      "count": 617
+    },
+    {
+      "value": "8640209",
+      "label": "8640209 - Serviços de diagnóstico por métodos ópticos - endo...",
+      "count": 615
+    },
+    {
+      "value": "4789006",
+      "label": "4789006 - Comércio varejista de fogos de artifício e artigos...",
+      "count": 613
+    },
+    {
+      "value": "0210106",
+      "label": "0210106 - Cultivo de mudas em viveiros florestais...",
+      "count": 605
+    },
+    {
+      "value": "1931400",
+      "label": "1931400 - Fabricação de álcool...",
+      "count": 604
+    },
+    {
+      "value": "4329102",
+      "label": "4329102 - Instalação de equipamentos para orientação à naveg...",
+      "count": 597
+    },
+    {
+      "value": "1830003",
+      "label": "1830003 - Reprodução de software em qualquer suporte...",
+      "count": 592
+    },
+    {
+      "value": "6612604",
+      "label": "6612604 - Corretoras de contratos de mercadorias...",
+      "count": 592
+    },
+    {
+      "value": "1220499",
+      "label": "1220499 - Fabricação de outros produtos do fumo, exceto ciga...",
+      "count": 590
+    },
+    {
+      "value": "0119901",
+      "label": "0119901 - Cultivo de abacaxi...",
+      "count": 589
+    },
+    {
+      "value": "9001905",
+      "label": "9001905 - Produção de espetáculos de rodeios, vaquejadas e s...",
+      "count": 585
+    },
+    {
+      "value": "0112101",
+      "label": "0112101 - Cultivo de algodão herbáceo...",
+      "count": 583
+    },
+    {
+      "value": "1041400",
+      "label": "1041400 - Fabricação de óleos vegetais em bruto, exceto óleo...",
+      "count": 575
+    },
+    {
+      "value": "2640000",
+      "label": "2640000 - Fabricação de aparelhos de recepção, reprodução, g...",
+      "count": 573
+    },
+    {
+      "value": "3250701",
+      "label": "3250701 - Fabricação de instrumentos não-eletrônicos e utens...",
+      "count": 567
+    },
+    {
+      "value": "1742799",
+      "label": "1742799 - Fabricação de produtos de papel para uso doméstico...",
+      "count": 561
+    },
+    {
+      "value": "2812700",
+      "label": "2812700 - Fabricação de equipamentos hidráulicos e pneumátic...",
+      "count": 559
+    },
+    {
+      "value": "2622100",
+      "label": "2622100 - Fabricação de periféricos para equipamentos de inf...",
+      "count": 555
+    },
+    {
+      "value": "0155504",
+      "label": "0155504 - Criação de aves, exceto galináceos...",
+      "count": 553
+    },
+    {
+      "value": "2341900",
+      "label": "2341900 - Fabricação de produtos cerâmicos refratários...",
+      "count": 548
+    },
+    {
+      "value": "1122403",
+      "label": "1122403 - Fabricação de refrescos, xaropes e pós para refres...",
+      "count": 546
+    },
+    {
+      "value": "3092000",
+      "label": "3092000 - Fabricação de bicicletas e triciclos não-motorizad...",
+      "count": 543
+    },
+    {
+      "value": "0210199",
+      "label": "0210199 - Produção de produtos não-madeireiros não especific...",
+      "count": 542
+    },
+    {
+      "value": "6520100",
+      "label": "6520100 - Sociedade seguradora de seguros saúde...",
+      "count": 541
+    },
+    {
+      "value": "3012100",
+      "label": "3012100 - Construção de embarcações para esporte e lazer...",
+      "count": 540
+    },
+    {
+      "value": "9001903",
+      "label": "9001903 - Produção de espetáculos de dança...",
+      "count": 535
+    },
+    {
+      "value": "0153902",
+      "label": "0153902 - Criação de ovinos, inclusive para produção de lã...",
+      "count": 531
+    },
+    {
+      "value": "4618403",
+      "label": "4618403 - Representantes comerciais e agentes do comércio de...",
+      "count": 531
+    },
+    {
+      "value": "8640212",
+      "label": "8640212 - Serviços de hemoterapia...",
+      "count": 531
+    },
+    {
+      "value": "4669901",
+      "label": "4669901 - Comércio atacadista de bombas e compressores; part...",
+      "count": 525
+    },
+    {
+      "value": "5250805",
+      "label": "5250805 - Operador de transporte multimodal - OTM...",
+      "count": 525
+    },
+    {
+      "value": "4649403",
+      "label": "4649403 - Comércio atacadista de bicicletas, triciclos e out...",
+      "count": 524
+    },
+    {
+      "value": "3314717",
+      "label": "3314717 - Manutenção e reparação de máquinas e equipamentos ...",
+      "count": 523
+    },
+    {
+      "value": "5239799",
+      "label": "5239799 - Atividades auxiliares dos transportes aquaviários ...",
+      "count": 518
+    },
+    {
+      "value": "5021102",
+      "label": "5021102 - Transporte por navegação interior de carga, interm...",
+      "count": 516
+    },
+    {
+      "value": "2759799",
+      "label": "2759799 - Fabricação de outros aparelhos eletrodomésticos nã...",
+      "count": 512
+    },
+    {
+      "value": "4649406",
+      "label": "4649406 - Comércio atacadista de lustres, luminárias e abaju...",
+      "count": 512
+    },
+    {
+      "value": "8690903",
+      "label": "8690903 - Atividades de acupuntura...",
+      "count": 509
+    },
+    {
+      "value": "9200399",
+      "label": "9200399 - Exploração de jogos de azar e apostas não especifi...",
+      "count": 509
+    },
+    {
+      "value": "0133409",
+      "label": "0133409 - Cultivo de maracujá...",
+      "count": 503
+    },
+    {
+      "value": "1532700",
+      "label": "1532700 - Fabricação de tênis de qualquer material...",
+      "count": 503
+    },
+    {
+      "value": "0810004",
+      "label": "0810004 - Extração de calcário e dolomita e beneficiamento a...",
+      "count": 501
+    },
+    {
+      "value": "4634602",
+      "label": "4634602 - Comércio atacadista de aves abatidas e derivados...",
+      "count": 500
+    },
+    {
+      "value": "2449199",
+      "label": "2449199 - Metalurgia de outros metais não-ferrosos e suas li...",
+      "count": 497
+    },
+    {
+      "value": "3316301",
+      "label": "3316301 - Manutenção e reparação de aeronaves, exceto a manu...",
+      "count": 497
+    },
+    {
+      "value": "0152101",
+      "label": "0152101 - Criação de bufalinos...",
+      "count": 489
+    },
+    {
+      "value": "2441501",
+      "label": "2441501 - Produção de alumínio e suas ligas em formas primár...",
+      "count": 489
+    },
+    {
+      "value": "0220902",
+      "label": "0220902 - Produção de carvão vegetal - florestas nativas...",
+      "count": 488
+    },
+    {
+      "value": "1013902",
+      "label": "1013902 - Preparação de subprodutos do abate...",
+      "count": 486
+    },
+    {
+      "value": "1312000",
+      "label": "1312000 - Preparação e fiação de fibras têxteis naturais, ex...",
+      "count": 486
+    },
+    {
+      "value": "6511102",
+      "label": "6511102 - Planos de auxílio-funeral...",
+      "count": 483
+    },
+    {
+      "value": "0220901",
+      "label": "0220901 - Extração de madeira em florestas nativas...",
+      "count": 475
+    },
+    {
+      "value": "8599602",
+      "label": "8599602 - Cursos de pilotagem...",
+      "count": 475
+    },
+    {
+      "value": "8299703",
+      "label": "8299703 - Serviços de gravação de carimbos, exceto confecção...",
+      "count": 473
+    },
+    {
+      "value": "5229001",
+      "label": "5229001 - Serviços de apoio ao transporte por táxi, inclusiv...",
+      "count": 470
+    },
+    {
+      "value": "8621601",
+      "label": "8621601 - UTI móvel...",
+      "count": 470
+    },
+    {
+      "value": "8542200",
+      "label": "8542200 - Educação profissional de nível tecnológico...",
+      "count": 468
+    },
+    {
+      "value": "2311700",
+      "label": "2311700 - Fabricação de vidro plano e de segurança...",
+      "count": 467
+    },
+    {
+      "value": "6612602",
+      "label": "6612602 - Distribuidoras de títulos e valores mobiliários...",
+      "count": 466
+    },
+    {
+      "value": "4211102",
+      "label": "4211102 - Pintura para sinalização em pistas rodoviárias e a...",
+      "count": 465
+    },
+    {
+      "value": "6621502",
+      "label": "6621502 - Auditoria e consultoria atuarial...",
+      "count": 465
+    },
+    {
+      "value": "1020101",
+      "label": "1020101 - Preservação de peixes, crustáceos e moluscos...",
+      "count": 464
+    },
+    {
+      "value": "5912002",
+      "label": "5912002 - Serviços de mixagem sonora em produção audiovisual...",
+      "count": 461
+    },
+    {
+      "value": "2732500",
+      "label": "2732500 - Fabricação de material elétrico para instalações e...",
+      "count": 460
+    },
+    {
+      "value": "2813500",
+      "label": "2813500 - Fabricação de válvulas, registros e dispositivos s...",
+      "count": 459
+    },
+    {
+      "value": "4623105",
+      "label": "4623105 - Comércio atacadista de cacau...",
+      "count": 459
+    },
+    {
+      "value": "1011205",
+      "label": "1011205 - Matadouro - abate de reses sob contrato - exceto a...",
+      "count": 458
+    },
+    {
+      "value": "2945000",
+      "label": "2945000 - Fabricação de material elétrico e eletrônico para ...",
+      "count": 457
+    },
+    {
+      "value": "0322105",
+      "label": "0322105 - Ranicultura...",
+      "count": 456
+    },
+    {
+      "value": "3099700",
+      "label": "3099700 - Fabricação de equipamentos de transporte não espec...",
+      "count": 452
+    },
+    {
+      "value": "1323500",
+      "label": "1323500 - Tecelagem de fios de fibras artificiais e sintétic...",
+      "count": 450
+    },
+    {
+      "value": "4649405",
+      "label": "4649405 - Comércio atacadista de artigos de tapeçaria; persi...",
+      "count": 447
+    },
+    {
+      "value": "4637102",
+      "label": "4637102 - Comércio atacadista de açúcar...",
+      "count": 442
+    },
+    {
+      "value": "6619303",
+      "label": "6619303 - Representações de bancos estrangeiros...",
+      "count": 439
+    },
+    {
+      "value": "8640206",
+      "label": "8640206 - Serviços de ressonância magnética...",
+      "count": 434
+    },
+    {
+      "value": "2710402",
+      "label": "2710402 - Fabricação de transformadores, indutores, converso...",
+      "count": 432
+    },
+    {
+      "value": "0892401",
+      "label": "0892401 - Extração de sal marinho...",
+      "count": 428
+    },
+    {
+      "value": "2013401",
+      "label": "2013401 - Fabricação de adubos e fertilizantes organo-minera...",
+      "count": 428
+    },
+    {
+      "value": "0159899",
+      "label": "0159899 - Criação de outros animais não especificados anteri...",
+      "count": 427
+    },
+    {
+      "value": "0990403",
+      "label": "0990403 - Atividades de apoio à extração de minerais não-met...",
+      "count": 425
+    },
+    {
+      "value": "2710401",
+      "label": "2710401 - Fabricação de geradores de corrente contínua e alt...",
+      "count": 424
+    },
+    {
+      "value": "3314704",
+      "label": "3314704 - Manutenção e reparação de compressores...",
+      "count": 417
+    },
+    {
+      "value": "5240101",
+      "label": "5240101 - Operação dos aeroportos e campos de aterrissagem...",
+      "count": 417
+    },
+    {
+      "value": "4649409",
+      "label": "4649409 - Comércio atacadista de produtos de higiene, limpez...",
+      "count": 413
+    },
+    {
+      "value": "3250707",
+      "label": "3250707 - Fabricação de artigos ópticos...",
+      "count": 410
+    },
+    {
+      "value": "6141800",
+      "label": "6141800 - Operadoras de televisão por assinatura por cabo...",
+      "count": 408
+    },
+    {
+      "value": "8730102",
+      "label": "8730102 - Albergues assistenciais...",
+      "count": 407
+    },
+    {
+      "value": "4649407",
+      "label": "4649407 - Comércio atacadista de filmes, CDs, DVDs, fitas e ...",
+      "count": 405
+    },
+    {
+      "value": "0162801",
+      "label": "0162801 - Serviço de inseminação artificial em animais...",
+      "count": 402
+    },
+    {
+      "value": "0321304",
+      "label": "0321304 - Criação de peixes ornamentais em água salgada e sa...",
+      "count": 402
+    },
+    {
+      "value": "1812100",
+      "label": "1812100 - Impressão de material de segurança...",
+      "count": 401
+    },
+    {
+      "value": "4319300",
+      "label": "4319300 - Serviços de preparação do terreno não especificado...",
+      "count": 395
+    },
+    {
+      "value": "9101500",
+      "label": "9101500 - Atividades de bibliotecas e arquivos...",
+      "count": 394
+    },
+    {
+      "value": "2031200",
+      "label": "2031200 - Fabricação de resinas termoplásticas...",
+      "count": 391
+    },
+    {
+      "value": "6612603",
+      "label": "6612603 - Corretoras de câmbio...",
+      "count": 390
+    },
+    {
+      "value": "2941700",
+      "label": "2941700 - Fabricação de peças e acessórios para o sistema mo...",
+      "count": 389
+    },
+    {
+      "value": "5022002",
+      "label": "5022002 - Transporte por navegação interior de passageiros e...",
+      "count": 389
+    },
+    {
+      "value": "3313902",
+      "label": "3313902 - Manutenção e reparação de baterias e acumuladores ...",
+      "count": 378
+    },
+    {
+      "value": "6120599",
+      "label": "6120599 - Serviços de telecomunicações sem fio não especific...",
+      "count": 378
+    },
+    {
+      "value": "1421500",
+      "label": "1421500 - Fabricação de meias...",
+      "count": 376
+    },
+    {
+      "value": "0810009",
+      "label": "0810009 - Extração de basalto e beneficiamento associado...",
+      "count": 373
+    },
+    {
+      "value": "2591800",
+      "label": "2591800 - Fabricação de embalagens metálicas...",
+      "count": 370
+    },
+    {
+      "value": "8299704",
+      "label": "8299704 - Leiloeiros independentes...",
+      "count": 369
+    },
+    {
+      "value": "2320600",
+      "label": "2320600 - Fabricação de cimento...",
+      "count": 368
+    },
+    {
+      "value": "8423000",
+      "label": "8423000 - Justiça...",
+      "count": 367
+    },
+    {
+      "value": "0891600",
+      "label": "0891600 - Extração de minerais para fabricação de adubos, fe...",
+      "count": 365
+    },
+    {
+      "value": "3314705",
+      "label": "3314705 - Manutenção e reparação de equipamentos de transmis...",
+      "count": 361
+    },
+    {
+      "value": "1122499",
+      "label": "1122499 - Fabricação de outras bebidas não-alcoólicas não es...",
+      "count": 352
+    },
+    {
+      "value": "3312104",
+      "label": "3312104 - Manutenção e reparação de equipamentos e instrumen...",
+      "count": 351
+    },
+    {
+      "value": "0899102",
+      "label": "0899102 - Extração de quartzo...",
+      "count": 348
+    },
+    {
+      "value": "3701100",
+      "label": "3701100 - Gestão de redes de esgoto...",
+      "count": 348
+    },
+    {
+      "value": "4299501",
+      "label": "4299501 - Construção de instalações esportivas e recreativas...",
+      "count": 348
+    },
+    {
+      "value": "9102301",
+      "label": "9102301 - Atividades de museus e de exploração de lugares e ...",
+      "count": 348
+    },
+    {
+      "value": "0121102",
+      "label": "0121102 - Cultivo de morango...",
+      "count": 347
+    },
+    {
+      "value": "8640210",
+      "label": "8640210 - Serviços de quimioterapia...",
+      "count": 343
+    },
+    {
+      "value": "2631100",
+      "label": "2631100 - Fabricação de equipamentos transmissores de comuni...",
+      "count": 341
+    },
+    {
+      "value": "5812300",
+      "label": "5812300 - Edição de jornais...",
+      "count": 338
+    },
+    {
+      "value": "6110899",
+      "label": "6110899 - Serviços de telecomunicações por fio não especific...",
+      "count": 338
+    },
+    {
+      "value": "2091600",
+      "label": "2091600 - Fabricação de adesivos e selantes...",
+      "count": 334
+    },
+    {
+      "value": "6130200",
+      "label": "6130200 - Telecomunicações por satélite...",
+      "count": 334
+    },
+    {
+      "value": "1012103",
+      "label": "1012103 - Frigorífico - abate de suínos...",
+      "count": 332
+    },
+    {
+      "value": "4645102",
+      "label": "4645102 - Comércio atacadista de próteses e artigos de ortop...",
+      "count": 330
+    },
+    {
+      "value": "2864000",
+      "label": "2864000 - Fabricação de máquinas e equipamentos para as indú...",
+      "count": 324
+    },
+    {
+      "value": "1220401",
+      "label": "1220401 - Fabricação de cigarros...",
+      "count": 323
+    },
+    {
+      "value": "0155502",
+      "label": "0155502 - Produção de pintos de um dia...",
+      "count": 322
+    },
+    {
+      "value": "5030101",
+      "label": "5030101 - Navegação de apoio marítimo...",
+      "count": 322
+    },
+    {
+      "value": "6542100",
+      "label": "6542100 - Previdência complementar aberta...",
+      "count": 322
+    },
+    {
+      "value": "0220999",
+      "label": "0220999 - Coleta de produtos não-madeireiros não especificad...",
+      "count": 321
+    },
+    {
+      "value": "0112199",
+      "label": "0112199 - Cultivo de outras fibras de lavoura temporária não...",
+      "count": 317
+    },
+    {
+      "value": "2424502",
+      "label": "2424502 - Produção de relaminados, trefilados e perfilados d...",
+      "count": 313
+    },
+    {
+      "value": "2223400",
+      "label": "2223400 - Fabricação de tubos e acessórios de material plást...",
+      "count": 310
+    },
+    {
+      "value": "2122000",
+      "label": "2122000 - Fabricação de medicamentos para uso veterinário...",
+      "count": 301
+    },
+    {
+      "value": "9603303",
+      "label": "9603303 - Serviços de sepultamento...",
+      "count": 300
+    },
+    {
+      "value": "1061902",
+      "label": "1061902 - Fabricação de produtos do arroz...",
+      "count": 290
+    },
+    {
+      "value": "8012900",
+      "label": "8012900 - Atividades de transporte de valores...",
+      "count": 287
+    },
+    {
+      "value": "3011302",
+      "label": "3011302 - Construção de embarcações para uso comercial e par...",
+      "count": 286
+    },
+    {
+      "value": "8711503",
+      "label": "8711503 - Atividades de assistência a deficientes físicos, i...",
+      "count": 283
+    },
+    {
+      "value": "2815102",
+      "label": "2815102 - Fabricação de equipamentos de transmissão para fin...",
+      "count": 281
+    },
+    {
+      "value": "3011301",
+      "label": "3011301 - Construção de embarcações de grande porte...",
+      "count": 281
+    },
+    {
+      "value": "1340502",
+      "label": "1340502 - Alvejamento, tingimento e torção em fios, tecidos,...",
+      "count": 279
+    },
+    {
+      "value": "2019399",
+      "label": "2019399 - Fabricação de outros produtos químicos inorgânicos...",
+      "count": 277
+    },
+    {
+      "value": "0162802",
+      "label": "0162802 - Serviço de tosquiamento de ovinos...",
+      "count": 275
+    },
+    {
+      "value": "2660400",
+      "label": "2660400 - Fabricação de aparelhos eletromédicos e eletrotera...",
+      "count": 273
+    },
+    {
+      "value": "2821601",
+      "label": "2821601 - Fabricação de fornos industriais, aparelhos e equi...",
+      "count": 273
+    },
+    {
+      "value": "0133408",
+      "label": "0133408 - Cultivo de mamão...",
+      "count": 272
+    },
+    {
+      "value": "2632900",
+      "label": "2632900 - Fabricação de aparelhos telefônicos e de outros eq...",
+      "count": 271
+    },
+    {
+      "value": "3250709",
+      "label": "3250709 - Serviço de laboratório óptico...",
+      "count": 270
+    },
+    {
+      "value": "0990402",
+      "label": "0990402 - Atividades de apoio à extração de minerais metálic...",
+      "count": 269
+    },
+    {
+      "value": "4623103",
+      "label": "4623103 - Comércio atacadista de algodão...",
+      "count": 268
+    },
+    {
+      "value": "5022001",
+      "label": "5022001 - Transporte por navegação interior de passageiros e...",
+      "count": 267
+    },
+    {
+      "value": "7319001",
+      "label": "7319001 - Criação de estandes para feiras e exposições...",
+      "count": 267
+    },
+    {
+      "value": "7719501",
+      "label": "7719501 - Locação de embarcações sem tripulação, exceto para...",
+      "count": 266
+    },
+    {
+      "value": "2412100",
+      "label": "2412100 - Produção de ferroligas...",
+      "count": 265
+    },
+    {
+      "value": "3314703",
+      "label": "3314703 - Manutenção e reparação de válvulas industriais...",
+      "count": 265
+    },
+    {
+      "value": "6022501",
+      "label": "6022501 - Programadoras...",
+      "count": 264
+    },
+    {
+      "value": "4623104",
+      "label": "4623104 - Comércio atacadista de fumo em folha não beneficia...",
+      "count": 263
+    },
+    {
+      "value": "6450600",
+      "label": "6450600 - Sociedades de capitalização...",
+      "count": 263
+    },
+    {
+      "value": "6440900",
+      "label": "6440900 - Arrendamento mercantil...",
+      "count": 261
+    },
+    {
+      "value": "0133405",
+      "label": "0133405 - Cultivo de coco-da-baía...",
+      "count": 260
+    },
+    {
+      "value": "1313800",
+      "label": "1313800 - Fiação de fibras artificiais e sintéticas...",
+      "count": 260
+    },
+    {
+      "value": "6120502",
+      "label": "6120502 - Serviço móvel especializado - SME...",
+      "count": 257
+    },
+    {
+      "value": "0153901",
+      "label": "0153901 - Criação de caprinos...",
+      "count": 256
+    },
+    {
+      "value": "1811301",
+      "label": "1811301 - Impressão de jornais...",
+      "count": 256
+    },
+    {
+      "value": "2944100",
+      "label": "2944100 - Fabricação de peças e acessórios para o sistema de...",
+      "count": 254
+    },
+    {
+      "value": "0155503",
+      "label": "0155503 - Criação de outros galináceos, exceto para corte...",
+      "count": 253
+    },
+    {
+      "value": "2825900",
+      "label": "2825900 - Fabricação de máquinas e equipamentos para saneame...",
+      "count": 253
+    },
+    {
+      "value": "9601702",
+      "label": "9601702 - Tinturarias...",
+      "count": 251
+    },
+    {
+      "value": "2441502",
+      "label": "2441502 - Produção de laminados de alumínio...",
+      "count": 250
+    },
+    {
+      "value": "1081301",
+      "label": "1081301 - Beneficiamento de café...",
+      "count": 249
+    },
+    {
+      "value": "2014200",
+      "label": "2014200 - Fabricação de gases industriais...",
+      "count": 248
+    },
+    {
+      "value": "3250703",
+      "label": "3250703 - Fabricação de aparelhos e utensílios para correção...",
+      "count": 247
+    },
+    {
+      "value": "2110600",
+      "label": "2110600 - Fabricação de produtos farmoquímicos...",
+      "count": 242
+    },
+    {
+      "value": "2411300",
+      "label": "2411300 - Produção de ferro-gusa...",
+      "count": 242
+    },
+    {
+      "value": "2531402",
+      "label": "2531402 - Produção de forjados de metais não-ferrosos e suas...",
+      "count": 242
+    },
+    {
+      "value": "0135100",
+      "label": "0135100 - Cultivo de cacau...",
+      "count": 238
+    },
+    {
+      "value": "0810003",
+      "label": "0810003 - Extração de mármore e beneficiamento associado...",
+      "count": 236
+    },
+    {
+      "value": "2531401",
+      "label": "2531401 - Produção de forjados de aço...",
+      "count": 236
+    },
+    {
+      "value": "8640211",
+      "label": "8640211 - Serviços de radioterapia...",
+      "count": 236
+    },
+    {
+      "value": "0729401",
+      "label": "0729401 - Extração de minérios de nióbio e titânio...",
+      "count": 234
+    },
+    {
+      "value": "2330303",
+      "label": "2330303 - Fabricação de artefatos de fibrocimento para uso n...",
+      "count": 232
+    },
+    {
+      "value": "2790202",
+      "label": "2790202 - Fabricação de equipamentos para sinalização e alar...",
+      "count": 231
+    },
+    {
+      "value": "8621602",
+      "label": "8621602 - Serviços móveis de atendimento a urgências, exceto...",
+      "count": 230
+    },
+    {
+      "value": "3314721",
+      "label": "3314721 - Manutenção e reparação de máquinas e aparelhos par...",
+      "count": 228
+    },
+    {
+      "value": "3839401",
+      "label": "3839401 - Usinas de compostagem...",
+      "count": 227
+    },
+    {
+      "value": "1099607",
+      "label": "1099607 - Fabricação de alimentos dietéticos e complementos ...",
+      "count": 224
+    },
+    {
+      "value": "0322107",
+      "label": "0322107 - Atividades de apoio à aqüicultura em água doce...",
+      "count": 223
+    },
+    {
+      "value": "1032501",
+      "label": "1032501 - Fabricação de conservas de palmito...",
+      "count": 223
+    },
+    {
+      "value": "2051700",
+      "label": "2051700 - Fabricação de defensivos agrícolas...",
+      "count": 222
+    },
+    {
+      "value": "1742702",
+      "label": "1742702 - Fabricação de absorventes higiênicos...",
+      "count": 221
+    },
+    {
+      "value": "5112999",
+      "label": "5112999 - Outros serviços de transporte aéreo de passageiros...",
+      "count": 217
+    },
+    {
+      "value": "0729404",
+      "label": "0729404 - Extração de minérios de cobre, chumbo, zinco e out...",
+      "count": 216
+    },
+    {
+      "value": "0721901",
+      "label": "0721901 - Extração de minério de alumínio...",
+      "count": 214
+    },
+    {
+      "value": "2073800",
+      "label": "2073800 - Fabricação de impermeabilizantes, solventes e prod...",
+      "count": 214
+    },
+    {
+      "value": "4511105",
+      "label": "4511105 - Comércio por atacado de reboques e semi-reboques n...",
+      "count": 210
+    },
+    {
+      "value": "4634699",
+      "label": "4634699 - Comércio atacadista de carnes e derivados de outro...",
+      "count": 209
+    },
+    {
+      "value": "6435201",
+      "label": "6435201 - Sociedades de crédito imobiliário...",
+      "count": 208
+    },
+    {
+      "value": "8711505",
+      "label": "8711505 - Condomínios residenciais para idosos e deficientes...",
+      "count": 208
+    },
+    {
+      "value": "0311602",
+      "label": "0311602 - Pesca de crustáceos e moluscos em água salgada...",
+      "count": 207
+    },
+    {
+      "value": "0810008",
+      "label": "0810008 - Extração de saibro e beneficiamento associado...",
+      "count": 207
+    },
+    {
+      "value": "2852600",
+      "label": "2852600 - Fabricação de outras máquinas e equipamentos para ...",
+      "count": 207
+    },
+    {
+      "value": "5030102",
+      "label": "5030102 - Navegação de apoio portuário...",
+      "count": 206
+    },
+    {
+      "value": "0220906",
+      "label": "0220906 - Conservação de florestas nativas...",
+      "count": 205
+    },
+    {
+      "value": "8413200",
+      "label": "8413200 - Regulação das atividades econômicas...",
+      "count": 205
+    },
+    {
+      "value": "0311604",
+      "label": "0311604 - Atividades de apoio à pesca em água salgada...",
+      "count": 204
+    },
+    {
+      "value": "0133401",
+      "label": "0133401 - Cultivo de açaí...",
+      "count": 203
+    },
+    {
+      "value": "3314722",
+      "label": "3314722 - Manutenção e reparação de máquinas e aparelhos par...",
+      "count": 200
+    },
+    {
+      "value": "2811900",
+      "label": "2811900 - Fabricação de motores e turbinas, peças e acessóri...",
+      "count": 198
+    },
+    {
+      "value": "3314715",
+      "label": "3314715 - Manutenção e reparação de máquinas e equipamentos ...",
+      "count": 198
+    },
+    {
+      "value": "8711504",
+      "label": "8711504 - Centros de apoio a pacientes com câncer e com AIDS...",
+      "count": 198
+    },
+    {
+      "value": "1921700",
+      "label": "1921700 - Fabricação de produtos do refino de petróleo...",
+      "count": 197
+    },
+    {
+      "value": "2422901",
+      "label": "2422901 - Produção de laminados planos de aço ao carbono, re...",
+      "count": 196
+    },
+    {
+      "value": "2431800",
+      "label": "2431800 - Produção de tubos de aço com costura...",
+      "count": 196
+    },
+    {
+      "value": "7719502",
+      "label": "7719502 - Locação de aeronaves sem tripulação...",
+      "count": 196
+    },
+    {
+      "value": "3822000",
+      "label": "3822000 - Tratamento e disposição de resíduos perigosos...",
+      "count": 193
+    },
+    {
+      "value": "2722801",
+      "label": "2722801 - Fabricação de baterias e acumuladores para veículo...",
+      "count": 190
+    },
+    {
+      "value": "4911600",
+      "label": "4911600 - Transporte ferroviário de carga...",
+      "count": 190
+    },
+    {
+      "value": "9412001",
+      "label": "9412001 - Atividades de fiscalização profissional...",
+      "count": 190
+    },
+    {
+      "value": "2822401",
+      "label": "2822401 - Fabricação de máquinas, equipamentos e aparelhos p...",
+      "count": 189
+    },
+    {
+      "value": "1042200",
+      "label": "1042200 - Fabricação de óleos vegetais refinados, exceto óle...",
+      "count": 187
+    },
+    {
+      "value": "4221901",
+      "label": "4221901 - Construção de barragens e represas para geração de...",
+      "count": 186
+    },
+    {
+      "value": "0139304",
+      "label": "0139304 - Cultivo de plantas para condimento, exceto pimenta...",
+      "count": 183
+    },
+    {
+      "value": "2751100",
+      "label": "2751100 - Fabricação de fogões, refrigeradores e máquinas de...",
+      "count": 183
+    },
+    {
+      "value": "9603305",
+      "label": "9603305 - Serviços de somatoconservação...",
+      "count": 183
+    },
+    {
+      "value": "0723501",
+      "label": "0723501 - Extração de minério de manganês...",
+      "count": 182
+    },
+    {
+      "value": "9329802",
+      "label": "9329802 - Exploração de boliches...",
+      "count": 182
+    },
+    {
+      "value": "2910701",
+      "label": "2910701 - Fabricação de automóveis, camionetas e utilitários...",
+      "count": 180
+    },
+    {
+      "value": "2342701",
+      "label": "2342701 - Fabricação de azulejos e pisos...",
+      "count": 179
+    },
+    {
+      "value": "2863100",
+      "label": "2863100 - Fabricação de máquinas e equipamentos para a indús...",
+      "count": 179
+    },
+    {
+      "value": "3314714",
+      "label": "3314714 - Manutenção e reparação de máquinas e equipamentos ...",
+      "count": 179
+    },
+    {
+      "value": "8730101",
+      "label": "8730101 - Orfanatos...",
+      "count": 178
+    },
+    {
+      "value": "2866600",
+      "label": "2866600 - Fabricação de máquinas e equipamentos para a indús...",
+      "count": 177
+    },
+    {
+      "value": "4222702",
+      "label": "4222702 - Obras de irrigação...",
+      "count": 177
+    },
+    {
+      "value": "5120000",
+      "label": "5120000 - Transporte aéreo de carga...",
+      "count": 174
+    },
+    {
+      "value": "1099602",
+      "label": "1099602 - Fabricação de pós alimentícios...",
+      "count": 172
+    },
+    {
+      "value": "3041500",
+      "label": "3041500 - Fabricação de aeronaves...",
+      "count": 172
+    },
+    {
+      "value": "6499902",
+      "label": "6499902 - Sociedades de investimento...",
+      "count": 172
+    },
+    {
+      "value": "1830001",
+      "label": "1830001 - Reprodução de som em qualquer suporte...",
+      "count": 171
+    },
+    {
+      "value": "0322102",
+      "label": "0322102 - Criação de camarões em água doce...",
+      "count": 170
+    },
+    {
+      "value": "1830002",
+      "label": "1830002 - Reprodução de vídeo em qualquer suporte...",
+      "count": 170
+    },
+    {
+      "value": "3900500",
+      "label": "3900500 - Descontaminação e outros serviços de gestão de res...",
+      "count": 170
+    },
+    {
+      "value": "0159804",
+      "label": "0159804 - Criação de bicho-da-seda...",
+      "count": 166
+    },
+    {
+      "value": "0210105",
+      "label": "0210105 - Cultivo de espécies madeireiras, exceto eucalipto,...",
+      "count": 166
+    },
+    {
+      "value": "3314716",
+      "label": "3314716 - Manutenção e reparação de tratores, exceto agrícol...",
+      "count": 165
+    },
+    {
+      "value": "5012201",
+      "label": "5012201 - Transporte marítimo de longo curso - Carga...",
+      "count": 164
+    },
+    {
+      "value": "4542102",
+      "label": "4542102 - Comércio sob consignação de motocicletas e motonet...",
+      "count": 162
+    },
+    {
+      "value": "2854200",
+      "label": "2854200 - Fabricação de máquinas e equipamentos para terrapl...",
+      "count": 161
+    },
+    {
+      "value": "2442300",
+      "label": "2442300 - Metalurgia dos metais preciosos...",
+      "count": 160
+    },
+    {
+      "value": "1932200",
+      "label": "1932200 - Fabricação de biocombustíveis, exceto álcool...",
+      "count": 158
+    },
+    {
+      "value": "1710900",
+      "label": "1710900 - Fabricação de celulose e outras pastas para a fabr...",
+      "count": 157
+    },
+    {
+      "value": "5221400",
+      "label": "5221400 - Concessionárias de rodovias, pontes, túneis e serv...",
+      "count": 156
+    },
+    {
+      "value": "7739001",
+      "label": "7739001 - Aluguel de máquinas e equipamentos para extração d...",
+      "count": 156
+    },
+    {
+      "value": "0111303",
+      "label": "0111303 - Cultivo de trigo...",
+      "count": 154
+    },
+    {
+      "value": "2211100",
+      "label": "2211100 - Fabricação de pneumáticos e de câmaras-de-ar...",
+      "count": 154
+    },
+    {
+      "value": "2439300",
+      "label": "2439300 - Produção de outros tubos de ferro e aço...",
+      "count": 154
+    },
+    {
+      "value": "4713005",
+      "label": "4713005 - Lojas francas (Duty free) de aeroportos, portos e ...",
+      "count": 154
+    },
+    {
+      "value": "0114800",
+      "label": "0114800 - Cultivo de fumo...",
+      "count": 153
+    },
+    {
+      "value": "2943300",
+      "label": "2943300 - Fabricação de peças e acessórios para o sistema de...",
+      "count": 152
+    },
+    {
+      "value": "2040100",
+      "label": "2040100 - Fabricação de fibras artificiais e sintéticas...",
+      "count": 149
+    },
+    {
+      "value": "2710403",
+      "label": "2710403 - Fabricação de motores elétricos, peças e acessório...",
+      "count": 149
+    },
+    {
+      "value": "2424501",
+      "label": "2424501 - Produção de arames de aço...",
+      "count": 147
+    },
+    {
+      "value": "6190602",
+      "label": "6190602 - Provedores de voz sobre protocolo internet - VOIP...",
+      "count": 145
+    },
+    {
+      "value": "0500301",
+      "label": "0500301 - Extração de carvão mineral...",
+      "count": 144
+    },
+    {
+      "value": "2522500",
+      "label": "2522500 - Fabricação de caldeiras geradoras de vapor, exceto...",
+      "count": 144
+    },
+    {
+      "value": "0990401",
+      "label": "0990401 - Atividades de apoio à extração de minério de ferro...",
+      "count": 139
+    },
+    {
+      "value": "2865800",
+      "label": "2865800 - Fabricação de máquinas e equipamentos para as indú...",
+      "count": 138
+    },
+    {
+      "value": "3315500",
+      "label": "3315500 - Manutenção e reparação de veículos ferroviários...",
+      "count": 137
+    },
+    {
+      "value": "6110802",
+      "label": "6110802 - Serviços de redes de transportes de telecomunicaçõ...",
+      "count": 137
+    },
+    {
+      "value": "8630507",
+      "label": "8630507 - Atividades de reprodução humana assistida...",
+      "count": 137
+    },
+    {
+      "value": "2832100",
+      "label": "2832100 - Fabricação de equipamentos para irrigação agrícola...",
+      "count": 136
+    },
+    {
+      "value": "3091101",
+      "label": "3091101 - Fabricação de motocicletas...",
+      "count": 136
+    },
+    {
+      "value": "2550101",
+      "label": "2550101 - Fabricação de equipamento bélico pesado, exceto ve...",
+      "count": 135
+    },
+    {
+      "value": "2652300",
+      "label": "2652300 - Fabricação de cronômetros e relógios...",
+      "count": 135
+    },
+    {
+      "value": "6424701",
+      "label": "6424701 - Bancos cooperativos...",
+      "count": 134
+    },
+    {
+      "value": "4223500",
+      "label": "4223500 - Construção de redes de transportes por dutos, exce...",
+      "count": 133
+    },
+    {
+      "value": "1610205",
+      "label": "1610205 - Serviço de tratamento de madeira realizado sob con...",
+      "count": 132
+    },
+    {
+      "value": "5239701",
+      "label": "5239701 - Serviços de praticagem...",
+      "count": 131
+    },
+    {
+      "value": "2831300",
+      "label": "2831300 - Fabricação de tratores agrícolas, peças e acessóri...",
+      "count": 130
+    },
+    {
+      "value": "2942500",
+      "label": "2942500 - Fabricação de peças e acessórios para os sistemas ...",
+      "count": 129
+    },
+    {
+      "value": "0119907",
+      "label": "0119907 - Cultivo de melão...",
+      "count": 128
+    },
+    {
+      "value": "0133407",
+      "label": "0133407 - Cultivo de maçã...",
+      "count": 128
+    },
+    {
+      "value": "3091102",
+      "label": "3091102 - Fabricação de peças e acessórios para motocicletas...",
+      "count": 127
+    },
+    {
+      "value": "8299705",
+      "label": "8299705 - Serviços de levantamento de fundos sob contrato...",
+      "count": 126
+    },
+    {
+      "value": "3316302",
+      "label": "3316302 - Manutenção de aeronaves na pista...",
+      "count": 124
+    },
+    {
+      "value": "0133411",
+      "label": "0133411 - Cultivo de pêssego...",
+      "count": 123
+    },
+    {
+      "value": "1314600",
+      "label": "1314600 - Fabricação de linhas para costurar e bordar...",
+      "count": 122
+    },
+    {
+      "value": "7420005",
+      "label": "7420005 - Serviços de microfilmagem...",
+      "count": 120
+    },
+    {
+      "value": "3520401",
+      "label": "3520401 - Produção de gás; processamento de gás natural...",
+      "count": 118
+    },
+    {
+      "value": "2330304",
+      "label": "2330304 - Fabricação de casas pré-moldadas de concreto...",
+      "count": 117
+    },
+    {
+      "value": "0312404",
+      "label": "0312404 - Atividades de apoio à pesca em água doce...",
+      "count": 116
+    },
+    {
+      "value": "4940000",
+      "label": "4940000 - Transporte dutoviário...",
+      "count": 116
+    },
+    {
+      "value": "1072401",
+      "label": "1072401 - Fabricação de açúcar de cana refinado...",
+      "count": 115
+    },
+    {
+      "value": "3240003",
+      "label": "3240003 - Fabricação de mesas de bilhar, de sinuca e acessór...",
+      "count": 115
+    },
+    {
+      "value": "2449101",
+      "label": "2449101 - Produção de zinco em formas primárias...",
+      "count": 112
+    },
+    {
+      "value": "6499905",
+      "label": "6499905 - Concessão de crédito pelas OSCIP...",
+      "count": 112
+    },
+    {
+      "value": "2821602",
+      "label": "2821602 - Fabricação de estufas e fornos elétricos para fins...",
+      "count": 111
+    },
+    {
+      "value": "3299001",
+      "label": "3299001 - Fabricação de guarda-chuvas e similares...",
+      "count": 111
+    },
+    {
+      "value": "2022300",
+      "label": "2022300 - Fabricação de intermediários para plastificantes, ...",
+      "count": 110
+    },
+    {
+      "value": "2092401",
+      "label": "2092401 - Fabricação de pólvoras, explosivos e detonantes...",
+      "count": 110
+    },
+    {
+      "value": "6431000",
+      "label": "6431000 - Bancos múltiplos, sem carteira comercial...",
+      "count": 109
+    },
+    {
+      "value": "1922599",
+      "label": "1922599 - Fabricação de outros produtos derivados do petróle...",
+      "count": 107
+    },
+    {
+      "value": "1012102",
+      "label": "1012102 - Abate de pequenos animais...",
+      "count": 106
+    },
+    {
+      "value": "9603302",
+      "label": "9603302 - Serviços de cremação...",
+      "count": 105
+    },
+    {
+      "value": "2032100",
+      "label": "2032100 - Fabricação de resinas termofixas...",
+      "count": 103
+    },
+    {
+      "value": "0322199",
+      "label": "0322199 - Cultivos e semicultivos da aqüicultura em água doc...",
+      "count": 99
+    },
+    {
+      "value": "2092402",
+      "label": "2092402 - Fabricação de artigos pirotécnicos...",
+      "count": 98
+    },
+    {
+      "value": "1082100",
+      "label": "1082100 - Fabricação de produtos à base de café...",
+      "count": 96
+    },
+    {
+      "value": "2423702",
+      "label": "2423702 - Produção de laminados longos de aço, exceto tubos...",
+      "count": 96
+    },
+    {
+      "value": "0152103",
+      "label": "0152103 - Criação de asininos e muares...",
+      "count": 94
+    },
+    {
+      "value": "3520402",
+      "label": "3520402 - Distribuição de combustíveis gasosos por redes urb...",
+      "count": 94
+    },
+    {
+      "value": "6438799",
+      "label": "6438799 - Outras instituições de intermediação não-monetária...",
+      "count": 93
+    },
+    {
+      "value": "9609205",
+      "label": "9609205 - Atividades de sauna e banhos...",
+      "count": 93
+    },
+    {
+      "value": "2824102",
+      "label": "2824102 - Fabricação de aparelhos e equipamentos de ar condi...",
+      "count": 92
+    },
+    {
+      "value": "6432800",
+      "label": "6432800 - Bancos de investimento...",
+      "count": 91
+    },
+    {
+      "value": "2012600",
+      "label": "2012600 - Fabricação de intermediários para fertilizantes...",
+      "count": 90
+    },
+    {
+      "value": "2829101",
+      "label": "2829101 - Fabricação de máquinas de escrever, calcular e out...",
+      "count": 89
+    },
+    {
+      "value": "4922103",
+      "label": "4922103 - Transporte rodoviário coletivo de passageiros, com...",
+      "count": 88
+    },
+    {
+      "value": "1113501",
+      "label": "1113501 - Fabricação de malte, inclusive malte uísque...",
+      "count": 87
+    },
+    {
+      "value": "0810005",
+      "label": "0810005 - Extração de gesso e caulim...",
+      "count": 86
+    },
+    {
+      "value": "2670101",
+      "label": "2670101 - Fabricação de equipamentos e instrumentos ópticos,...",
+      "count": 86
+    },
+    {
+      "value": "2740601",
+      "label": "2740601 - Fabricação de lâmpadas...",
+      "count": 85
+    },
+    {
+      "value": "0892403",
+      "label": "0892403 - Refino e outros tratamentos do sal...",
+      "count": 84
+    },
+    {
+      "value": "3240001",
+      "label": "3240001 - Fabricação de jogos eletrônicos...",
+      "count": 83
+    },
+    {
+      "value": "3250702",
+      "label": "3250702 - Fabricação de mobiliário para uso médico, cirúrgic...",
+      "count": 82
+    },
+    {
+      "value": "0139301",
+      "label": "0139301 - Cultivo de chá-da-índia...",
+      "count": 81
+    },
+    {
+      "value": "2021500",
+      "label": "2021500 - Fabricação de produtos petroquímicos básicos...",
+      "count": 81
+    },
+    {
+      "value": "2072000",
+      "label": "2072000 - Fabricação de tintas de impressão...",
+      "count": 81
+    },
+    {
+      "value": "0210104",
+      "label": "0210104 - Cultivo de teca...",
+      "count": 80
+    },
+    {
+      "value": "5231101",
+      "label": "5231101 - Administração da infra-estrutura portuária...",
+      "count": 80
+    },
+    {
+      "value": "1220402",
+      "label": "1220402 - Fabricação de cigarrilhas e charutos...",
+      "count": 79
+    },
+    {
+      "value": "6022502",
+      "label": "6022502 - Atividades relacionadas à televisão por assinatura...",
+      "count": 79
+    },
+    {
+      "value": "8421300",
+      "label": "8421300 - Relações exteriores...",
+      "count": 79
+    },
+    {
+      "value": "9200302",
+      "label": "9200302 - Exploração de apostas em corridas de cavalos...",
+      "count": 79
+    },
+    {
+      "value": "0119902",
+      "label": "0119902 - Cultivo de alho...",
+      "count": 78
+    },
+    {
+      "value": "2721000",
+      "label": "2721000 - Fabricação de pilhas, baterias e acumuladores elét...",
+      "count": 78
+    },
+    {
+      "value": "2851800",
+      "label": "2851800 - Fabricação de máquinas e equipamentos para a prosp...",
+      "count": 78
+    },
+    {
+      "value": "2121102",
+      "label": "2121102 - Fabricação de medicamentos homeopáticos para uso h...",
+      "count": 77
+    },
+    {
+      "value": "0133403",
+      "label": "0133403 - Cultivo de caju...",
+      "count": 76
+    },
+    {
+      "value": "1741901",
+      "label": "1741901 - Fabricação de formulários contínuos...",
+      "count": 76
+    },
+    {
+      "value": "6143400",
+      "label": "6143400 - Operadoras de televisão por assinatura por satélit...",
+      "count": 75
+    },
+    {
+      "value": "6437900",
+      "label": "6437900 - Sociedades de crédito ao microempreendedor...",
+      "count": 75
+    },
+    {
+      "value": "0321301",
+      "label": "0321301 - Criação de peixes em água salgada e salobra...",
+      "count": 72
+    },
+    {
+      "value": "4511106",
+      "label": "4511106 - Comércio por atacado de ônibus e microônibus novos...",
+      "count": 70
+    },
+    {
+      "value": "0139305",
+      "label": "0139305 - Cultivo de dendê...",
+      "count": 69
+    },
+    {
+      "value": "2814301",
+      "label": "2814301 - Fabricação de compressores para uso industrial, pe...",
+      "count": 69
+    },
+    {
+      "value": "0710302",
+      "label": "0710302 - Pelotização, sinterização e outros beneficiamentos...",
+      "count": 68
+    },
+    {
+      "value": "1011203",
+      "label": "1011203 - Frigorífico - abate de ovinos e caprinos...",
+      "count": 68
+    },
+    {
+      "value": "1722200",
+      "label": "1722200 - Fabricação de cartolina e papel-cartão...",
+      "count": 67
+    },
+    {
+      "value": "4681804",
+      "label": "4681804 - Comércio atacadista de combustíveis de origem mine...",
+      "count": 67
+    },
+    {
+      "value": "0729405",
+      "label": "0729405 - Beneficiamento de minérios de cobre, chumbo, zinco...",
+      "count": 65
+    },
+    {
+      "value": "2121103",
+      "label": "2121103 - Fabricação de medicamentos fitoterápicos para uso ...",
+      "count": 65
+    },
+    {
+      "value": "2443100",
+      "label": "2443100 - Metalurgia do cobre...",
+      "count": 65
+    },
+    {
+      "value": "3211603",
+      "label": "3211603 - Cunhagem de moedas e medalhas...",
+      "count": 65
+    },
+    {
+      "value": "4912401",
+      "label": "4912401 - Transporte ferroviário de passageiros intermunicip...",
+      "count": 65
+    },
+    {
+      "value": "0500302",
+      "label": "0500302 - Beneficiamento de carvão mineral...",
+      "count": 64
+    },
+    {
+      "value": "0722701",
+      "label": "0722701 - Extração de minério de estanho...",
+      "count": 64
+    },
+    {
+      "value": "8650007",
+      "label": "8650007 - Atividades de terapia de nutrição enteral e parent...",
+      "count": 63
+    },
+    {
+      "value": "4912402",
+      "label": "4912402 - Transporte ferroviário de passageiros municipal e ...",
+      "count": 62
+    },
+    {
+      "value": "6424702",
+      "label": "6424702 - Cooperativas centrais de crédito...",
+      "count": 61
+    },
+    {
+      "value": "6434400",
+      "label": "6434400 - Agências de fomento...",
+      "count": 59
+    },
+    {
+      "value": "2123800",
+      "label": "2123800 - Fabricação de preparações farmacêuticas...",
+      "count": 58
+    },
+    {
+      "value": "2312500",
+      "label": "2312500 - Fabricação de embalagens de vidro...",
+      "count": 57
+    },
+    {
+      "value": "0724302",
+      "label": "0724302 - Beneficiamento de minério de metais preciosos...",
+      "count": 56
+    },
+    {
+      "value": "2099101",
+      "label": "2099101 - Fabricação de chapas, filmes, papéis e outros mate...",
+      "count": 56
+    },
+    {
+      "value": "5822102",
+      "label": "5822102 - Edição integrada à impressão de jornais não diário...",
+      "count": 56
+    },
+    {
+      "value": "2920401",
+      "label": "2920401 - Fabricação de caminhões e ônibus...",
+      "count": 54
+    },
+    {
+      "value": "3250704",
+      "label": "3250704 - Fabricação de aparelhos e utensílios para correção...",
+      "count": 54
+    },
+    {
+      "value": "3530100",
+      "label": "3530100 - Produção e distribuição de vapor, água quente e ar...",
+      "count": 54
+    },
+    {
+      "value": "2421100",
+      "label": "2421100 - Produção de semi-acabados de aço...",
+      "count": 53
+    },
+    {
+      "value": "2532202",
+      "label": "2532202 - Metalurgia do pó...",
+      "count": 53
+    },
+    {
+      "value": "1122402",
+      "label": "1122402 - Fabricação de chá mate e outros chás prontos para ...",
+      "count": 52
+    },
+    {
+      "value": "2399102",
+      "label": "2399102 - Fabricação de abrasivos...",
+      "count": 52
+    },
+    {
+      "value": "2790201",
+      "label": "2790201 - Fabricação de eletrodos, contatos e outros artigos...",
+      "count": 52
+    },
+    {
+      "value": "2930102",
+      "label": "2930102 - Fabricação de carrocerias para ônibus...",
+      "count": 52
+    },
+    {
+      "value": "2033900",
+      "label": "2033900 - Fabricação de elastômeros...",
+      "count": 50
+    },
+    {
+      "value": "3292201",
+      "label": "3292201 - Fabricação de roupas de proteção e segurança e res...",
+      "count": 50
+    },
+    {
+      "value": "6530800",
+      "label": "6530800 - Resseguros...",
+      "count": 50
+    },
+    {
+      "value": "6619305",
+      "label": "6619305 - Operadoras de cartões de débito...",
+      "count": 50
+    },
+    {
+      "value": "1210700",
+      "label": "1210700 - Processamento industrial do fumo...",
+      "count": 49
+    },
+    {
+      "value": "1099603",
+      "label": "1099603 - Fabricação de fermentos e leveduras...",
+      "count": 48
+    },
+    {
+      "value": "5011402",
+      "label": "5011402 - Transporte marítimo de cabotagem - passageiros...",
+      "count": 48
+    },
+    {
+      "value": "0810010",
+      "label": "0810010 - Beneficiamento de gesso e caulim associado à extra...",
+      "count": 47
+    },
+    {
+      "value": "1043100",
+      "label": "1043100 - Fabricação de margarina e outras gorduras vegetais...",
+      "count": 47
+    },
+    {
+      "value": "4950700",
+      "label": "4950700 - Trens turísticos, teleféricos e similares...",
+      "count": 47
+    },
+    {
+      "value": "0321305",
+      "label": "0321305 - Atividades de apoio à aqüicultura em água salgada ...",
+      "count": 46
+    },
+    {
+      "value": "8640214",
+      "label": "8640214 - Serviços de bancos de células e tecidos humanos...",
+      "count": 46
+    },
+    {
+      "value": "6619304",
+      "label": "6619304 - Caixas eletrônicos...",
+      "count": 44
+    },
+    {
+      "value": "0725100",
+      "label": "0725100 - Extração de minerais radioativos...",
+      "count": 43
+    },
+    {
+      "value": "3031800",
+      "label": "3031800 - Fabricação de locomotivas, vagões e outros materia...",
+      "count": 43
+    },
+    {
+      "value": "3032600",
+      "label": "3032600 - Fabricação de peças e acessórios para veículos fer...",
+      "count": 43
+    },
+    {
+      "value": "6435202",
+      "label": "6435202 - Associações de poupança e empréstimo...",
+      "count": 43
+    },
+    {
+      "value": "0220903",
+      "label": "0220903 - Coleta de castanha-do-pará em florestas nativas...",
+      "count": 42
+    },
+    {
+      "value": "2423701",
+      "label": "2423701 - Produção de tubos de aço sem costura...",
+      "count": 40
+    },
+    {
+      "value": "4684202",
+      "label": "4684202 - Comércio atacadista de solventes...",
+      "count": 40
+    },
+    {
+      "value": "2011800",
+      "label": "2011800 - Fabricação de cloro e álcalis...",
+      "count": 39
+    },
+    {
+      "value": "2722802",
+      "label": "2722802 - Recondicionamento de baterias e acumuladores para ...",
+      "count": 39
+    },
+    {
+      "value": "2824101",
+      "label": "2824101 - Fabricação de aparelhos e equipamentos de ar condi...",
+      "count": 39
+    },
+    {
+      "value": "0220905",
+      "label": "0220905 - Coleta de palmito em florestas nativas...",
+      "count": 37
+    },
+    {
+      "value": "2680900",
+      "label": "2680900 - Fabricação de mídias virgens, magnéticas e ópticas...",
+      "count": 37
+    },
+    {
+      "value": "1922502",
+      "label": "1922502 - Rerrefino de óleos lubrificantes...",
+      "count": 36
+    },
+    {
+      "value": "2449103",
+      "label": "2449103 - Fabricação de ânodos para galvanoplastia...",
+      "count": 35
+    },
+    {
+      "value": "2759701",
+      "label": "2759701 - Fabricação de aparelhos elétricos de uso pessoal, ...",
+      "count": 35
+    },
+    {
+      "value": "3240002",
+      "label": "3240002 - Fabricação de mesas de bilhar, de sinuca e acessór...",
+      "count": 34
+    },
+    {
+      "value": "0139302",
+      "label": "0139302 - Cultivo de erva-mate...",
+      "count": 33
+    },
+    {
+      "value": "0321399",
+      "label": "0321399 - Cultivos e semicultivos da aqüicultura em água sal...",
+      "count": 33
+    },
+    {
+      "value": "2670102",
+      "label": "2670102 - Fabricação de aparelhos fotográficos e cinematográ...",
+      "count": 33
+    },
+    {
+      "value": "2550102",
+      "label": "2550102 - Fabricação de armas de fogo, outras armas e muniçõ...",
+      "count": 32
+    },
+    {
+      "value": "4912403",
+      "label": "4912403 - Transporte metroviário...",
+      "count": 31
+    },
+    {
+      "value": "6619301",
+      "label": "6619301 - Serviços de liquidação e custódia...",
+      "count": 31
+    },
+    {
+      "value": "8640213",
+      "label": "8640213 - Serviços de litotripcia...",
+      "count": 31
+    },
+    {
+      "value": "0139303",
+      "label": "0139303 - Cultivo de pimenta-do-reino...",
+      "count": 30
+    },
+    {
+      "value": "0210102",
+      "label": "0210102 - Cultivo de acácia-negra...",
+      "count": 30
+    },
+    {
+      "value": "2422902",
+      "label": "2422902 - Produção de laminados planos de aços especiais...",
+      "count": 30
+    },
+    {
+      "value": "0321303",
+      "label": "0321303 - Criação de ostras e mexilhões em água salgada e sa...",
+      "count": 29
+    },
+    {
+      "value": "2853400",
+      "label": "2853400 - Fabricação de tratores, peças e acessórios, exceto...",
+      "count": 28
+    },
+    {
+      "value": "5231103",
+      "label": "5231103 - Gestão de terminais aquaviários...",
+      "count": 28
+    },
+    {
+      "value": "6611801",
+      "label": "6611801 - Bolsa de valores...",
+      "count": 27
+    },
+    {
+      "value": "0723502",
+      "label": "0723502 - Beneficiamento de minério de manganês...",
+      "count": 25
+    },
+    {
+      "value": "1910100",
+      "label": "1910100 - Coquerias...",
+      "count": 25
+    },
+    {
+      "value": "6611804",
+      "label": "6611804 - Administração de mercados de balcão organizados...",
+      "count": 25
+    },
+    {
+      "value": "2349401",
+      "label": "2349401 - Fabricação de material sanitário de cerâmica...",
+      "count": 24
+    },
+    {
+      "value": "0600003",
+      "label": "0600003 - Extração e beneficiamento de areias betuminosas...",
+      "count": 23
+    },
+    {
+      "value": "0116403",
+      "label": "0116403 - Cultivo de mamona...",
+      "count": 22
+    },
+    {
+      "value": "6499903",
+      "label": "6499903 - Fundo garantidor de crédito...",
+      "count": 21
+    },
+    {
+      "value": "0729403",
+      "label": "0729403 - Extração de minério de níquel...",
+      "count": 20
+    },
+    {
+      "value": "2815101",
+      "label": "2815101 - Fabricação de rolamentos para fins industriais...",
+      "count": 20
+    },
+    {
+      "value": "0312403",
+      "label": "0312403 - Coleta de outros produtos aquáticos de água doce...",
+      "count": 19
+    },
+    {
+      "value": "1922501",
+      "label": "1922501 - Formulação de combustíveis...",
+      "count": 19
+    },
+    {
+      "value": "4623107",
+      "label": "4623107 - Comércio atacadista de sisal...",
+      "count": 19
+    },
+    {
+      "value": "6142600",
+      "label": "6142600 - Operadoras de televisão por assinatura por microon...",
+      "count": 19
+    },
+    {
+      "value": "0311603",
+      "label": "0311603 - Coleta de outros produtos marinhos...",
+      "count": 18
+    },
+    {
+      "value": "0899101",
+      "label": "0899101 - Extração de grafita...",
+      "count": 18
+    },
+    {
+      "value": "3042300",
+      "label": "3042300 - Fabricação de turbinas, motores e outros component...",
+      "count": 18
+    },
+    {
+      "value": "5012202",
+      "label": "5012202 - Transporte marítimo de longo curso - Passageiros...",
+      "count": 18
+    },
+    {
+      "value": "2094100",
+      "label": "2094100 - Fabricação de catalisadores...",
+      "count": 17
+    },
+    {
+      "value": "2910703",
+      "label": "2910703 - Fabricação de motores para automóveis, camionetas ...",
+      "count": 17
+    },
+    {
+      "value": "0722702",
+      "label": "0722702 - Beneficiamento de minério de estanho...",
+      "count": 16
+    },
+    {
+      "value": "1012104",
+      "label": "1012104 - Matadouro - abate de suínos sob contrato...",
+      "count": 16
+    },
+    {
+      "value": "0170900",
+      "label": "0170900 - Caça e serviços relacionados...",
+      "count": 15
+    },
+    {
+      "value": "6611802",
+      "label": "6611802 - Bolsa de mercadorias...",
+      "count": 15
+    },
+    {
+      "value": "0116402",
+      "label": "0116402 - Cultivo de girassol...",
+      "count": 14
+    },
+    {
+      "value": "2449102",
+      "label": "2449102 - Produção de laminados de zinco...",
+      "count": 14
+    },
+    {
+      "value": "0721902",
+      "label": "0721902 - Beneficiamento de minério de alumínio...",
+      "count": 12
+    },
+    {
+      "value": "3511500",
+      "label": "3511500 - Geração de energia elétrica...",
+      "count": 12
+    },
+    {
+      "value": "6611803",
+      "label": "6611803 - Bolsa de mercadorias e futuros...",
+      "count": 12
+    },
+    {
+      "value": "1011202",
+      "label": "1011202 - Frigorífico - abate de eqüinos...",
+      "count": 11
+    },
+    {
+      "value": "1011204",
+      "label": "1011204 - Frigorífico - abate de bufalinos...",
+      "count": 11
+    },
+    {
+      "value": "5030103",
+      "label": "5030103 - Serviço de rebocadores e empurradores...",
+      "count": 11
+    },
+    {
+      "value": "2910702",
+      "label": "2910702 - Fabricação de chassis com motor para automóveis, c...",
+      "count": 10
+    },
+    {
+      "value": "6433600",
+      "label": "6433600 - Bancos de desenvolvimento...",
+      "count": 10
+    },
+    {
+      "value": "0729402",
+      "label": "0729402 - Extração de minério de tungstênio...",
+      "count": 9
+    },
+    {
+      "value": "1099606",
+      "label": "1099606 - Fabricação de adoçantes naturais e artificiais...",
+      "count": 9
+    },
+    {
+      "value": "1220403",
+      "label": "1220403 - Fabricação de filtros para cigarros...",
+      "count": 9
+    },
+    {
+      "value": "2814302",
+      "label": "2814302 - Fabricação de compressores para uso não industrial...",
+      "count": 9
+    },
+    {
+      "value": "4751200",
+      "label": "4751200 - Comércio varejista especializado de equipamentos e...",
+      "count": 9
+    },
+    {
+      "value": "6438701",
+      "label": "6438701 - Bancos de câmbio...",
+      "count": 8
+    },
+    {
+      "value": "6499904",
+      "label": "6499904 - Caixas de financiamento de corporações...",
+      "count": 8
+    },
+    {
+      "value": "0133406",
+      "label": "0133406 - Cultivo de guaraná...",
+      "count": 7
+    },
+    {
+      "value": "2539000",
+      "label": "2539000 - Serviços de usinagem, solda, tratamento e revestim...",
+      "count": 7
+    },
+    {
+      "value": "8690902",
+      "label": "8690902 - Atividades de banco de leite humano...",
+      "count": 7
+    },
+    {
+      "value": "0159803",
+      "label": "0159803 - Criação de escargô...",
+      "count": 6
+    },
+    {
+      "value": "0322106",
+      "label": "0322106 - Criação de jacaré...",
+      "count": 6
+    },
+    {
+      "value": "1122404",
+      "label": "1122404 - Fabricação de bebidas isotônicas...",
+      "count": 6
+    },
+    {
+      "value": "2092403",
+      "label": "2092403 - Fabricação de fósforos de segurança...",
+      "count": 6
+    },
+    {
+      "value": "2920402",
+      "label": "2920402 - Fabricação de motores para caminhões e ônibus...",
+      "count": 6
+    },
+    {
+      "value": "5130700",
+      "label": "5130700 - Transporte espacial...",
+      "count": 6
+    },
+    {
+      "value": "0892402",
+      "label": "0892402 - Extração de sal-gema...",
+      "count": 5
+    },
+    {
+      "value": "6435203",
+      "label": "6435203 - Companhias hipotecárias...",
+      "count": 5
+    },
+    {
+      "value": "0312402",
+      "label": "0312402 - Pesca de crustáceos e moluscos em água doce...",
+      "count": 4
+    },
+    {
+      "value": "6410700",
+      "label": "6410700 - Banco Central...",
+      "count": 4
+    },
+    {
+      "value": "1065102",
+      "label": "1065102 - Fabricação de óleo de milho em bruto...",
+      "count": 3
+    },
+    {
+      "value": "1072402",
+      "label": "1072402 - Fabricação de açúcar de cereais (dextrose) e de be...",
+      "count": 3
+    },
+    {
+      "value": "4633803",
+      "label": "4633803 - Comércio atacadista de coelhos e outros pequenos a...",
+      "count": 3
+    },
+    {
+      "value": "0112102",
+      "label": "0112102 - Cultivo de juta...",
+      "count": 2
+    },
+    {
+      "value": "0210109",
+      "label": "0210109 - Produção de casca de acácia-negra - florestas plan...",
+      "count": 2
+    },
+    {
+      "value": "0899103",
+      "label": "0899103 - Extração de amianto...",
+      "count": 2
+    },
+    {
+      "value": "2019301",
+      "label": "2019301 - Elaboração de combustíveis nucleares...",
+      "count": 2
+    },
+    {
+      "value": "0322103",
+      "label": "0322103 - Criação de ostras e mexilhões em água doce...",
+      "count": 1
+    },
+    {
+      "value": "0600002",
+      "label": "0600002 - Extração e beneficiamento de xisto...",
+      "count": 1
+    },
+    {
+      "value": "1822900",
+      "label": "1822900 - Serviços de acabamentos gráficos...",
+      "count": 1
+    },
+    {
+      "value": "4721101",
+      "label": "4721101 - Padaria e confeitaria com predominância de produçã...",
+      "count": 1
+    }
+  ],
+  "naturezas_juridicas": [
+    {
+      "value": "2135",
+      "label": "Empresário (Individual)",
+      "count": 16601416
+    },
+    {
+      "value": "2062",
+      "label": "Sociedade Empresária Limitada",
+      "count": 5760894
+    },
+    {
+      "value": "4090",
+      "label": "Candidato a Cargo Político Eletivo",
+      "count": 493875
+    },
+    {
+      "value": "2240",
+      "label": "Sociedade Simples Limitada",
+      "count": 277938
+    },
+    {
+      "value": "3999",
+      "label": "Associação Privada",
+      "count": 257392
+    },
+    {
+      "value": "4014",
+      "label": "Empresa Individual Imobiliária",
+      "count": 97623
+    },
+    {
+      "value": "3085",
+      "label": "Condomínio Edilício",
+      "count": 90701
+    },
+    {
+      "value": "4120",
+      "label": "Produtor Rural (Pessoa Física)",
+      "count": 88658
+    },
+    {
+      "value": "2321",
+      "label": "Sociedade Unipessoal de Advocacia",
+      "count": 86048
+    },
+    {
+      "value": "2127",
+      "label": "Sociedade em Conta de Participação",
+      "count": 39539
+    },
+    {
+      "value": "3220",
+      "label": "Organização Religiosa",
+      "count": 37694
+    },
+    {
+      "value": "2054",
+      "label": "Sociedade Anônima Fechada",
+      "count": 33037
+    },
+    {
+      "value": "2224",
+      "label": "Clube/Fundo de Investimento",
+      "count": 30128
+    },
+    {
+      "value": "2232",
+      "label": "Sociedade Simples Pura",
+      "count": 19823
+    },
+    {
+      "value": "3271",
+      "label": "Órgão de Direção Local de Partido Político",
+      "count": 13263
+    },
+    {
+      "value": "2216",
+      "label": "Empresa Domiciliada no Exterior",
+      "count": 13168
+    },
+    {
+      "value": "3131",
+      "label": "Entidade Sindical",
+      "count": 12124
+    },
+    {
+      "value": "2348",
+      "label": "Empresa Simples de Inovação",
+      "count": 12011
+    },
+    {
+      "value": "2151",
+      "label": "Consórcio de Sociedades",
+      "count": 9439
+    },
+    {
+      "value": "2070",
+      "label": "Sociedade Empresária em Nome Coletivo",
+      "count": 8764
+    },
+    {
+      "value": "1333",
+      "label": "Fundo Público da Administração Direta Municipal",
+      "count": 8417
+    },
+    {
+      "value": "3034",
+      "label": "Serviço Notarial e Registral (Cartório)",
+      "count": 8158
+    },
+    {
+      "value": "3212",
+      "label": "Fundação ou Associação Domiciliada no Exterior",
+      "count": 8011
+    },
+    {
+      "value": "2143",
+      "label": "Cooperativa",
+      "count": 7857
+    },
+    {
+      "value": "2305",
+      "label": "Empresa Individual de Responsabilidade Limitada (de Natureza Empresária)",
+      "count": 5937
+    },
+    {
+      "value": "3069",
+      "label": "Fundação Privada",
+      "count": 2459
+    },
+    {
+      "value": "1031",
+      "label": "Órgão Público do Poder Executivo Municipal",
+      "count": 2203
+    },
+    {
+      "value": "1244",
+      "label": "Município",
+      "count": 1811
+    },
+    {
+      "value": "1066",
+      "label": "Órgão Público do Poder Legislativo Municipal",
+      "count": 1248
+    },
+    {
+      "value": "3328",
+      "label": "Plano de Benefícios de Previdência Complementar Fechada",
+      "count": 1228
+    },
+    {
+      "value": "2046",
+      "label": "Sociedade Anônima Aberta",
+      "count": 884
+    },
+    {
+      "value": "3301",
+      "label": "Organização Social (OS)",
+      "count": 678
+    },
+    {
+      "value": "2100",
+      "label": "Sociedade Mercantil de Capital e Indústria",
+      "count": 658
+    },
+    {
+      "value": "8885",
+      "label": "Natureza Jurídica não informada",
+      "count": 642
+    },
+    {
+      "value": "1120",
+      "label": "Autarquia Municipal",
+      "count": 467
+    },
+    {
+      "value": "2011",
+      "label": "Empresa Pública",
+      "count": 425
+    },
+    {
+      "value": "2160",
+      "label": "Grupo de Sociedades",
+      "count": 382
+    },
+    {
+      "value": "1023",
+      "label": "Órgão Público do Poder Executivo Estadual ou do Distrito Federal",
+      "count": 363
+    },
+    {
+      "value": "1155",
+      "label": "Fundação Pública de Direito Público Municipal",
+      "count": 296
+    },
+    {
+      "value": "2038",
+      "label": "Sociedade de Economia Mista",
+      "count": 240
+    },
+    {
+      "value": "1210",
+      "label": "Consórcio Público de Direito Público (Associação Pública)",
+      "count": 193
+    },
+    {
+      "value": "2097",
+      "label": "Sociedade Empresária em Comandita por Ações",
+      "count": 180
+    },
+    {
+      "value": "2178",
+      "label": "Estabelecimento, no Brasil, de Sociedade Estrangeira",
+      "count": 161
+    },
+    {
+      "value": "1104",
+      "label": "Autarquia Federal",
+      "count": 151
+    },
+    {
+      "value": "2089",
+      "label": "Sociedade Empresária em Comandita Simples",
+      "count": 148
+    },
+    {
+      "value": "1325",
+      "label": "Fundo Público da Administração Direta Estadual ou do Distrito Federal",
+      "count": 145
+    },
+    {
+      "value": "3263",
+      "label": "Órgão de Direção Regional de Partido Político",
+      "count": 144
+    },
+    {
+      "value": "2330",
+      "label": "Cooperativas de Consumo",
+      "count": 132
+    },
+    {
+      "value": "2313",
+      "label": "Empresa Individual de Responsabilidade Limitada (de Natureza Simples)",
+      "count": 129
+    },
+    {
+      "value": "1112",
+      "label": "Autarquia Estadual ou do Distrito Federal",
+      "count": 118
+    }
+  ],
+  "portes": [
+    {
+      "value": "MICRO",
+      "label": "Microempresa (ME)",
+      "count": 12827418
+    },
+    {
+      "value": "MEI",
+      "label": "Microempreendedor Individual (MEI)",
+      "count": 9559301
+    },
+    {
+      "value": "GRANDE",
+      "label": "Grande Empresa",
+      "count": 682876
+    },
+    {
+      "value": "PEQUENO",
+      "label": "Empresa de Pequeno Porte (EPP)",
+      "count": 651238
+    },
+    {
+      "value": "MEDIO",
+      "label": "Empresa de Médio Porte",
+      "count": 317221
+    }
+  ],
+  "simples_opcoes": [
+    {
+      "value": "S",
+      "label": "Optante pelo Simples",
+      "count": 24346887
+    },
+    {
+      "value": "N",
+      "label": "Não Optante",
+      "count": 21458957
+    }
+  ],
+  "situacoes_cadastrais": [
+    {
+      "value": "01",
+      "label": "Nulo"
+    },
+    {
+      "value": "02",
+      "label": "Ativa"
+    },
+    {
+      "value": "03",
+      "label": "Suspensa"
+    },
+    {
+      "value": "04",
+      "label": "Inapta"
+    },
+    {
+      "value": "08",
+      "label": "Baixada"
+    }
+  ],
+  "has_estabelecimentos": true,
+  "timestamp": "2025-10-23T09:43:35.425595"
+}
