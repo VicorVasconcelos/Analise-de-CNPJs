@@ -1,5 +1,0 @@
-﻿elapsed_s=183.173
-backend_execution_s=
-total_registros=
-filename=
-warning=

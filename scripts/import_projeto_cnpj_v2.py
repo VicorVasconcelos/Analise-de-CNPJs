@@ -21,7 +21,7 @@ logging.basicConfig(
 )
 
 class CNPJProjectImporter:
-    def __init__(self, db_path="data/cnpj_database.db", data_path="C:/Users/Victor/Documents/CNPJ"):
+    def __init__(self, db_path="data/cnpj_database.db", data_path="C:/Users/victor.vasconcelos/Downloads/EU/Empresas/download"):
         self.db_path = db_path
         self.data_path = Path(data_path)
         self.connection = None
@@ -315,7 +315,7 @@ def main():
     if not importer.data_path.exists():
         logging.error(f"Pasta não encontrada: {importer.data_path}")
         logging.info("Verifique se o caminho está correto:")
-        logging.info("   C:/Users/victor.vasconcelos/Documents/PROJETO CNPJ")
+        logging.info("   C:/Users/victor.vasconcelos/Downloads/EU/Empresas/download")
         return
     
     logging.info(f"Pasta de dados: {importer.data_path}")

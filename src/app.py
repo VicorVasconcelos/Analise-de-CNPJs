@@ -275,12 +275,22 @@ class CNPJApp:
                     }), 200
 
                 cursor = self.db.connection.cursor()
-                # Check if expected table/view exists (accept both table and view)
-                cursor.execute("SELECT name FROM sqlite_master WHERE (type='table' OR type='view') AND name='estabelecimentos_completos'")
-                if cursor.fetchone():
+                # Aceitar tanto o schema "antigo" (view estabelecimentos_completos)
+                # quanto o schema importado diretamente (table estabelecimentos).
+                cursor.execute(
+                    """
+                    SELECT name FROM sqlite_master
+                    WHERE (type='table' OR type='view')
+                      AND name IN ('estabelecimentos_completos', 'estabelecimentos')
+                    ORDER BY CASE WHEN name='estabelecimentos_completos' THEN 0 ELSE 1 END
+                    LIMIT 1
+                    """
+                )
+                row = cursor.fetchone()
+                if row:
+                    source_name = row[0]
                     try:
-                        # Return estabelecimentos count (what users see as "empresas")
-                        cursor.execute("SELECT COUNT(*) FROM estabelecimentos_completos")
+                        cursor.execute(f"SELECT COUNT(*) FROM {source_name}")
                         total_empresas = cursor.fetchone()[0]
                     except Exception:
                         total_empresas = None
@@ -289,17 +299,17 @@ class CNPJApp:
                         "status": "healthy",
                         "database": "connected",
                         "total_empresas": total_empresas,
+                        "data_source": source_name,
                         "db_path": self.db_path,
                         "timestamp": datetime.now().isoformat()
                     }), 200
-                else:
-                    return jsonify({
-                        "status": "uninitialized",
-                        "database": "connected",
-                        "message": "Tabelas esperadas não encontradas (ex: estabelecimentos_completos)",
-                        "db_path": self.db_path,
-                        "timestamp": datetime.now().isoformat()
-                    }), 200
+                return jsonify({
+                    "status": "uninitialized",
+                    "database": "connected",
+                    "message": "Objetos esperados não encontrados (estabelecimentos_completos/estabelecimentos)",
+                    "db_path": self.db_path,
+                    "timestamp": datetime.now().isoformat()
+                }), 200
             except Exception as e:
                 return jsonify({
                     "status": "error",
@@ -419,10 +429,39 @@ class CNPJApp:
 
                 cursor = self.db.connection.cursor()
 
+                # Compatibilidade de schema: aceitar views *_completos (legado)
+                # e tabelas base (import atual).
+                cursor.execute(
+                    """
+                    SELECT name FROM sqlite_master
+                    WHERE (type='table' OR type='view')
+                      AND name IN ('estabelecimentos_completos', 'estabelecimentos')
+                    ORDER BY CASE WHEN name='estabelecimentos_completos' THEN 0 ELSE 1 END
+                    LIMIT 1
+                    """
+                )
+                est_row = cursor.fetchone()
+                est_source = est_row[0] if est_row else None
+
+                cursor.execute(
+                    """
+                    SELECT name FROM sqlite_master
+                    WHERE (type='table' OR type='view')
+                      AND name IN ('empresas_completas', 'empresas')
+                    ORDER BY CASE WHEN name='empresas_completas' THEN 0 ELSE 1 END
+                    LIMIT 1
+                    """
+                )
+                emp_row = cursor.fetchone()
+                emp_source = emp_row[0] if emp_row else None
+
                 # Verificar se temos dados de estabelecimentos (fast check)
                 t0 = time.time()
-                cursor.execute("SELECT 1 FROM estabelecimentos_completos LIMIT 1")
-                has_estabelecimentos = cursor.fetchone() is not None
+                if est_source:
+                    cursor.execute(f"SELECT 1 FROM {est_source} LIMIT 1")
+                    has_estabelecimentos = cursor.fetchone() is not None
+                else:
+                    has_estabelecimentos = False
                 t_has_est = time.time() - t0
                 print(f"[TIMING] /filters has_estabelecimentos: {t_has_est:.3f}s (fast check)")
 
@@ -434,15 +473,36 @@ class CNPJApp:
                     cursor.execute("SELECT uf, total_estabelecimentos as total FROM aggregates_ufs ORDER BY uf ASC")
                     ufs = [{"value": uf, "label": (uf or ''), "count": total} for uf, total in cursor.fetchall()]
                 else:
-                    # UFs disponíveis - usar estabelecimentos_completos e ordenar por uf ASC
-                    cursor.execute("""
-                        SELECT uf, COUNT(*) as total_estabelecimentos
-                        FROM estabelecimentos_completos
-                        WHERE uf IS NOT NULL AND uf != ''
-                        GROUP BY uf
-                        ORDER BY uf ASC
-                    """)
-                    ufs = [{"value": uf, "label": (uf or ''), "count": total} for uf, total in cursor.fetchall()]
+                    # Fallback ultrarrápido: lista fixa de UFs para evitar varredura grande.
+                    ufs = [
+                        {"value": "AC", "label": "AC", "count": None},
+                        {"value": "AL", "label": "AL", "count": None},
+                        {"value": "AM", "label": "AM", "count": None},
+                        {"value": "AP", "label": "AP", "count": None},
+                        {"value": "BA", "label": "BA", "count": None},
+                        {"value": "CE", "label": "CE", "count": None},
+                        {"value": "DF", "label": "DF", "count": None},
+                        {"value": "ES", "label": "ES", "count": None},
+                        {"value": "GO", "label": "GO", "count": None},
+                        {"value": "MA", "label": "MA", "count": None},
+                        {"value": "MG", "label": "MG", "count": None},
+                        {"value": "MS", "label": "MS", "count": None},
+                        {"value": "MT", "label": "MT", "count": None},
+                        {"value": "PA", "label": "PA", "count": None},
+                        {"value": "PB", "label": "PB", "count": None},
+                        {"value": "PE", "label": "PE", "count": None},
+                        {"value": "PI", "label": "PI", "count": None},
+                        {"value": "PR", "label": "PR", "count": None},
+                        {"value": "RJ", "label": "RJ", "count": None},
+                        {"value": "RN", "label": "RN", "count": None},
+                        {"value": "RO", "label": "RO", "count": None},
+                        {"value": "RR", "label": "RR", "count": None},
+                        {"value": "RS", "label": "RS", "count": None},
+                        {"value": "SC", "label": "SC", "count": None},
+                        {"value": "SE", "label": "SE", "count": None},
+                        {"value": "SP", "label": "SP", "count": None},
+                        {"value": "TO", "label": "TO", "count": None},
+                    ]
                 t_ufs = time.time() - t0
                 print(f"[TIMING] /filters ufs: {t_ufs:.3f}s, found {len(ufs)} ufs")
 
@@ -498,50 +558,14 @@ class CNPJApp:
                         }.get(porte_key, porte_key)
                         portes.append({"value": porte_key, "label": label, "count": total})
                 else:
-                    # Fallback to slower counts
-                    portes_classificacao = []
-                    cursor.execute("""
-                        SELECT COUNT(*) as total
-                        FROM simples
-                        WHERE opcao_mei = 'S'
-                    """)
-                    total_mei = cursor.fetchone()[0]
-                    if total_mei > 0:
-                        portes_classificacao.append({"value": "MEI", "label": "Microempreendedor Individual (MEI)", "count": total_mei})
-                    cursor.execute("""
-                        SELECT COUNT(*) as total
-                        FROM empresas_completas
-                        WHERE porte IN ('49', '50') AND porte IS NOT NULL AND porte != ''
-                    """)
-                    total_micro = cursor.fetchone()[0]
-                    if total_micro > 0:
-                        portes_classificacao.append({"value": "MICRO", "label": "Microempresa (ME)", "count": total_micro})
-                    cursor.execute("""
-                        SELECT COUNT(*) as total
-                        FROM empresas_completas
-                        WHERE porte IN ('05', '16', '17', '19') AND porte IS NOT NULL AND porte != ''
-                    """)
-                    total_pequeno = cursor.fetchone()[0]
-                    if total_pequeno > 0:
-                        portes_classificacao.append({"value": "PEQUENO", "label": "Empresa de Pequeno Porte (EPP)", "count": total_pequeno})
-                    cursor.execute("""
-                        SELECT COUNT(*) as total
-                        FROM empresas_completas
-                        WHERE porte IN ('43', '34', '65', '59') AND porte IS NOT NULL AND porte != ''
-                    """)
-                    total_medio = cursor.fetchone()[0]
-                    if total_medio > 0:
-                        portes_classificacao.append({"value": "MEDIO", "label": "Empresa de Médio Porte", "count": total_medio})
-                    cursor.execute("""
-                        SELECT COUNT(*) as total
-                        FROM empresas_completas
-                        WHERE porte NOT IN ('49', '50', '05', '16', '17', '19', '43', '34', '65', '59')
-                        AND porte IS NOT NULL AND porte != ''
-                    """)
-                    total_grande = cursor.fetchone()[0]
-                    if total_grande > 0:
-                        portes_classificacao.append({"value": "GRANDE", "label": "Grande Empresa", "count": total_grande})
-                    portes = portes_classificacao
+                    # Fallback ultrarrápido: evita múltiplos COUNT(*) full-scan em bases grandes.
+                    portes = [
+                        {"value": "MEI", "label": "Microempreendedor Individual (MEI)", "count": None},
+                        {"value": "MICRO", "label": "Microempresa (ME)", "count": None},
+                        {"value": "PEQUENO", "label": "Empresa de Pequeno Porte (EPP)", "count": None},
+                        {"value": "MEDIO", "label": "Empresa de Médio Porte", "count": None},
+                        {"value": "GRANDE", "label": "Grande Empresa", "count": None},
+                    ]
 
                 # Status Simples Nacional - use aggregates_simples if present
                 cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='aggregates_simples'")
@@ -552,19 +576,10 @@ class CNPJApp:
                         descricao = 'Optante pelo Simples' if opcao == 'S' else ('Não Optante' if opcao == 'N' else 'Não Informado')
                         simples_opcoes.append({"value": opcao, "label": descricao, "count": total})
                 else:
-                    cursor.execute("""
-                        SELECT
-                            opcao_simples,
-                            CASE WHEN opcao_simples = 'S' THEN 'Optante pelo Simples'
-                                 WHEN opcao_simples = 'N' THEN 'Não Optante'
-                                 ELSE 'Não Informado' END as descricao,
-                            COUNT(*) as total
-                        FROM simples
-                        GROUP BY opcao_simples
-                        ORDER BY total DESC
-                    """)
-                    simples_opcoes = [{"value": opcao, "label": descricao, "count": total}
-                                    for opcao, descricao, total in cursor.fetchall()]
+                    simples_opcoes = [
+                        {"value": "S", "label": "Optante pelo Simples", "count": None},
+                        {"value": "N", "label": "Não Optante", "count": None},
+                    ]
 
                 # Situações Cadastrais disponíveis
                 situacoes_cadastrais = [
@@ -578,6 +593,7 @@ class CNPJApp:
                 # Montar resposta
                 response_obj = {
                     "ufs": ufs,
+                    "municipios": [],
                     "cnaes": cnaes,
                     "naturezas_juridicas": naturezas_juridicas,
                     "portes": portes,
@@ -604,6 +620,64 @@ class CNPJApp:
             except Exception as e:
                 print("[ERRO] Exceção no handler /filters:")
                 traceback.print_exc()
+                return jsonify({"error": str(e)}), 500
+
+        @self.app.route('/municipios')
+        def get_municipios_by_uf():
+            """Retorna municípios da UF selecionada para filtro em cascata."""
+            try:
+                uf = (request.args.get('uf') or '').strip().upper()
+                if not uf:
+                    return jsonify({"uf": "", "municipios": [], "timestamp": datetime.now().isoformat()})
+
+                if not self.db.connect():
+                    return jsonify({"error": "Database connection failed"}), 500
+
+                cursor = self.db.connection.cursor()
+
+                cursor.execute(
+                    """
+                    SELECT name FROM sqlite_master
+                    WHERE (type='table' OR type='view')
+                      AND name IN ('estabelecimentos_completos', 'estabelecimentos')
+                    ORDER BY CASE WHEN name='estabelecimentos_completos' THEN 0 ELSE 1 END
+                    LIMIT 1
+                    """
+                )
+                row = cursor.fetchone()
+                est_source = row[0] if row else None
+                if not est_source:
+                    return jsonify({"uf": uf, "municipios": [], "timestamp": datetime.now().isoformat()})
+
+                start = time.time()
+                cursor.execute(
+                    f"""
+                    SELECT
+                        d.codigo_municipio as value,
+                        COALESCE(NULLIF(TRIM(m.nome_municipio), ''), d.codigo_municipio) as label
+                    FROM (
+                        SELECT DISTINCT est.municipio as codigo_municipio
+                        FROM {est_source} est
+                        WHERE est.uf = ?
+                          AND est.municipio IS NOT NULL
+                          AND TRIM(est.municipio) != ''
+                    ) d
+                    LEFT JOIN municipios m ON m.codigo_municipio = d.codigo_municipio
+                    ORDER BY label ASC
+                    """,
+                    [uf],
+                )
+
+                municipios = [{"value": value, "label": label, "uf": uf} for value, label in cursor.fetchall()]
+                elapsed = time.time() - start
+                print(f"[TIMING] /municipios uf={uf}: {elapsed:.3f}s, found {len(municipios)} municipios")
+
+                return jsonify({
+                    "uf": uf,
+                    "municipios": municipios,
+                    "timestamp": datetime.now().isoformat()
+                })
+            except Exception as e:
                 return jsonify({"error": str(e)}), 500
 
         @self.app.route('/query', methods=['POST'])
@@ -909,7 +983,11 @@ class CNPJApp:
             """Exporta dados filtrados em CSV"""
             conn = None
             try:
-                filtros = request.get_json() or {}
+                payload = request.get_json() or {}
+                if isinstance(payload, dict) and isinstance(payload.get('filtros'), dict):
+                    filtros = payload.get('filtros') or {}
+                else:
+                    filtros = payload if isinstance(payload, dict) else {}
 
                 # Usa conexão dedicada para export para evitar contenção com requisições paralelas.
                 conn = sqlite3.connect(self.db_path, timeout=60, check_same_thread=False)
@@ -930,7 +1008,7 @@ class CNPJApp:
                 # Isso reduz contenção e estabiliza o tempo de export no frontend.
                 cursor = conn.cursor()
                 cursor.execute('DROP TABLE IF EXISTS temp.export_estab')
-                cnpj_basicos = filtros.get('cnpj_basicos')
+                cnpj_basicos = payload.get('cnpj_basicos') if isinstance(payload, dict) else None
                 if isinstance(cnpj_basicos, list) and len(cnpj_basicos) > 0:
                     cleaned_basicos = []
                     for b in cnpj_basicos:
@@ -950,13 +1028,17 @@ class CNPJApp:
                         [(b,) for b in cleaned_basicos[:100000]],
                     )
                     cursor.execute(
-                        """
+                        f"""
                         CREATE TEMP TABLE export_estab AS
                         SELECT est.*
                         FROM estabelecimentos_completos est
+                        LEFT JOIN empresas_completas e ON est.cnpj_basico = e.cnpj_basico
+                        LEFT JOIN simples s ON est.cnpj_basico = s.cnpj_basico
                         INNER JOIN export_basicos_input bi ON bi.cnpj_basico = est.cnpj_basico
+                        WHERE {where_sql}
                         LIMIT 100000
-                        """
+                        """,
+                        params,
                     )
                 else:
                     cursor.execute(
@@ -1212,7 +1294,7 @@ class CNPJApp:
 
                 try:
                     conn.set_progress_handler(_export_progress_handler, 1000)
-                    cursor.execute(sql_export, params)
+                    cursor.execute(sql_export)
                 except sqlite3.OperationalError as oe:
                     try:
                         conn.set_progress_handler(None, 0)

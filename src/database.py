@@ -29,6 +29,21 @@ class CNPJDatabase:
                 pass
             # Desabilitar chaves estrangeiras temporariamente para importação
             self.connection.execute("PRAGMA foreign_keys = OFF")
+
+            # Compatibilidade de schema: manter views esperadas por consultas legadas.
+            # Quando o banco contém apenas tabelas base (empresas/estabelecimentos),
+            # essas views evitam erros "no such table" em rotas antigas.
+            try:
+                self.connection.execute(
+                    "CREATE VIEW IF NOT EXISTS empresas_completas AS SELECT * FROM empresas"
+                )
+                self.connection.execute(
+                    "CREATE VIEW IF NOT EXISTS estabelecimentos_completos AS SELECT * FROM estabelecimentos"
+                )
+            except Exception:
+                # Não bloquear conexão caso as tabelas base ainda não existam.
+                pass
+
             print(f"OK - Conectado ao banco: {self.db_path}")
             return True
         except Exception as e:

@@ -14,6 +14,7 @@ const PREFETCH_CONCURRENCY = 3;
 const pageCache = new Map();
 let currentSearchToken = 0;
 const activeQueryControllers = new Set();
+let municipioRequestToken = 0;
 
 // Elementos DOM
 const statusCard = document.getElementById('statusCard');
@@ -173,6 +174,12 @@ async function loadFilters() {
             });
         }
 
+        // Município depende da UF selecionada (carregamento sob demanda)
+        const municipioSelect = document.getElementById('municipio');
+        if (municipioSelect) {
+            updateMunicipioOptions();
+        }
+
         // Carregar CNAEs
         const cnaeSelect = document.getElementById('cnae');
         if (cnaeSelect) {
@@ -256,6 +263,9 @@ async function loadFilters() {
 
         const simplesSelect = document.getElementById('opcao_simples');
         if (simplesSelect) simplesSelect.innerHTML = '<option value="">Servidor offline - Inicie o Flask</option>';
+
+        const municipioSelect = document.getElementById('municipio');
+        if (municipioSelect) municipioSelect.innerHTML = '<option value="">Servidor offline - Inicie o Flask</option>';
     }
 }
 
@@ -264,6 +274,78 @@ function setupEventListeners() {
     filtersForm.addEventListener('submit', handleSearch);
     clearFiltersBtn.addEventListener('click', clearFilters);
     exportBtn.addEventListener('click', handleExport);
+
+    const ufSelect = document.getElementById('uf');
+    if (ufSelect) {
+        ufSelect.addEventListener('change', async () => {
+            await updateMunicipioOptions(ufSelect.value);
+        });
+    }
+}
+
+async function updateMunicipioOptions(selectedUf = '') {
+    const municipioSelect = document.getElementById('municipio');
+    if (!municipioSelect) {
+        return;
+    }
+
+    municipioSelect.innerHTML = '';
+
+    if (!selectedUf) {
+        municipioSelect.disabled = true;
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = 'Selecione um estado primeiro';
+        municipioSelect.appendChild(placeholder);
+        return;
+    }
+
+    const firstOption = document.createElement('option');
+    firstOption.value = '';
+    firstOption.textContent = 'Todos os municípios do estado';
+    municipioSelect.appendChild(firstOption);
+
+    try {
+        const requestToken = ++municipioRequestToken;
+        municipioSelect.disabled = true;
+        const response = await fetch(`${API_BASE_URL}/municipios?uf=${encodeURIComponent(selectedUf)}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            mode: 'cors'
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        // Ignora resposta atrasada de uma UF antiga quando o usuário trocou rapidamente.
+        if (requestToken !== municipioRequestToken) {
+            return;
+        }
+        const municipios = (data.municipios || []).slice().sort((a, b) => {
+            const aLabel = (a?.label || '').toString().toUpperCase();
+            const bLabel = (b?.label || '').toString().toUpperCase();
+            return aLabel.localeCompare(bLabel);
+        });
+
+        municipios.forEach((municipio) => {
+            const option = document.createElement('option');
+            option.value = municipio.value || '';
+            option.textContent = municipio.label || municipio.value || '';
+            municipioSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Erro ao carregar municípios por UF:', error);
+        const errorOption = document.createElement('option');
+        errorOption.value = '';
+        errorOption.textContent = 'Erro ao carregar municípios';
+        municipioSelect.appendChild(errorOption);
+    }
+
+    municipioSelect.disabled = false;
 }
 
 // Manipular busca
@@ -287,6 +369,11 @@ async function handleSearch(event) {
         // UF
         if (formData.get('uf')) {
             currentFilters.uf = formData.get('uf');
+        }
+
+        // Município
+        if (formData.get('municipio')) {
+            currentFilters.municipio = formData.get('municipio');
         }
 
         // CNAE
@@ -633,7 +720,10 @@ async function handleExport() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ cnpj_basicos: cnpjBasicos }),
+            body: JSON.stringify({
+                cnpj_basicos: cnpjBasicos,
+                filtros: currentFilters,
+            }),
             signal: controller.signal
         });
         clearTimeout(timeoutId);
@@ -684,9 +774,22 @@ async function handleExport() {
 // Limpar filtros
 function clearFilters() {
     filtersForm.reset();
-    document.getElementById('uf').selectedIndex = -1;
-    document.getElementById('cnae').selectedIndex = -1;
-    document.getElementById('situacao_cadastral').selectedIndex = -1;
+    const ufSelect = document.getElementById('uf');
+    if (ufSelect) {
+        ufSelect.value = '';
+    }
+
+    const cnaeSelect = document.getElementById('cnae');
+    if (cnaeSelect) {
+        cnaeSelect.selectedIndex = 0;
+    }
+
+    const situacaoSelect = document.getElementById('situacao_cadastral');
+    if (situacaoSelect) {
+        situacaoSelect.selectedIndex = 0;
+    }
+
+    updateMunicipioOptions();
     currentFilters = {};
     hideResultsSection();
 }
