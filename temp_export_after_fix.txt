@@ -1,0 +1,6 @@
+﻿elapsed_s=43.51
+response_success=True
+backend_execution_s=43.186
+total_registros=25000
+file=cnpj_exportacao_20260323_213719.csv
+warning=Exportação limitada a 25.000 registros. Aplique filtros mais específicos para obter resultados menores.

@@ -21,7 +21,7 @@ logging.basicConfig(
 )
 
 class CNPJProjectImporter:
-    def __init__(self, db_path="data/cnpj_database.db", data_path="C:/Users/victor.vasconcelos/Documents/PROJETO CNPJ"):
+    def __init__(self, db_path="data/cnpj_database.db", data_path="C:/Users/Victor/Documents/CNPJ"):
         self.db_path = db_path
         self.data_path = Path(data_path)
         self.connection = None
@@ -85,6 +85,15 @@ class CNPJProjectImporter:
                 'columns': [
                     'cnpj_basico', 'opcao_simples', 'data_opcao_simples', 'data_exclusao_simples',
                     'opcao_mei', 'data_opcao_mei', 'data_exclusao_mei'
+                ],
+                'encoding': 'latin1'
+            },
+            'Socios0': {
+                'table': 'socios',
+                'columns': [
+                    'cnpj_basico', 'identificador_socio', 'nome_socio', 'cpf_cnpj_socio',
+                    'qualificacao_socio', 'data_entrada_sociedade', 'pais', 'representante_legal',
+                    'nome_representante', 'qualificacao_representante', 'faixa_etaria'
                 ],
                 'encoding': 'latin1'
             }
@@ -245,7 +254,7 @@ class CNPJProjectImporter:
         # Ordem de importação (tabelas de referência primeiro, depois menores para maiores)
         import_order = [
             'Motivos', 'Naturezas', 'Paises', 'Qualificacoes', 
-            'Cnaes', 'Municipios', 'Empresas0', 'Estabelecimentos0', 'Simples'
+            'Cnaes', 'Municipios', 'Empresas0', 'Estabelecimentos0', 'Simples', 'Socios0'
         ]
         
         success_count = 0

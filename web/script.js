@@ -6,10 +6,17 @@ let currentPage = 1;
 let currentFilters = {};
 let totalResults = 0;
 let resultsPerPage = 50;
+let useFetchAll = false;
+
+// Estratégia de pré-carregamento paginado
+const PREFETCH_INITIAL_PAGES = 3;
+const PREFETCH_CONCURRENCY = 3;
+const pageCache = new Map();
+let currentSearchToken = 0;
+const activeQueryControllers = new Set();
 
 // Elementos DOM
 const statusCard = document.getElementById('statusCard');
-const statsGrid = document.getElementById('statsGrid');
 const filtersForm = document.getElementById('filtersForm');
 const resultsSection = document.getElementById('resultsSection');
 const resultsTable = document.getElementById('resultsTable');
@@ -32,7 +39,6 @@ async function initializeApp() {
         const apiConnected = await checkAPIStatus();
 
         if (apiConnected) {
-            await loadStats();
             await loadFilters();
             setupEventListeners();
         } else {
@@ -52,30 +58,6 @@ function setupOfflineInterface() {
     filterInputs.forEach(input => {
         input.disabled = true;
     });
-
-    // Mostrar estatísticas offline
-    statsGrid.innerHTML = `
-        <div class="stat-card">
-            <i class="fas fa-server" style="color: #e74c3c;"></i>
-            <div class="stat-value">Offline</div>
-            <div class="stat-label">Servidor Flask</div>
-        </div>
-        <div class="stat-card">
-            <i class="fas fa-exclamation-triangle" style="color: #f39c12;"></i>
-            <div class="stat-value">Indisponível</div>
-            <div class="stat-label">Dados</div>
-        </div>
-        <div class="stat-card">
-            <i class="fas fa-info-circle" style="color: #3498db;"></i>
-            <div class="stat-value">python app.py</div>
-            <div class="stat-label">Execute no Terminal</div>
-        </div>
-        <div class="stat-card">
-            <i class="fas fa-refresh" style="color: #9b59b6;"></i>
-            <div class="stat-value">F5</div>
-            <div class="stat-label">Recarregar Página</div>
-        </div>
-    `;
 
     // Adicionar botão de reconexão
     const reconnectBtn = document.createElement('button');
@@ -141,59 +123,11 @@ async function checkAPIStatus() {
     }
 }
 
-// Carregar estatísticas
-async function loadStats() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/stats`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            mode: 'cors'
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-
-        statsGrid.innerHTML = `
-            <div class="stat-card">
-                <i class="fas fa-building"></i>
-                <div class="stat-value">${formatNumber(data.tabelas.empresas || 0)}</div>
-                <div class="stat-label">Empresas</div>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-industry"></i>
-                <div class="stat-value">${formatNumber(data.tabelas.cnaes || 0)}</div>
-                <div class="stat-label">CNAEs Disponíveis</div>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-map-marker-alt"></i>
-                <div class="stat-value">${data.top_ufs && data.top_ufs.length}</div>
-                <div class="stat-label">Estados (UFs)</div>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-chart-pie"></i>
-                <div class="stat-value">${data.top_naturezas[0]?.natureza?.slice(0, 15) || 'N/A'}...</div>
-                <div class="stat-label">Principal Natureza<br><small>(${formatNumber(data.top_naturezas[0]?.total || 0)} empresas)</small></div>
-            </div>
-        `;
-    } catch (error) {
-        console.error('Erro ao carregar estatísticas:', error);
-        statsGrid.innerHTML = `
-            <div class="stat-card">
-                <i class="fas fa-exclamation-triangle"></i>
-                <div class="stat-value">Erro</div>
-                <div class="stat-label">Não foi possível carregar estatísticas</div>
-            </div>
-        `;
-    }
-}
-
 // Carregar opções de filtros
 async function loadFilters() {
+    console.log('[INFO] Carregando filtros...');
+    const startTime = Date.now();
+    
     try {
         const response = await fetch(`${API_BASE_URL}/filters`, {
             method: 'GET',
@@ -208,6 +142,9 @@ async function loadFilters() {
         }
 
         const data = await response.json();
+        
+        const loadTime = ((Date.now() - startTime) / 1000).toFixed(2);
+        console.log(`[INFO] Filtros carregados em ${loadTime}s`);
 
         // Helper to safely read value/label from various backend shapes
         function readValue(o, keys) {
@@ -379,8 +316,9 @@ async function handleSearch(event) {
 
 
 
-        // Resetar página
+        // Resetar página e cache para a nova busca
         currentPage = 1;
+        pageCache.clear();
 
         // Fazer busca
         await performSearch();
@@ -396,38 +334,104 @@ async function handleSearch(event) {
 // Realizar busca na API
 async function performSearch() {
     try {
-        const queryParams = {
-            ...currentFilters,
-            page: currentPage,
-            per_page: resultsPerPage
-        };
+        // Cada busca ganha um token; prefetch antigo é ignorado quando token muda
+        const searchToken = ++currentSearchToken;
 
+        // 1) Carregar imediatamente a página atual para resposta rápida ao usuário
+        const firstPageData = await fetchPageData(currentPage, searchToken);
+        pageCache.set(currentPage, firstPageData.data || []);
+        totalResults = firstPageData.pagination ? firstPageData.pagination.total : 0;
+
+        displayResults(firstPageData.data || []);
+        updatePagination();
+        showResultsSection();
+
+        // 2) Pré-carregar as 10 primeiras páginas com prioridade
+        const totalPages = Math.max(1, Math.ceil(totalResults / resultsPerPage));
+        const initialPages = [];
+        for (let p = 1; p <= Math.min(PREFETCH_INITIAL_PAGES, totalPages); p++) {
+            if (p !== currentPage && !pageCache.has(p)) {
+                initialPages.push(p);
+            }
+        }
+        prefetchPages(initialPages, searchToken);
+
+    } catch (error) {
+        console.error('Erro na busca:', error);
+        showError('Erro ao buscar dados');
+    }
+}
+
+function buildPageQueryParams(page) {
+    return {
+        ...currentFilters,
+        page,
+        per_page: resultsPerPage,
+        fetch_all: false
+    };
+}
+
+async function fetchPageData(page, searchToken) {
+    // Se a busca mudou, não seguir com requisições antigas
+    if (searchToken !== currentSearchToken) {
+        throw new Error('Busca substituída por uma nova solicitação.');
+    }
+
+    const controller = new AbortController();
+    activeQueryControllers.add(controller);
+
+    try {
         const response = await fetch(`${API_BASE_URL}/query`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(queryParams)
+            body: JSON.stringify(buildPageQueryParams(page)),
+            signal: controller.signal
         });
 
         if (!response.ok) {
             throw new Error(`Erro na API: ${response.status}`);
         }
 
-        const data = await response.json();
-
-        // Atualizar estado - usar formato correto da API
-        totalResults = data.pagination ? data.pagination.total : data.total;
-
-        // Exibir resultados
-        displayResults(data.data);
-        updatePagination();
-        showResultsSection();
-
-    } catch (error) {
-        console.error('Erro na busca:', error);
-        showError('Erro ao buscar dados');
+        return response.json();
+    } finally {
+        activeQueryControllers.delete(controller);
     }
+}
+
+async function prefetchPages(pages, searchToken) {
+    if (!pages || pages.length === 0) {
+        return;
+    }
+
+    const queue = pages.slice();
+    const workers = [];
+
+    for (let i = 0; i < PREFETCH_CONCURRENCY; i++) {
+        workers.push((async () => {
+            while (queue.length > 0) {
+                if (searchToken !== currentSearchToken) {
+                    return;
+                }
+
+                const page = queue.shift();
+                if (!page || pageCache.has(page)) {
+                    continue;
+                }
+
+                try {
+                    const data = await fetchPageData(page, searchToken);
+                    pageCache.set(page, data.data || []);
+                } catch (err) {
+                    // Prefetch é best-effort: ignora falhas e segue para outras páginas
+                    console.warn(`Prefetch falhou para página ${page}:`, err.message || err);
+                }
+            }
+        })());
+    }
+
+    await Promise.allSettled(workers);
 }
 
 // Exibir resultados na tabela
@@ -460,7 +464,9 @@ function displayResults(results) {
 
     const startResult = (currentPage - 1) * resultsPerPage + 1;
     const endResult = Math.min(currentPage * resultsPerPage, totalResults);
-    resultsCount.textContent = `${formatNumber(startResult)}-${formatNumber(endResult)} de ${formatNumber(totalResults)} resultados`;
+    const cachedPages = pageCache.size;
+    const totalPages = Math.max(1, Math.ceil(totalResults / resultsPerPage));
+    resultsCount.textContent = `${formatNumber(startResult)}-${formatNumber(endResult)} de ${formatNumber(totalResults)} resultados | cache: ${cachedPages}/${totalPages} páginas`;
 }
 
 // Atualizar paginação
@@ -524,10 +530,28 @@ async function goToPage(page) {
     }
 
     currentPage = page;
+    // Navegação instantânea quando página já está no cache
+    if (pageCache.has(page)) {
+        displayResults(pageCache.get(page));
+        updatePagination();
+        return;
+    }
+
     showLoading('Carregando página...');
 
     try {
-        await performSearch();
+        const data = await fetchPageData(page, currentSearchToken);
+        pageCache.set(page, data.data || []);
+        totalResults = data.pagination ? data.pagination.total : totalResults;
+
+        displayResults(data.data || []);
+        updatePagination();
+
+        // Pré-carrega páginas vizinhas para navegação suave
+        const totalPages = Math.max(1, Math.ceil(totalResults / resultsPerPage));
+        const neighbors = [page + 1, page + 2, page - 1, page - 2]
+            .filter(p => p >= 1 && p <= totalPages && !pageCache.has(p));
+        prefetchPages(neighbors, currentSearchToken);
     } finally {
         hideLoading();
     }
@@ -536,18 +560,56 @@ async function goToPage(page) {
 // Manipular exportação
 async function handleExport() {
     try {
-        showLoading('Gerando arquivo CSV...');
+        const EXPORT_LIMIT = 100000;
+        const EXPORT_TIMEOUT_MS = 420000;
+
+        // Cancela prefetch/queries em curso para priorizar o export no backend.
+        currentSearchToken++;
+        for (const controller of activeQueryControllers) {
+            try {
+                controller.abort();
+            } catch (_) {
+                // no-op
+            }
+        }
+        activeQueryControllers.clear();
+
+        // Aviso prévio para alinhar expectativa do usuário com o limite atual do backend.
+        if (totalResults > EXPORT_LIMIT) {
+            const confirmed = window.confirm(
+                `A exportação está limitada a ${formatNumber(EXPORT_LIMIT)} registros. ` +
+                `Sua busca atual tem ${formatNumber(totalResults)} resultados.\n\n` +
+                'Deseja continuar e exportar os primeiros 100.000 registros?'
+            );
+            if (!confirmed) {
+                return;
+            }
+        }
+
+        showLoading('Gerando arquivo CSV (pausando prefetch)...');
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), EXPORT_TIMEOUT_MS);
 
         const response = await fetch(`${API_BASE_URL}/export`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(currentFilters)
+            body: JSON.stringify(currentFilters),
+            signal: controller.signal
         });
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
-            throw new Error(`Erro na exportação: ${response.status}`);
+            let backendMessage = '';
+            try {
+                const errorPayload = await response.json();
+                backendMessage = errorPayload?.message || errorPayload?.error || '';
+            } catch (_) {
+                backendMessage = '';
+            }
+            throw new Error(`Erro na exportação (${response.status})${backendMessage ? `: ${backendMessage}` : ''}`);
         }
 
         const data = await response.json();
@@ -562,14 +624,21 @@ async function handleExport() {
             link.click();
             document.body.removeChild(link);
 
-            showSuccess(`Arquivo ${data.filename} exportado com sucesso! (${formatNumber(data.total_records)} registros)`);
+            const exportedCount = data.total_registros ?? data.total_records ?? 0;
+            const executionTime = data.execution_time ? `${data.execution_time.toFixed(2)}s` : 'N/A';
+            const warningSuffix = data.warning ? `\n${data.warning}` : '';
+            showSuccess(`Arquivo ${data.filename} exportado com sucesso!\n(${formatNumber(exportedCount)} registros em ${executionTime})${warningSuffix}`);
         } else {
             throw new Error('Erro ao gerar arquivo de exportação');
         }
 
     } catch (error) {
         console.error('Erro na exportação:', error);
-        showError('Erro ao exportar dados');
+        if (error.name === 'AbortError') {
+            showError('A exportação excedeu o tempo limite de 420s. Tente aplicar mais filtros.');
+        } else {
+            showError(error.message || 'Erro ao exportar dados');
+        }
     } finally {
         hideLoading();
     }

@@ -7,6 +7,7 @@ import time
 import os
 import sys
 from datetime import datetime
+import csv
 # Import do módulo de database: quando o pacote `src` é usado como pacote, preferimos
 # import relativo; quando o arquivo é executado diretamente como script (python src/app.py)
 # a importação relativa falha. Tentamos o relativo e recuamos para um import absoluto.
@@ -274,11 +275,12 @@ class CNPJApp:
                     }), 200
 
                 cursor = self.db.connection.cursor()
-                # Check if expected table exists
-                cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='empresas_completas'")
+                # Check if expected table/view exists (accept both table and view)
+                cursor.execute("SELECT name FROM sqlite_master WHERE (type='table' OR type='view') AND name='estabelecimentos_completos'")
                 if cursor.fetchone():
                     try:
-                        cursor.execute("SELECT COUNT(*) FROM empresas_completas")
+                        # Return estabelecimentos count (what users see as "empresas")
+                        cursor.execute("SELECT COUNT(*) FROM estabelecimentos_completos")
                         total_empresas = cursor.fetchone()[0]
                     except Exception:
                         total_empresas = None
@@ -294,15 +296,18 @@ class CNPJApp:
                     return jsonify({
                         "status": "uninitialized",
                         "database": "connected",
-                        "message": "Tabelas esperadas não encontradas (ex: empresas_completas)",
+                        "message": "Tabelas esperadas não encontradas (ex: estabelecimentos_completos)",
                         "db_path": self.db_path,
                         "timestamp": datetime.now().isoformat()
                     }), 200
-            finally:
-                try:
-                    self.db.disconnect()
-                except Exception:
-                    pass
+            except Exception as e:
+                return jsonify({
+                    "status": "error",
+                    "database": "error",
+                    "message": str(e),
+                    "db_path": self.db_path,
+                    "timestamp": datetime.now().isoformat()
+                }), 500
 
         @self.app.route('/stats')
         @ttl_cache(ttl=120)
@@ -316,7 +321,8 @@ class CNPJApp:
 
                 # Prefer aggregated meta table when available (much faster)
                 cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='aggregates_meta'")
-                if cursor.fetchone():
+                has_aggregates_meta = cursor.fetchone() is not None
+                if has_aggregates_meta:
                     cursor.execute("SELECT total_empresas, total_estabelecimentos, total_simples, total_cnaes FROM aggregates_meta LIMIT 1")
                     row = cursor.fetchone()
                     if row:
@@ -336,7 +342,8 @@ class CNPJApp:
 
                 # Top UFs - use aggregates_ufs if present
                 cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='aggregates_ufs'")
-                if cursor.fetchone():
+                has_aggregates_ufs = cursor.fetchone() is not None
+                if has_aggregates_ufs:
                     cursor.execute("SELECT uf, total_estabelecimentos as total FROM aggregates_ufs ORDER BY total DESC LIMIT 5")
                     top_ufs = [{"uf": uf, "total": total} for uf, total in cursor.fetchall()]
                 else:
@@ -352,7 +359,8 @@ class CNPJApp:
 
                 # Top Naturezas - use aggregates_naturezas if present
                 cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='aggregates_naturezas'")
-                if cursor.fetchone():
+                has_aggregates_naturezas = cursor.fetchone() is not None
+                if has_aggregates_naturezas:
                     cursor.execute("SELECT codigo_natureza, descricao_natureza, total FROM aggregates_naturezas ORDER BY total DESC LIMIT 10")
                     top_naturezas = [{"natureza": descricao or "N/A", "total": total} for _, descricao, total in cursor.fetchall()]
                 else:
@@ -365,8 +373,6 @@ class CNPJApp:
                         LIMIT 10
                     """)
                     top_naturezas = [{"natureza": natureza or "N/A", "total": total} for natureza, total in cursor.fetchall()]
-
-                self.db.disconnect()
 
                 return jsonify({
                     "tabelas": {
@@ -399,12 +405,14 @@ class CNPJApp:
                 return jsonify({"error": str(e)}), 500
 
         @self.app.route('/filters')
-        @ttl_cache(ttl=300)
+        @ttl_cache(ttl=1800)  # Cache por 30 minutos (era 5 minutos)
         def get_filter_options():
             """Retorna opções disponíveis para cada filtro"""
             import traceback
             try:
                 start_total = time.time()
+                print("[INFO] /filters - Iniciando carregamento de filtros...")
+                
                 if not self.db.connect():
                     print("[ERRO] Falha ao conectar ao banco de dados em /filters")
                     return jsonify({"error": "Database connection failed"}), 500
@@ -438,23 +446,24 @@ class CNPJApp:
                 t_ufs = time.time() - t0
                 print(f"[TIMING] /filters ufs: {t_ufs:.3f}s, found {len(ufs)} ufs")
 
-                # CNAEs disponíveis - preferir aggregates
+                # CNAEs disponíveis - retornar TODOS os CNAEs para o usuário
                 cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='aggregates_cnaes'")
                 t0 = time.time()
                 if cursor.fetchone():
-                    cursor.execute("SELECT codigo_cnae, descricao_cnae, total FROM aggregates_cnaes ORDER BY total DESC")
-                    cnaes = [{"value": codigo, "label": f"{codigo} - {(descricao or 'Descrição não disponível')[:50]}...", "count": total} for codigo, descricao, total in cursor.fetchall()]
+                    # Aggregates já traz os códigos com contagem; ordenar por código para UX consistente
+                    cursor.execute("SELECT codigo_cnae, descricao_cnae, total FROM aggregates_cnaes ORDER BY codigo_cnae ASC")
+                    cnaes = [{"value": codigo, "label": f"{codigo} - {(descricao or 'Descrição não disponível')}", "count": total} for codigo, descricao, total in cursor.fetchall()]
                 else:
+                    # Fallback leve: usar tabela cnaes (lista completa) sem agregação pesada em estabelecimentos
                     cursor.execute("""
-                        SELECT DISTINCT e.cnae_fiscal_principal as codigo_cnae, c.descricao_cnae
-                        FROM estabelecimentos_completos e
-                        LEFT JOIN cnaes c ON e.cnae_fiscal_principal = c.codigo_cnae
-                        WHERE e.cnae_fiscal_principal IS NOT NULL AND e.cnae_fiscal_principal != ''
-                        ORDER BY e.cnae_fiscal_principal
+                        SELECT codigo_cnae, descricao_cnae
+                        FROM cnaes
+                        WHERE codigo_cnae IS NOT NULL AND codigo_cnae != ''
+                        ORDER BY codigo_cnae ASC
                     """)
-                    cnaes = [{"value": codigo, "label": f"{codigo} - {(descricao or 'Descrição não disponível')[:50]}...", "count": 0} for codigo, descricao in cursor.fetchall()]
+                    cnaes = [{"value": codigo, "label": f"{codigo} - {(descricao or 'Descrição não disponível')}", "count": None} for codigo, descricao in cursor.fetchall()]
                 t_cnaes = time.time() - t0
-                print(f"[TIMING] /filters cnaes: {t_cnaes:.3f}s, found {len(cnaes)} cnaes")
+                print(f"[TIMING] /filters cnaes: {t_cnaes:.3f}s, found {len(cnaes)} cnaes (all)")
 
                 # Naturezas Jurídicas disponíveis - prefer aggregates if present
                 cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='aggregates_naturezas'")
@@ -463,16 +472,15 @@ class CNPJApp:
                     naturezas_juridicas = [{"value": codigo, "label": (descricao or ''), "count": total}
                                for codigo, descricao, total in cursor.fetchall()]
                 else:
+                    # Fallback rápido: evita JOIN+GROUP pesado em empresas_completas.
+                    # Para o filtro, a lista de naturezas é suficiente mesmo sem contagem exata.
                     cursor.execute("""
-                        SELECT n.codigo_natureza, n.descricao_natureza, COUNT(*) as total
-                        FROM empresas_completas e
-                        INNER JOIN naturezas n ON e.natureza_juridica = n.codigo_natureza
-                        GROUP BY n.codigo_natureza, n.descricao_natureza
-                        ORDER BY total DESC
-                        LIMIT 50
+                        SELECT codigo_natureza, descricao_natureza
+                        FROM naturezas
+                        ORDER BY descricao_natureza ASC
                     """)
-                    naturezas_juridicas = [{"value": codigo, "label": (descricao or ''), "count": total}
-                               for codigo, descricao, total in cursor.fetchall()]
+                    naturezas_juridicas = [{"value": codigo, "label": (descricao or ''), "count": None}
+                               for codigo, descricao in cursor.fetchall()]
 
                 # Portes de Empresa disponíveis - use aggregates_portes if present
                 cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='aggregates_portes'")
@@ -580,14 +588,16 @@ class CNPJApp:
                 }
 
                 # Logs adicionais e dump para arquivo para diagnóstico front-end/back-end
+                total_time = time.time() - start_total
                 try:
                     print(f"[INFO] /filters counts -> ufs={len(ufs)}, cnaes={len(cnaes)}, naturezas={len(naturezas_juridicas)}, portes={len(portes)}, simples={len(simples_opcoes)}, situacoes={len(situacoes_cadastrais)}")
-                    with open('last_filters_response.json', 'w', encoding='utf-8') as fh:
-                        json.dump(response_obj, fh, ensure_ascii=False, indent=2)
+                    print(f"[TIMING] /filters TOTAL: {total_time:.3f}s - Resposta enviada com sucesso")
+                    # Dump opcional para diagnóstico (desabilitado por padrão para reduzir I/O).
+                    if os.environ.get('CNPJ_DEBUG_FILTERS_DUMP') == '1':
+                        with open('last_filters_response.json', 'w', encoding='utf-8') as fh:
+                            json.dump(response_obj, fh, ensure_ascii=False, indent=2)
                 except Exception as dump_e:
                     print(f"[WARN] falha ao gravar last_filters_response.json: {dump_e}")
-
-                self.db.disconnect()
 
                 return jsonify(response_obj)
 
@@ -612,8 +622,29 @@ class CNPJApp:
                         filtros['per_page'] = payload.get('per_page')
                 else:
                     filtros = payload
-                page = filtros.get('page', 1)
-                per_page = min(filtros.get('per_page', 50), 1000)  # Máximo 1000 por página
+
+                # Buscar todos os resultados quando solicitado pelo frontend.
+                fetch_all = filtros.get('fetch_all', False)
+                if isinstance(fetch_all, str):
+                    fetch_all = fetch_all.strip().lower() in ('1', 'true', 'yes', 'sim', 's')
+                else:
+                    fetch_all = bool(fetch_all)
+
+                # Normalizar paginação para evitar erros quando o frontend envia strings
+                try:
+                    page = int(filtros.get('page', 1))
+                except (TypeError, ValueError):
+                    page = 1
+                page = max(page, 1)
+
+                try:
+                    per_page_raw = int(filtros.get('per_page', 50))
+                except (TypeError, ValueError):
+                    per_page_raw = 50
+                per_page = max(1, min(per_page_raw, 1000))  # Máximo 1000 por página
+
+                if fetch_all:
+                    page = 1
 
                 if not self.db.connect():
                     return jsonify({"error": "Database connection failed"}), 500
@@ -621,6 +652,12 @@ class CNPJApp:
                 # Construir consulta dinâmica - usando a função centralizada para consistência com /export
                 where_clauses, params = build_where_and_params(filtros)
                 where_sql = " AND ".join(where_clauses) if where_clauses else "1=1"
+
+                if fetch_all and not where_clauses:
+                    return jsonify({
+                        "error": "missing_filters_for_fetch_all",
+                        "message": "Para evitar sobrecarga, fetch_all exige ao menos um filtro"
+                    }), 400
 
                 # helper: progress handler factory (define cedo para estar sempre disponível)
                 def _make_progress_handler(start, max_seconds):
@@ -633,102 +670,51 @@ class CNPJApp:
                 expensive_keys = {'razao_social', 'natureza_juridica', 'porte', 'opcao_simples', 'socios_present'}
                 use_fast_path = not any(k in filtros for k in expensive_keys)
 
-                # Contar total - tentar usar tabelas de agregados quando aplicável para evitar COUNTs pesados
+                # Em fetch_all: retornar TODOS os resultados sem limite (para buscas/consultas)
+                # Em paginação normal: usar agregates se disponível, senão fazer COUNT rápido.
                 cursor = self.db.connection.cursor()
-
                 total = None
-                # marca tempo de início para medir execução mesmo quando total vier de agregados
                 inicio = time.time()
-                # Caso sem filtros (consulta global) podemos usar aggregates_meta
-                if (not where_clauses):
-                    cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='aggregates_meta'")
-                    if cursor.fetchone():
-                        cursor.execute("SELECT total_estabelecimentos FROM aggregates_meta LIMIT 1")
-                        row = cursor.fetchone()
-                        if row:
-                            total = row[0]
-
-                # Caso com um único filtro simples (uf, cnae, natureza, porte, simples) tentar usar tabela específica
-                if total is None:
-                    simple_agg_map = {
-                        'uf': ('aggregates_ufs', 'uf', 'total_estabelecimentos'),
-                        'cnae': ('aggregates_cnaes', 'codigo_cnae', 'total'),
-                        'natureza_juridica': ('aggregates_naturezas', 'codigo_natureza', 'total'),
-                        'porte': ('aggregates_portes', 'porte_key', 'total'),
-                        'opcao_simples': ('aggregates_simples', 'opcao', 'total')
-                    }
-                    # detect filters keys excluding pagination params
-                    filter_keys = [k for k in filtros.keys() if k not in ('page', 'per_page')]
-                    if len(filter_keys) == 1:
-                        fk = filter_keys[0]
-                        if fk in simple_agg_map:
-                            agg_table, agg_col, agg_total_col = simple_agg_map[fk]
-                            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name=?", (agg_table,))
-                            if cursor.fetchone():
-                                # Query the aggregates table for the matching value
-                                val = filtros.get(fk)
-                                try:
-                                    cursor.execute(f"SELECT {agg_total_col} FROM {agg_table} WHERE {agg_col} = ? LIMIT 1", (val,))
-                                    r = cursor.fetchone()
-                                    if r:
-                                        total = r[0]
-                                except Exception:
-                                    # If any problem occurs, fallback to regular count
-                                    total = None
-
-                # Se ainda não obtivemos total por agregados, executar o COUNT com proteção de progress handler
-                if total is None:
-                    if use_fast_path:
-                        # Count only on estabelecimentos_completos (indexed on uf, cnae, municipio)
+                
+                if not fetch_all:
+                    # Tentar aggregates para não fazer COUNT em paginação normal
+                    if not where_clauses:
+                        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='aggregates_meta'")
+                        if cursor.fetchone():
+                            cursor.execute("SELECT total_estabelecimentos FROM aggregates_meta LIMIT 1")
+                            row = cursor.fetchone()
+                            if row:
+                                total = row[0]
+                    # Se ainda não temos total, fazer COUNT rápido sem JOINs em fast_path
+                    if total is None and use_fast_path:
+                        # where_sql referencia est.*, então o COUNT também precisa do alias est.
                         sql_count = f"SELECT COUNT(*) FROM estabelecimentos_completos est WHERE {where_sql}"
-                    else:
-                        # Full join path (slower) - needed when filters reference empresa/simples/socios
-                        sql_count = f"""
-                            SELECT COUNT(*)
-                            FROM estabelecimentos_completos est
-                            LEFT JOIN empresas_completas e ON est.cnpj_basico = e.cnpj_basico
-                            LEFT JOIN simples s ON est.cnpj_basico = s.cnpj_basico
-                            WHERE {where_sql}
-                        """
-
-                    inicio = time.time()
-                    # safety: set a progress handler to abort long-running SQL (protect interactive use)
-                    def _make_progress_handler(start, max_seconds):
-                        def handler():
-                            return 1 if (time.time() - start) > max_seconds else 0
-                        return handler
-
-                    try:
-                        # abort count if longer than 30 seconds (increased temporarily for debugging)
-                        self.db.connection.set_progress_handler(_make_progress_handler(inicio, 30), 1000)
-                        cursor.execute(sql_count, params)
-                        total = cursor.fetchone()[0]
-                        # debug log: count executed
-                        print(f"[DEBUG] count executed sql_count startswith: {sql_count.strip()[:60]}")
-                    except sqlite3.OperationalError as oe:
-                        # Query interrupted by progress handler
                         try:
-                            self.db.disconnect()
+                            cursor.execute(sql_count, params)
+                            r = cursor.fetchone()
+                            if r:
+                                total = r[0]
                         except Exception:
-                            pass
-                        return jsonify({"error": "query_timeout", "message": "Count query timed out", "details": str(oe)}), 503
-                    finally:
-                        try:
-                            self.db.connection.set_progress_handler(None, 0)
-                        except Exception:
-                            pass
+                            total = None
 
                 # Buscar dados paginados - baseado nos dados dos estabelecimentos
                 offset = (page - 1) * per_page
+                # Em fetch_all: sem LIMIT SQL para retornar tudo, MAS avisar que há limite prático (~100K)
+                # para evitar serialização JSON lenta. Para obter > 100K, usar paginação.
+                # Em paginação: aplicar LIMIT e OFFSET para browsing
+                FETCH_ALL_MAX_FOR_JSON = 100000  # Limite prático para serialização JSON
+                if fetch_all:
+                    limit_offset_sql = f"LIMIT {FETCH_ALL_MAX_FOR_JSON}"  # Limite de segurança para JSON
+                else:
+                    limit_offset_sql = "LIMIT ? OFFSET ?"
 
                 if use_fast_path:
-                    # Simpler select primarily from estabelecimentos_completos, joining only small lookup tables
-                    # choose order column: avoid expensive ORDER BY on large non-indexed columns for broad queries
-                    # Use rowid ordering to avoid expensive sorts on large tables
-                    order_col = 'est.rowid'
-                    # Fast path: avoid heavy join to empresas_completas for broad queries.
-                    # Returning a placeholder for razao_social keeps the result shape unchanged
-                    # while eliminating the expensive join.
+                    # Fast path optimizado: sem LEFT JOIN a municipios (muito lento)
+                    # Em fetch_all sem ORDER BY: máxima velocidade
+                    order_clause_fast = ""
+                    if not fetch_all and not where_clauses:
+                        order_clause_fast = "ORDER BY est.cnpj_basico"
+                    
                     sql_data = f"""
                         SELECT
                             SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 1, 2) || '.' ||
@@ -736,6 +722,7 @@ class CNPJApp:
                             SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 6, 3) || '/' ||
                             SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 9, 4) || '-' ||
                             SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 13, 2) as cnpj_formatado,
+                            '' as razao_social,
                             COALESCE(est.nome_fantasia, 'N/A') as nome_fantasia,
                             CASE WHEN est.situacao_cadastral = '02' THEN 'ATIVA'
                                  WHEN est.situacao_cadastral = '03' THEN 'SUSPENSA'
@@ -743,23 +730,18 @@ class CNPJApp:
                                  WHEN est.situacao_cadastral = '08' THEN 'BAIXADA'
                                  ELSE 'NÃO INFORMADO' END as situacao,
                             est.uf,
-                            COALESCE(m.nome_municipio, 'N/A') as municipio,
+                            '' as municipio,
                             '' as porte,
-                            '' as natureza_juridica,
-                            '' as razao_social
+                            '' as natureza_juridica
                         FROM estabelecimentos_completos est
-                        LEFT JOIN municipios m ON est.municipio = m.codigo_municipio
-                        LEFT JOIN cnaes c ON est.cnae_fiscal_principal = c.codigo_cnae
                         WHERE {where_sql}
-                        ORDER BY {order_col}
-                        LIMIT ? OFFSET ?
+                        {order_clause_fast}
+                        {limit_offset_sql}
                     """
                 else:
                     # for heavy path, avoid ordering by empresa fields when no filters are applied
-                    if not where_clauses:
-                        order_clause = 'est.rowid'
-                    else:
-                        order_clause = 'e.razao_social, est.cnpj_ordem'
+                    # Ordenar por chave primária do estabelecimento para reduzir custo de sort.
+                    order_clause = 'est.cnpj_basico, est.cnpj_ordem'
                     sql_data = f"""
                         SELECT
                             SUBSTR(est.cnpj_basico || est.cnpj_ordem || est.cnpj_dv, 1, 2) || '.' ||
@@ -792,23 +774,18 @@ class CNPJApp:
                         LEFT JOIN municipios m ON est.municipio = m.codigo_municipio
                         WHERE {where_sql}
                         ORDER BY {order_clause}
-                        LIMIT ? OFFSET ?
+                        {limit_offset_sql}
                     """
 
                 try:
-                    # debug log: indicate which sql_data will be executed
-                    print(f"[DEBUG] Executing data SQL (use_fast_path={use_fast_path}, where_clauses={len(where_clauses)})")
-                    print(f"[DEBUG] sql_data preview: {sql_data.strip()[:200]}")
-                    # allow slightly longer for data fetch (increased temporarily for debugging)
                     start_data = time.time()
-                    self.db.connection.set_progress_handler(_make_progress_handler(start_data, 60), 1000)
-                    cursor.execute(sql_data, params + [per_page, offset])
+                    # Em fetch_all sem ORDER: 10s timeout. Com ORDER ou paginação: 60s
+                    data_timeout = 10 if (fetch_all and not order_clause_fast) else 60
+                    self.db.connection.set_progress_handler(_make_progress_handler(start_data, data_timeout), 1000)
+                    sql_params = params if fetch_all else (params + [per_page, offset])
+                    cursor.execute(sql_data, sql_params)
                 except sqlite3.OperationalError as oe:
-                    try:
-                        self.db.disconnect()
-                    except Exception:
-                        pass
-                    return jsonify({"error": "query_timeout", "message": "Data query timed out", "details": str(oe)}), 503
+                    return jsonify({"error": "query_timeout", "message": "Data query timed out after 10s (verifique se filtros estão muito genéricos)", "details": str(oe)}), 503
                 finally:
                     try:
                         self.db.connection.set_progress_handler(None, 0)
@@ -819,7 +796,12 @@ class CNPJApp:
 
                 # Formatar resultados
                 dados = []
-                for row in resultados:
+                fetch_all_limit_reached = False
+                for i, row in enumerate(resultados):
+                    if fetch_all and i >= FETCH_ALL_MAX_FOR_JSON:
+                        # SQL LIMIT já força isso, mas marcar por segurança
+                        fetch_all_limit_reached = True
+                        break
                     dados.append({
                         "cnpj_formatado": row[0],
                         "razao_social": row[1],
@@ -831,23 +813,37 @@ class CNPJApp:
                         "natureza_juridica": row[7]
                     })
 
-                self.db.disconnect()
+                # Se fetch_all, usar o total do COUNT; senão, contar os dados retornados
+                if fetch_all:
+                    # total já tem o valor do COUNT se use_fast_path; senão usar len(dados)
+                    if total is None:
+                        total = len(dados)
+                    per_page = len(dados)
+                elif total is None:
+                    # Total aproximado para manter paginação funcional quando COUNT expira.
+                    total = offset + len(dados)
 
-                return jsonify({
+                response_obj = {
                     "success": True,
                     "data": dados,
                     "pagination": {
                         "page": page,
                         "per_page": per_page,
                         "total": total,
-                        "pages": (total + per_page - 1) // per_page
+                        "pages": (total + per_page - 1) // per_page if per_page else 1
                     },
                     "query_info": {
                         "filters_applied": len(where_clauses),
                         "execution_time": round(tempo, 3)
                     },
                     "timestamp": datetime.now().isoformat()
-                })
+                }
+                
+                # Se fetch_all atingiu limite de 100K, avisar cliente
+                if fetch_all and (fetch_all_limit_reached or len(dados) >= FETCH_ALL_MAX_FOR_JSON):
+                    response_obj["warning"] = f"Resultado limitado a {FETCH_ALL_MAX_FOR_JSON:,} registros (limite de segurança JSON). Use paginação (page/per_page) para visualizar mais dados."
+                
+                return jsonify(response_obj)
 
             except Exception as e:
                 return jsonify({"error": str(e)}), 500
@@ -855,20 +851,44 @@ class CNPJApp:
         @self.app.route('/export', methods=['POST'])
         def export_data():
             """Exporta dados filtrados em CSV"""
+            conn = None
             try:
                 filtros = request.get_json() or {}
 
-                if not self.db.connect():
-                    return jsonify({"error": "Database connection failed"}), 500
+                # Usa conexão dedicada para export para evitar contenção com requisições paralelas.
+                conn = sqlite3.connect(self.db_path, timeout=60, check_same_thread=False)
+                try:
+                    conn.execute("PRAGMA journal_mode = WAL")
+                    conn.execute("PRAGMA synchronous = NORMAL")
+                    conn.execute("PRAGMA temp_store = MEMORY")
+                    conn.execute("PRAGMA cache_size = 100000")
+                    conn.execute("PRAGMA foreign_keys = OFF")
+                except Exception:
+                    pass
 
                 # Construir consulta dinâmica (igual ao query) usando helper centralizado
                 where_clauses, params = build_where_and_params(filtros)
                 where_sql = " AND ".join(where_clauses) if where_clauses else "1=1"
 
+                # Materializa o subconjunto filtrado para evitar varreduras repetidas da tabela base.
+                # Isso reduz contenção e estabiliza o tempo de export no frontend.
+                cursor = conn.cursor()
+                cursor.execute('DROP TABLE IF EXISTS temp.export_estab')
+                cursor.execute(
+                    f"""
+                    CREATE TEMP TABLE export_estab AS
+                    SELECT *
+                    FROM estabelecimentos_completos est
+                    WHERE {where_sql}
+                    LIMIT 100000
+                    """,
+                    params,
+                )
+
                 # Se tabela de socios não existir, tentar importar arquivos CSV da pasta externa (Socio0)
-                cursor = self.db.connection.cursor()
+                cursor = conn.cursor()
                 cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='socios'")
-                if not cursor.fetchone():
+                if not cursor.fetchone() and os.environ.get('CNPJ_EXPORT_AUTO_IMPORT_SOCIOS', '0') == '1':
                     socio_dir = r"C:\Users\victor.vasconcelos\Documents\PROJETO CNPJ\Socio0"
                     try:
                         if os.path.isdir(socio_dir):
@@ -910,7 +930,7 @@ class CNPJApp:
 
                                     # Gravar na tabela sqlite 'socios'
                                     try:
-                                        df_soc[['cnpj_basico', 'nome_socio', 'cnpj_cpf_socio', 'qualificacao_socio']].to_sql('socios', self.db.connection, if_exists='append', index=False)
+                                        df_soc[['cnpj_basico', 'nome_socio', 'cnpj_cpf_socio', 'qualificacao_socio']].to_sql('socios', conn, if_exists='append', index=False)
                                         print(f"[INFO] importado socios de {fpath} para tabela 'socios'")
                                     except Exception as e:
                                         print(f"[WARN] falha ao importar socios de {fpath}: {e}")
@@ -919,78 +939,69 @@ class CNPJApp:
 
                 # Consulta completa para exportação (baseada no melhorar_arquivo_consolidado.py)
                 # Verificar se tabela 'socios' existe para incluir colunas de sócios
-                cursor = self.db.connection.cursor()
+                cursor = conn.cursor()
                 cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='socios'")
                 has_socios = cursor.fetchone() is not None
 
-                # Build socios select/join: use placeholders when socios table missing to avoid SQL syntax errors
+                # Requisito funcional: exportação não deve seguir sem base de sócios disponível.
+                if not has_socios:
+                    return jsonify({
+                        "error": "socios_required",
+                        "message": "A exportação exige os campos de sócio. Tabela 'socios' não encontrada."
+                    }), 503
+
+                cursor.execute("SELECT 1 FROM socios LIMIT 1")
+                if cursor.fetchone() is None:
+                    return jsonify({
+                        "error": "socios_required",
+                        "message": "A exportação exige os campos de sócio. A tabela 'socios' está vazia."
+                    }), 503
+
+                # Build socios select/join
                 socios_join = ""
                 if has_socios:
-                    # Select only the first socio per cnpj_basico (by MIN(rowid)), map qualificacao via qualificacoes
-                    # and produce a masked CPF token (preserve masked tokens like '***560201**')
-                    # Try to load optional proposals file (non-destructive) into a TEMP table
-                    # so we can use proposed qualificacao values as a fallback during export.
+                    # Índice essencial para acelerar agrupamento/join por cnpj_basico durante export.
                     try:
-                        import csv as _csv, io
-                        proposals_path = os.path.join('archive', 'socios_reimport_proposals_applied.csv')
-                        if not os.path.exists(proposals_path):
-                            proposals_path = os.path.join('archive', 'socios_reimport_proposals.csv')
-
-                        cur = self.db.connection.cursor()
-                        # Always create a TEMP table (possibly empty) so SQL can safely reference it
-                        cur.execute('CREATE TEMP TABLE IF NOT EXISTS proposals_qual (cnpj_basico TEXT PRIMARY KEY, proposed_qual TEXT)')
-                        # Ensure it's empty for this session unless the CSV provides rows
-                        cur.execute('DELETE FROM proposals_qual')
-
-                        if os.path.exists(proposals_path):
-                            try:
-                                with open(proposals_path, 'r', encoding='utf-8', errors='ignore') as pf:
-                                    # detect delimiter (simple heuristic)
-                                    sample = pf.read(8192)
-                                    pf.seek(0)
-                                    delim = ';' if ';' in sample else (',' if ',' in sample else ';')
-                                    reader = _csv.DictReader(pf, delimiter=delim)
-                                    rows = []
-                                    for r in reader:
-                                        # expect column cnpj_basico and proposed_qual (or variants in header)
-                                        c = r.get('cnpj_basico') or r.get('cnpj') or r.get('cnpj_basic')
-                                        q = r.get('proposed_qual') or r.get('proposed_qualificacao') or r.get('qual') or r.get('proposed')
-                                        if c:
-                                            rows.append((str(c).strip(), str(q).strip() if q is not None else ''))
-                                    if rows:
-                                        cur.executemany('INSERT OR REPLACE INTO proposals_qual (cnpj_basico, proposed_qual) VALUES (?,?)', rows)
-                                        # do not commit; temp table is session-scoped and will be discarded when connection closes
-                            except Exception:
-                                # ignore proposals loading errors and proceed without them
-                                pass
+                        cur = conn.cursor()
+                        cur.execute("CREATE INDEX IF NOT EXISTS idx_socios_cnpj_basico ON socios(cnpj_basico)")
                     except Exception:
                         pass
 
+                    # Basicos somente do subconjunto de export já filtrado.
+                    cur = conn.cursor()
+                    cur.execute('DROP TABLE IF EXISTS temp.export_basicos')
+                    cur.execute('CREATE TEMP TABLE export_basicos (cnpj_basico TEXT PRIMARY KEY)')
+                    cur.execute(
+                        """
+                        INSERT OR IGNORE INTO export_basicos (cnpj_basico)
+                        SELECT cnpj_basico
+                        FROM export_estab
+                        WHERE cnpj_basico IS NOT NULL AND TRIM(cnpj_basico) != ''
+                        """
+                    )
+
                     socios_select = (
-                        "COALESCE(socios_agg.nome_socio, '') as nome_socio, "
-                        # effective code: prefer socios table value, fallback to proposals
-                        "CASE WHEN (socios_agg.nome_socio IS NOT NULL AND TRIM(socios_agg.nome_socio) != '') AND (COALESCE(NULLIF(TRIM(socios_agg.qualificacao_socio),''), NULLIF(TRIM(proposals_qual.proposed_qual),''))) IS NOT NULL "
-                        "THEN (COALESCE(NULLIF(TRIM(socios_agg.qualificacao_socio),''), NULLIF(TRIM(proposals_qual.proposed_qual),'')) || "
+                        "COALESCE(NULLIF(TRIM(socios_agg.nome_socio), ''), 'Não Informado') as nome_socio, "
+                        "CASE WHEN NULLIF(TRIM(socios_agg.qualificacao_socio),'') IS NOT NULL "
+                        "THEN (NULLIF(TRIM(socios_agg.qualificacao_socio),'') || "
                         "COALESCE('' || (CASE WHEN q_map.descricao_qualificacao IS NOT NULL AND q_map.descricao_qualificacao != '' THEN ' - ' || q_map.descricao_qualificacao ELSE '' END), '')) "
-                        "ELSE '' END as qualificacao_socio, "
-                        "CASE WHEN socios_agg.cnpj_cpf_socio IS NULL THEN '' "
-                        "WHEN instr(socios_agg.cnpj_cpf_socio, '*') > 0 THEN socios_agg.cnpj_cpf_socio "
-                        "WHEN LENGTH(TRIM(socios_agg.cnpj_cpf_socio)) >= 11 THEN '***' || SUBSTR(socios_agg.cnpj_cpf_socio, 4, 6) || '**' "
-                        "ELSE socios_agg.cnpj_cpf_socio END as cpf_mid6"
+                        "ELSE 'Não Informado' END as qualificacao_socio, "
+                        "CASE WHEN socios_agg.cpf_socio IS NULL OR TRIM(socios_agg.cpf_socio) = '' THEN 'Não Informado' "
+                        "WHEN instr(socios_agg.cpf_socio, '*') > 0 THEN socios_agg.cpf_socio "
+                        "WHEN LENGTH(TRIM(socios_agg.cpf_socio)) >= 11 THEN '***' || SUBSTR(socios_agg.cpf_socio, 4, 6) || '**' "
+                        "ELSE socios_agg.cpf_socio END as cpf_socio"
                     )
                     socios_join = (
-                        "\n                    LEFT JOIN (\n                        SELECT s.cnpj_basico, s.nome_socio, s.qualificacao_socio, s.cnpj_cpf_socio\n                        FROM socios s\n                        INNER JOIN (SELECT cnpj_basico, COALESCE(MIN(CASE WHEN TRIM(nome_socio) != '' THEN rowid END), MIN(rowid)) as min_rowid FROM socios GROUP BY cnpj_basico) f\n                        ON f.cnpj_basico = s.cnpj_basico AND f.min_rowid = s.rowid\n                    ) as socios_agg ON socios_agg.cnpj_basico = e.cnpj_basico\n                    -- Ensure proposals are linked to the establishment so proposed values are available even when no socios row exists\n                    LEFT JOIN proposals_qual ON proposals_qual.cnpj_basico = e.cnpj_basico\n                    -- Map the effective code (socios.qualificacao_socio or proposals_qual.proposed_qual) to its description once\n                    LEFT JOIN qualificacoes q_map ON q_map.codigo_qualificacao = COALESCE(NULLIF(TRIM(socios_agg.qualificacao_socio),''), NULLIF(TRIM(proposals_qual.proposed_qual),''))"
+                        "\n                    LEFT JOIN (\n                        SELECT soc.cnpj_basico, soc.nome_socio, soc.qualificacao_socio, soc.cpf_cnpj_socio as cpf_socio\n                        FROM socios soc\n                        INNER JOIN (\n                            SELECT s2.cnpj_basico,\n                                   COALESCE(MIN(CASE WHEN TRIM(COALESCE(s2.nome_socio,'')) != '' THEN s2.rowid END), MIN(s2.rowid)) as min_rowid\n                            FROM socios s2\n                            INNER JOIN export_basicos eb ON eb.cnpj_basico = s2.cnpj_basico\n                            GROUP BY s2.cnpj_basico\n                        ) f\n                        ON f.cnpj_basico = soc.cnpj_basico AND f.min_rowid = soc.rowid\n                    ) as socios_agg ON socios_agg.cnpj_basico = est.cnpj_basico\n                    LEFT JOIN qualificacoes q_map ON q_map.codigo_qualificacao = NULLIF(TRIM(socios_agg.qualificacao_socio),'')"
                     )
-                else:
-                    # placeholders so CSV columns exist and SQL has no trailing comma
-                    socios_select = "'' as nome_socio, '' as qualificacao_socio, '' as cpf_mid6"
+
 
                 # Prepare bairro + optional socios fragment with deterministic comma placement
                 bairro_and_socios = "COALESCE(est.bairro, '') as bairro"
                 if socios_select:
                     bairro_and_socios = bairro_and_socios + ", " + socios_select
                 sql_export = f"""
-                    SELECT DISTINCT
+                    SELECT
                         CASE WHEN est.cnpj_basico IS NOT NULL AND est.cnpj_ordem IS NOT NULL AND est.cnpj_dv IS NOT NULL
                             THEN SUBSTR(est.cnpj_basico,1,2) || '.' || SUBSTR(est.cnpj_basico,3,3) || '.' || SUBSTR(est.cnpj_basico,6,3) || '/' || est.cnpj_ordem || '-' || est.cnpj_dv
                             ELSE est.cnpj_basico
@@ -1088,33 +1099,50 @@ class CNPJApp:
                         ELSE 'N/A' END as matriz_filial,
                     {socios_select}
 
-                    FROM estabelecimentos_completos est
+                    FROM export_estab est
                     LEFT JOIN empresas_completas e ON est.cnpj_basico = e.cnpj_basico
                     LEFT JOIN simples s ON est.cnpj_basico = s.cnpj_basico
                     LEFT JOIN cnaes c ON est.cnae_fiscal_principal = c.codigo_cnae
                     LEFT JOIN naturezas nat ON e.natureza_juridica = nat.codigo_natureza
                     LEFT JOIN municipios m ON est.municipio = m.codigo_municipio{socios_join}
-                    WHERE {where_sql}
-                    ORDER BY e.razao_social, est.cnpj_ordem
                 """
 
                 # Executar consulta
-                cursor = self.db.connection.cursor()
+                cursor = conn.cursor()
                 inicio = time.time()
-                # DEBUG: write generated SQL and params to server.err to inspect syntax issues
+                # DEBUG opcional de SQL (desabilitado por padrão para evitar I/O extra)
+                if os.environ.get('CNPJ_EXPORT_DEBUG_SQL') == '1':
+                    try:
+                        with open('server.err', 'a', encoding='utf-8') as fh:
+                            fh.write('\n--- SQL_EXPORT START ---\n')
+                            fh.write(sql_export)
+                            fh.write('\n--- SQL_EXPORT PARAMS: %s ---\n' % (str(params),))
+                    except Exception:
+                        pass
+
+                # Evitar travamento indefinido em queries pesadas de export.
+                export_timeout = int(os.environ.get('CNPJ_EXPORT_SQL_TIMEOUT', '120'))
+                def _export_progress_handler():
+                    return 1 if (time.time() - inicio) > export_timeout else 0
+
                 try:
-                    with open('server.err', 'a', encoding='utf-8') as fh:
-                        fh.write('\n--- SQL_EXPORT START ---\n')
-                        fh.write(sql_export)
-                        fh.write('\n--- SQL_EXPORT PARAMS: %s ---\n' % (str(params),))
-                except Exception:
-                    pass
-
-                cursor.execute(sql_export, params)
-
-                # Buscar resultados em chunks para economizar memória
-                chunk_size = 10000
-                dados_csv = []
+                    conn.set_progress_handler(_export_progress_handler, 1000)
+                    cursor.execute(sql_export, params)
+                except sqlite3.OperationalError as oe:
+                    try:
+                        conn.set_progress_handler(None, 0)
+                    except Exception:
+                        pass
+                    return jsonify({
+                        "error": "export_timeout",
+                        "message": f"Export query excedeu {export_timeout}s. Aplique filtros mais específicos.",
+                        "details": str(oe)
+                    }), 503
+                finally:
+                    try:
+                        conn.set_progress_handler(None, 0)
+                    except Exception:
+                        pass
 
                 # Headers - canonical 22-column layout (CNPJ first, CPF_SOCIO last)
                 headers = [
@@ -1125,33 +1153,27 @@ class CNPJApp:
                     'NOME_SOCIO', 'QUALIFICACAO_SOCIO', 'CPF_SOCIO'
                 ]
 
-                # Processar resultados
-                total_registros = 0
-                while True:
-                    rows = cursor.fetchmany(chunk_size)
-                    if not rows:
-                        break
-
-                    for row in rows:
-                        dados_csv.append(row)
-                        total_registros += 1
-
-                tempo = time.time() - inicio
-                self.db.disconnect()
-
-                # Criar DataFrame e CSV
-                df = pd.DataFrame(dados_csv, columns=headers)
-
                 # Criar arquivo temporário
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                 filename = f"cnpj_exportacao_{timestamp}.csv"
 
-                # Salvar arquivo CSV diretamente - evitando linhas em branco
-                df.to_csv(filename, sep=';', index=False, encoding='utf-8-sig',
-                         lineterminator='\n', quoting=1)
+                # Escrever CSV em streaming (mais rápido e com menor uso de memória)
+                chunk_size = 10000
+                total_registros = 0
+                with open(filename, 'w', newline='', encoding='utf-8-sig') as fh:
+                    writer = csv.writer(fh, delimiter=';', quoting=csv.QUOTE_ALL, lineterminator='\n')
+                    writer.writerow(headers)
+                    while True:
+                        rows = cursor.fetchmany(chunk_size)
+                        if not rows:
+                            break
+                        writer.writerows(rows)
+                        total_registros += len(rows)
+
+                tempo = time.time() - inicio
 
                 # Retornar informações da exportação
-                return jsonify({
+                response_data = {
                     "success": True,
                     "filename": filename,
                     "total_registros": total_registros,
@@ -1159,7 +1181,13 @@ class CNPJApp:
                     "filters_applied": filtros,
                     "download_url": f"/download/{filename}",
                     "timestamp": datetime.now().isoformat()
-                })
+                }
+                
+                # Se atingiu limite de 100K, avisar cliente
+                if total_registros >= 100000:
+                    response_data["warning"] = "Exportação limitada a 100.000 registros. Aplique filtros mais específicos para obter resultados menores."
+                
+                return jsonify(response_data)
 
             except Exception as e:
                 # Registrar traceback completo em server.err e no logger do Flask
@@ -1178,6 +1206,12 @@ class CNPJApp:
                 except Exception:
                     pass
                 return jsonify({"error": str(e)}), 500
+            finally:
+                if conn is not None:
+                    try:
+                        conn.close()
+                    except Exception:
+                        pass
 
         @self.app.route('/download/<filename>')
         def download_file(filename):
