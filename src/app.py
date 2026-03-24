@@ -630,6 +630,12 @@ class CNPJApp:
                 else:
                     fetch_all = bool(fetch_all)
 
+                ids_only = filtros.get('ids_only', False)
+                if isinstance(ids_only, str):
+                    ids_only = ids_only.strip().lower() in ('1', 'true', 'yes', 'sim', 's')
+                else:
+                    ids_only = bool(ids_only)
+
                 # Normalizar paginação para evitar erros quando o frontend envia strings
                 try:
                     page = int(filtros.get('page', 1))
@@ -658,6 +664,56 @@ class CNPJApp:
                         "error": "missing_filters_for_fetch_all",
                         "message": "Para evitar sobrecarga, fetch_all exige ao menos um filtro"
                     }), 400
+
+                # Modo leve para export: retorna somente cnpj_basicos filtrados.
+                if ids_only:
+                    if not where_clauses:
+                        return jsonify({
+                            "error": "missing_filters_for_ids_only",
+                            "message": "ids_only exige ao menos um filtro"
+                        }), 400
+
+                    cursor = self.db.connection.cursor()
+                    inicio_ids = time.time()
+
+                    def _make_progress_handler(start, max_seconds):
+                        def handler():
+                            return 1 if (time.time() - start) > max_seconds else 0
+                        return handler
+
+                    try:
+                        self.db.connection.set_progress_handler(_make_progress_handler(inicio_ids, 60), 1000)
+                        cursor.execute(
+                            f"""
+                            SELECT DISTINCT est.cnpj_basico
+                            FROM estabelecimentos_completos est
+                            WHERE {where_sql}
+                            LIMIT 100000
+                            """,
+                            params,
+                        )
+                    except sqlite3.OperationalError as oe:
+                        return jsonify({
+                            "error": "ids_only_timeout",
+                            "message": "Consulta de IDs excedeu 60s. Tente filtros mais específicos.",
+                            "details": str(oe)
+                        }), 503
+                    finally:
+                        try:
+                            self.db.connection.set_progress_handler(None, 0)
+                        except Exception:
+                            pass
+
+                    basicos = [r[0] for r in cursor.fetchall() if r and r[0]]
+                    response_obj = {
+                        "success": True,
+                        "cnpj_basicos": basicos,
+                        "total": len(basicos),
+                        "execution_time": round(time.time() - inicio_ids, 3)
+                    }
+                    if len(basicos) >= 100000:
+                        response_obj["warning"] = "Resultado limitado a 100.000 CNPJs básicos para exportação."
+                    return jsonify(response_obj)
 
                 # helper: progress handler factory (define cedo para estar sempre disponível)
                 def _make_progress_handler(start, max_seconds):
@@ -874,16 +930,45 @@ class CNPJApp:
                 # Isso reduz contenção e estabiliza o tempo de export no frontend.
                 cursor = conn.cursor()
                 cursor.execute('DROP TABLE IF EXISTS temp.export_estab')
-                cursor.execute(
-                    f"""
-                    CREATE TEMP TABLE export_estab AS
-                    SELECT *
-                    FROM estabelecimentos_completos est
-                    WHERE {where_sql}
-                    LIMIT 100000
-                    """,
-                    params,
-                )
+                cnpj_basicos = filtros.get('cnpj_basicos')
+                if isinstance(cnpj_basicos, list) and len(cnpj_basicos) > 0:
+                    cleaned_basicos = []
+                    for b in cnpj_basicos:
+                        bstr = ''.join(ch for ch in str(b or '') if ch.isdigit())
+                        if len(bstr) >= 8:
+                            cleaned_basicos.append(bstr[:8])
+                    if not cleaned_basicos:
+                        return jsonify({
+                            "error": "invalid_cnpj_basicos",
+                            "message": "Nenhum cnpj_basico válido foi informado para exportação."
+                        }), 400
+
+                    cursor.execute('DROP TABLE IF EXISTS temp.export_basicos_input')
+                    cursor.execute('CREATE TEMP TABLE export_basicos_input (cnpj_basico TEXT PRIMARY KEY)')
+                    cursor.executemany(
+                        'INSERT OR IGNORE INTO export_basicos_input (cnpj_basico) VALUES (?)',
+                        [(b,) for b in cleaned_basicos[:100000]],
+                    )
+                    cursor.execute(
+                        """
+                        CREATE TEMP TABLE export_estab AS
+                        SELECT est.*
+                        FROM estabelecimentos_completos est
+                        INNER JOIN export_basicos_input bi ON bi.cnpj_basico = est.cnpj_basico
+                        LIMIT 100000
+                        """
+                    )
+                else:
+                    cursor.execute(
+                        f"""
+                        CREATE TEMP TABLE export_estab AS
+                        SELECT *
+                        FROM estabelecimentos_completos est
+                        WHERE {where_sql}
+                        LIMIT 100000
+                        """,
+                        params,
+                    )
 
                 # Se tabela de socios não existir, tentar importar arquivos CSV da pasta externa (Socio0)
                 cursor = conn.cursor()

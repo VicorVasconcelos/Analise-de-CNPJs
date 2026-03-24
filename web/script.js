@@ -562,6 +562,7 @@ async function handleExport() {
     try {
         const EXPORT_LIMIT = 100000;
         const EXPORT_TIMEOUT_MS = 420000;
+        const IDS_TIMEOUT_MS = 120000;
 
         // Cancela prefetch/queries em curso para priorizar o export no backend.
         currentSearchToken++;
@@ -586,7 +587,43 @@ async function handleExport() {
             }
         }
 
-        showLoading('Gerando arquivo CSV (pausando prefetch)...');
+        showLoading('Preparando exportação (resolvendo IDs)...');
+
+        // 1) Resolve o conjunto de cnpj_basicos de forma leve para evitar query pesada no /export.
+        const idsController = new AbortController();
+        const idsTimeoutId = setTimeout(() => idsController.abort(), IDS_TIMEOUT_MS);
+        const idsResponse = await fetch(`${API_BASE_URL}/query`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ...currentFilters,
+                fetch_all: true,
+                ids_only: true,
+            }),
+            signal: idsController.signal
+        });
+        clearTimeout(idsTimeoutId);
+
+        if (!idsResponse.ok) {
+            let idsErr = '';
+            try {
+                const p = await idsResponse.json();
+                idsErr = p?.message || p?.error || '';
+            } catch (_) {
+                idsErr = '';
+            }
+            throw new Error(`Falha ao preparar IDs para exportação (${idsResponse.status})${idsErr ? `: ${idsErr}` : ''}`);
+        }
+
+        const idsData = await idsResponse.json();
+        const cnpjBasicos = Array.isArray(idsData?.cnpj_basicos) ? idsData.cnpj_basicos : [];
+        if (!cnpjBasicos.length) {
+            throw new Error('Nenhum CNPJ básico encontrado para exportação com os filtros atuais.');
+        }
+
+        showLoading('Gerando arquivo CSV...');
 
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), EXPORT_TIMEOUT_MS);
@@ -596,7 +633,7 @@ async function handleExport() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(currentFilters),
+            body: JSON.stringify({ cnpj_basicos: cnpjBasicos }),
             signal: controller.signal
         });
         clearTimeout(timeoutId);
