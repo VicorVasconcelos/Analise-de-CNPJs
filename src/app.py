@@ -2,12 +2,12 @@ from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 import sqlite3
 import pandas as pd
-import io
 import time
 import os
 import sys
 from datetime import datetime
 import csv
+import tempfile
 # Import do módulo de database: quando o pacote `src` é usado como pacote, preferimos
 # import relativo; quando o arquivo é executado diretamente como script (python src/app.py)
 # a importação relativa falha. Tentamos o relativo e recuamos para um import absoluto.
@@ -64,6 +64,15 @@ class CNPJApp:
         logging.getLogger().addHandler(log_handler)
         self.db_path = db_path
         self.db = CNPJDatabase(db_path)
+        # Arquivos de export ficam temporariamente no servidor e são removidos após download.
+        # O arquivo final deve ser salvo na máquina do usuário que solicitou a exportação.
+        default_temp_exports = os.path.join(tempfile.gettempdir(), 'cnpj_exports')
+        self.export_dir = os.environ.get('CNPJ_EXPORT_DIR', default_temp_exports)
+        try:
+            os.makedirs(self.export_dir, exist_ok=True)
+        except Exception:
+            # Fallback para o diretório temporário raiz do sistema.
+            self.export_dir = tempfile.gettempdir()
 
         # Configurar rotas
         self.setup_routes()
@@ -184,9 +193,10 @@ class CNPJApp:
                 where_clauses.append("est.municipio = ?")
                 params.append(filtros['municipio'])
 
-            if filtros.get('bairro'):
-                where_clauses.append("UPPER(est.bairro) LIKE UPPER(?)")
-                params.append(f"%{filtros['bairro']}%")
+            uf_filtro = str(filtros.get('uf') or '').strip().upper()
+            if filtros.get('bairro') and uf_filtro == 'DF':
+                where_clauses.append("est.bairro = ?")
+                params.append(str(filtros['bairro']).strip())
 
             if filtros.get('matriz_filial'):
                 where_clauses.append("est.identificador_matriz_filial = ?")
@@ -680,6 +690,64 @@ class CNPJApp:
             except Exception as e:
                 return jsonify({"error": str(e)}), 500
 
+        @self.app.route('/bairros')
+        def get_bairros_by_uf():
+            """Retorna bairros da UF selecionada (uso principal: DF)."""
+            try:
+                uf = (request.args.get('uf') or '').strip().upper()
+                if not uf:
+                    return jsonify({"uf": "", "bairros": [], "timestamp": datetime.now().isoformat()})
+
+                # Regra de negócio: bairro disponível apenas para DF no frontend
+                if uf != 'DF':
+                    return jsonify({"uf": uf, "bairros": [], "timestamp": datetime.now().isoformat()})
+
+                if not self.db.connect():
+                    return jsonify({"error": "Database connection failed"}), 500
+
+                cursor = self.db.connection.cursor()
+
+                cursor.execute(
+                    """
+                    SELECT name FROM sqlite_master
+                    WHERE (type='table' OR type='view')
+                      AND name IN ('estabelecimentos_completos', 'estabelecimentos')
+                    ORDER BY CASE WHEN name='estabelecimentos_completos' THEN 0 ELSE 1 END
+                    LIMIT 1
+                    """
+                )
+                row = cursor.fetchone()
+                est_source = row[0] if row else None
+                if not est_source:
+                    return jsonify({"uf": uf, "bairros": [], "timestamp": datetime.now().isoformat()})
+
+                start = time.time()
+                cursor.execute(
+                    f"""
+                    SELECT DISTINCT
+                        TRIM(est.bairro) as value,
+                        TRIM(est.bairro) as label
+                    FROM {est_source} est
+                    WHERE est.uf = ?
+                      AND est.bairro IS NOT NULL
+                      AND TRIM(est.bairro) != ''
+                    ORDER BY label ASC
+                    """,
+                    [uf],
+                )
+
+                bairros = [{"value": value, "label": label, "uf": uf} for value, label in cursor.fetchall()]
+                elapsed = time.time() - start
+                print(f"[TIMING] /bairros uf={uf}: {elapsed:.3f}s, found {len(bairros)} bairros")
+
+                return jsonify({
+                    "uf": uf,
+                    "bairros": bairros,
+                    "timestamp": datetime.now().isoformat()
+                })
+            except Exception as e:
+                return jsonify({"error": str(e)}), 500
+
         @self.app.route('/query', methods=['POST'])
         def query_data():
             """Consulta dados com filtros aplicados"""
@@ -983,6 +1051,20 @@ class CNPJApp:
             """Exporta dados filtrados em CSV"""
             conn = None
             try:
+                # Limpa exports antigos no servidor para evitar acúmulo local.
+                try:
+                    now_ts = time.time()
+                    ttl_seconds = int(os.environ.get('CNPJ_EXPORT_FILE_TTL_SECONDS', '7200'))
+                    for entry in os.scandir(self.export_dir):
+                        if not entry.is_file():
+                            continue
+                        if not entry.name.startswith('cnpj_exportacao_') or not entry.name.endswith('.csv'):
+                            continue
+                        if (now_ts - entry.stat().st_mtime) > ttl_seconds:
+                            os.remove(entry.path)
+                except Exception:
+                    pass
+
                 payload = request.get_json() or {}
                 if isinstance(payload, dict) and isinstance(payload.get('filtros'), dict):
                     filtros = payload.get('filtros') or {}
@@ -990,13 +1072,13 @@ class CNPJApp:
                     filtros = payload if isinstance(payload, dict) else {}
 
                 # Usa conexão dedicada para export para evitar contenção com requisições paralelas.
-                conn = sqlite3.connect(self.db_path, timeout=60, check_same_thread=False)
+                conn = sqlite3.connect(self.db_path, timeout=8, check_same_thread=False)
                 try:
-                    conn.execute("PRAGMA journal_mode = WAL")
-                    conn.execute("PRAGMA synchronous = NORMAL")
+                    # Evitar PRAGMAs globais de escrita por requisição (ex.: journal_mode),
+                    # pois podem ficar aguardando lock e degradar exportações pequenas.
                     conn.execute("PRAGMA temp_store = MEMORY")
                     conn.execute("PRAGMA cache_size = 100000")
-                    conn.execute("PRAGMA foreign_keys = OFF")
+                    conn.execute("PRAGMA busy_timeout = 8000")
                 except Exception:
                     pass
 
@@ -1027,30 +1109,51 @@ class CNPJApp:
                         'INSERT OR IGNORE INTO export_basicos_input (cnpj_basico) VALUES (?)',
                         [(b,) for b in cleaned_basicos[:100000]],
                     )
-                    cursor.execute(
-                        f"""
-                        CREATE TEMP TABLE export_estab AS
-                        SELECT est.*
-                        FROM estabelecimentos_completos est
-                        LEFT JOIN empresas_completas e ON est.cnpj_basico = e.cnpj_basico
-                        LEFT JOIN simples s ON est.cnpj_basico = s.cnpj_basico
-                        INNER JOIN export_basicos_input bi ON bi.cnpj_basico = est.cnpj_basico
-                        WHERE {where_sql}
-                        LIMIT 100000
-                        """,
-                        params,
-                    )
+
+                    # Segurança funcional: sempre revalidar os filtros ativos para garantir
+                    # que a exportação respeite exatamente o que foi selecionado no frontend.
+                    # Um bypass explícito só é aceito quando não há filtros para validar.
+                    revalidate_filters = bool(where_clauses)
+                    if revalidate_filters:
+                        cursor.execute(
+                            f"""
+                            CREATE TEMP TABLE export_estab AS
+                            SELECT est.*
+                            FROM estabelecimentos est
+                            INNER JOIN export_basicos_input bi ON bi.cnpj_basico = est.cnpj_basico
+                            WHERE {where_sql}
+                            LIMIT 100000
+                            """,
+                            params,
+                        )
+                    else:
+                        cursor.execute(
+                            """
+                            CREATE TEMP TABLE export_estab AS
+                            SELECT est.*
+                            FROM estabelecimentos est
+                            INNER JOIN export_basicos_input bi ON bi.cnpj_basico = est.cnpj_basico
+                            LIMIT 100000
+                            """
+                        )
                 else:
                     cursor.execute(
                         f"""
                         CREATE TEMP TABLE export_estab AS
                         SELECT *
-                        FROM estabelecimentos_completos est
+                        FROM estabelecimentos est
                         WHERE {where_sql}
                         LIMIT 100000
                         """,
                         params,
                     )
+
+                # Índice temporário somente do subconjunto exportado.
+                # Evita DDL recorrente em tabelas grandes durante cada requisição.
+                try:
+                    cursor.execute("CREATE INDEX IF NOT EXISTS idx_export_estab_cnpj_basico ON export_estab(cnpj_basico)")
+                except Exception:
+                    pass
 
                 # Se tabela de socios não existir, tentar importar arquivos CSV da pasta externa (Socio0)
                 cursor = conn.cursor()
@@ -1127,13 +1230,6 @@ class CNPJApp:
                 # Build socios select/join
                 socios_join = ""
                 if has_socios:
-                    # Índice essencial para acelerar agrupamento/join por cnpj_basico durante export.
-                    try:
-                        cur = conn.cursor()
-                        cur.execute("CREATE INDEX IF NOT EXISTS idx_socios_cnpj_basico ON socios(cnpj_basico)")
-                    except Exception:
-                        pass
-
                     # Basicos somente do subconjunto de export já filtrado.
                     cur = conn.cursor()
                     cur.execute('DROP TABLE IF EXISTS temp.export_basicos')
@@ -1147,6 +1243,33 @@ class CNPJApp:
                         """
                     )
 
+                    # Pré-agrega 1 sócio por CNPJ básico apenas para o conjunto exportado.
+                    # Isso evita subconsulta com GROUP BY sobre toda a tabela de sócios.
+                    cur.execute('DROP TABLE IF EXISTS temp.export_socios_agg')
+                    cur.execute(
+                        """
+                        CREATE TEMP TABLE export_socios_agg AS
+                        SELECT cnpj_basico, nome_socio, qualificacao_socio, cpf_socio
+                        FROM (
+                            SELECT
+                                soc.cnpj_basico,
+                                soc.nome_socio,
+                                soc.qualificacao_socio,
+                                soc.cpf_cnpj_socio AS cpf_socio,
+                                ROW_NUMBER() OVER (
+                                    PARTITION BY soc.cnpj_basico
+                                    ORDER BY
+                                        CASE WHEN TRIM(COALESCE(soc.nome_socio,'')) != '' THEN 0 ELSE 1 END,
+                                        soc.rowid
+                                ) AS rn
+                            FROM socios soc
+                            INNER JOIN export_basicos eb ON eb.cnpj_basico = soc.cnpj_basico
+                        )
+                        WHERE rn = 1
+                        """
+                    )
+                    cur.execute("CREATE INDEX IF NOT EXISTS idx_export_socios_agg_cnpj_basico ON export_socios_agg(cnpj_basico)")
+
                     socios_select = (
                         "COALESCE(NULLIF(TRIM(socios_agg.nome_socio), ''), 'Não Informado') as nome_socio, "
                         "CASE WHEN NULLIF(TRIM(socios_agg.qualificacao_socio),'') IS NOT NULL "
@@ -1159,14 +1282,9 @@ class CNPJApp:
                         "ELSE socios_agg.cpf_socio END as cpf_socio"
                     )
                     socios_join = (
-                        "\n                    LEFT JOIN (\n                        SELECT soc.cnpj_basico, soc.nome_socio, soc.qualificacao_socio, soc.cpf_cnpj_socio as cpf_socio\n                        FROM socios soc\n                        INNER JOIN (\n                            SELECT s2.cnpj_basico,\n                                   COALESCE(MIN(CASE WHEN TRIM(COALESCE(s2.nome_socio,'')) != '' THEN s2.rowid END), MIN(s2.rowid)) as min_rowid\n                            FROM socios s2\n                            INNER JOIN export_basicos eb ON eb.cnpj_basico = s2.cnpj_basico\n                            GROUP BY s2.cnpj_basico\n                        ) f\n                        ON f.cnpj_basico = soc.cnpj_basico AND f.min_rowid = soc.rowid\n                    ) as socios_agg ON socios_agg.cnpj_basico = est.cnpj_basico\n                    LEFT JOIN qualificacoes q_map ON q_map.codigo_qualificacao = NULLIF(TRIM(socios_agg.qualificacao_socio),'')"
+                        "\n                    LEFT JOIN export_socios_agg as socios_agg ON socios_agg.cnpj_basico = est.cnpj_basico\n                    LEFT JOIN qualificacoes q_map ON q_map.codigo_qualificacao = NULLIF(TRIM(socios_agg.qualificacao_socio),'')"
                     )
 
-
-                # Prepare bairro + optional socios fragment with deterministic comma placement
-                bairro_and_socios = "COALESCE(est.bairro, '') as bairro"
-                if socios_select:
-                    bairro_and_socios = bairro_and_socios + ", " + socios_select
                 sql_export = f"""
                     SELECT
                         CASE WHEN est.cnpj_basico IS NOT NULL AND est.cnpj_ordem IS NOT NULL AND est.cnpj_dv IS NOT NULL
@@ -1216,23 +1334,11 @@ class CNPJApp:
                         est.uf,
                         COALESCE(m.nome_municipio, '') as nome_municipio,
 
-                        -- Telefone formatado
-                        CASE
-                            WHEN est.ddd_1 IS NOT NULL AND est.telefone_1 IS NOT NULL THEN
-                                '(' || est.ddd_1 || ') ' ||
-                                CASE
-                                    WHEN LENGTH(est.telefone_1) = 9 THEN
-                                        SUBSTR(est.telefone_1, 1, 5) || '-' || SUBSTR(est.telefone_1, 6, 4)
-                                    WHEN LENGTH(est.telefone_1) = 8 THEN
-                                        SUBSTR(est.telefone_1, 1, 4) || '-' || SUBSTR(est.telefone_1, 5, 4)
-                                    ELSE est.telefone_1
-                                END
-                            ELSE ''
-                        END as telefone_formatado,
+                        COALESCE(vt.telefone, '') as telefone,
+                        COALESCE(vt.telefone_2, '') as telefone_2,
 
                         COALESCE(est.correio_eletronico, '') as email,
                         COALESCE(c.descricao_cnae, '') as descricao_cnae,
-                        COALESCE(nat.descricao_natureza, '') as descricao_natureza,
                         -- Bairro (moved to match reference export ordering)
                         COALESCE(est.bairro, '') as bairro,
                     CASE WHEN s.opcao_mei = 'S' THEN 'Microempreendedor Individual (MEI)'
@@ -1253,13 +1359,7 @@ class CNPJApp:
                             ELSE 'Não Informado'
                         END as capital_social,
 
-                        CASE WHEN s.opcao_simples = 'S' THEN 'Sim'
-                             WHEN s.opcao_simples = 'N' THEN 'Não'
-                             ELSE 'N/A' END as opcao_simples,
-
-                        CASE WHEN s.opcao_mei = 'S' THEN 'Sim'
-                             WHEN s.opcao_mei = 'N' THEN 'Não'
-                             ELSE 'N/A' END as opcao_mei,
+                            CASE WHEN s.opcao_mei = 'S' THEN 'MEI' ELSE '' END as opcao_mei,
 
                     CASE WHEN est.identificador_matriz_filial = '1' THEN 'Matriz'
                         WHEN est.identificador_matriz_filial = '2' THEN 'Filial'
@@ -1267,11 +1367,22 @@ class CNPJApp:
                     {socios_select}
 
                     FROM export_estab est
-                    LEFT JOIN empresas_completas e ON est.cnpj_basico = e.cnpj_basico
+                    LEFT JOIN empresas e ON est.cnpj_basico = e.cnpj_basico
                     LEFT JOIN simples s ON est.cnpj_basico = s.cnpj_basico
                     LEFT JOIN cnaes c ON est.cnae_fiscal_principal = c.codigo_cnae
-                    LEFT JOIN naturezas nat ON e.natureza_juridica = nat.codigo_natureza
+                    LEFT JOIN vw_estabelecimentos_telefones vt
+                        ON vt.cnpj_basico = est.cnpj_basico
+                       AND vt.cnpj_ordem = est.cnpj_ordem
+                       AND vt.cnpj_dv = est.cnpj_dv
                     LEFT JOIN municipios m ON est.municipio = m.codigo_municipio{socios_join}
+                    ORDER BY
+                        CASE WHEN est.situacao_cadastral = '02' THEN 0 ELSE 1 END,
+                        CASE WHEN COALESCE(vt.telefone, '') <> '' OR COALESCE(vt.telefone_2, '') <> '' THEN 0 ELSE 1 END,
+                        CASE WHEN COALESCE(est.correio_eletronico, '') <> '' THEN 0 ELSE 1 END,
+                        COALESCE(e.razao_social, '') ASC,
+                        est.cnpj_basico ASC,
+                        est.cnpj_ordem ASC,
+                        est.cnpj_dv ASC
                 """
 
                 # Executar consulta
@@ -1314,20 +1425,21 @@ class CNPJApp:
                 # Headers - canonical 22-column layout (CNPJ first, CPF_SOCIO last)
                 headers = [
                     'CNPJ', 'RAZAO_SOCIAL', 'NOME_FANTASIA', 'SITUACAO_EMPRESA', 'DATA_SITUACAO',
-                    'ENDERECO_COMPLETO', 'CEP', 'UF', 'NOME_MUNICIPIO', 'TELEFONE_FORMATADO',
-                    'EMAIL', 'DESCRICAO_CNAE', 'DESCRICAO_NATUREZA', 'BAIRRO', 'PORTE',
-                    'CAPITAL_SOCIAL', 'OPCAO_SIMPLES', 'OPCAO_MEI', 'MATRIZ_FILIAL',
+                    'ENDERECO_COMPLETO', 'CEP', 'UF', 'NOME_MUNICIPIO', 'TELEFONE', 'TELEFONE 2',
+                    'EMAIL', 'DESCRICAO_CNAE', 'BAIRRO', 'PORTE',
+                    'CAPITAL_SOCIAL', 'MEI', 'MATRIZ_FILIAL',
                     'NOME_SOCIO', 'QUALIFICACAO_SOCIO', 'CPF_SOCIO'
                 ]
 
                 # Criar arquivo temporário
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                 filename = f"cnpj_exportacao_{timestamp}.csv"
+                export_path = os.path.join(self.export_dir, filename)
 
                 # Escrever CSV em streaming (mais rápido e com menor uso de memória)
                 chunk_size = 10000
                 total_registros = 0
-                with open(filename, 'w', newline='', encoding='utf-8-sig') as fh:
+                with open(export_path, 'w', newline='', encoding='utf-8-sig') as fh:
                     writer = csv.writer(fh, delimiter=';', quoting=csv.QUOTE_ALL, lineterminator='\n')
                     writer.writerow(headers)
                     while True:
@@ -1384,8 +1496,20 @@ class CNPJApp:
         def download_file(filename):
             """Download do arquivo CSV gerado"""
             try:
-                if os.path.exists(filename):
-                    return send_file(filename, as_attachment=True, download_name=filename)
+                safe_name = os.path.basename(filename)
+                target_path = os.path.join(self.export_dir, safe_name)
+                if os.path.exists(target_path):
+                    response = send_file(target_path, as_attachment=True, download_name=safe_name)
+
+                    @response.call_on_close
+                    def _cleanup_export_file():
+                        try:
+                            if os.path.exists(target_path):
+                                os.remove(target_path)
+                        except Exception:
+                            pass
+
+                    return response
                 else:
                     return jsonify({"error": "File not found"}), 404
             except Exception as e:
